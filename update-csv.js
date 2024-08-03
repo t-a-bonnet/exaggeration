@@ -10,8 +10,8 @@ export async function handler(event) {
     try {
         // Parse and validate input
         const { id, text } = JSON.parse(event.body);
-        const idString = id.toString();
-        const textString = text.toString();
+        const idString = id ? id.toString().trim() : '';
+        const textString = text ? text.toString().trim() : '';
 
         if (!idString || !textString) {
             console.error('Invalid input:', { id: idString, text: textString });

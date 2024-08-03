@@ -4,7 +4,7 @@
     "description": "A web-based interface for viewing and editing CSV data.",
     "main": "index.html",
     "scripts": {
-      "start": "netlify dev", 
+      "start": "netlify dev",
       "build": "echo 'No build step required'",
       "test": "echo 'No tests specified' && exit 0"
     },

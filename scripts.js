@@ -7,73 +7,93 @@ document.addEventListener('DOMContentLoaded', () => {
     let data = [];
     let columnIndex = -1; // To store the index of the 'body_parent' column
 
-    function loadCSV() {
-        fetch('sampled_climate_data.csv')
-            .then(response => response.text())
-            .then(text => {
-                const rows = text.trim().split('\n'); // Trim and split into rows
-                if (rows.length < 2) {
-                    console.error('Not enough rows in CSV file.');
-                    return;
-                }
+    // Function to load the CSV data
+    async function loadCSV() {
+        try {
+            const response = await fetch('sampled_climate_data.csv');
+            const text = await response.text();
 
-                const header = rows[0].split(','); // Extract the header row
-                columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
+            const rows = text.trim().split('\n'); // Trim and split into rows
+            if (rows.length < 2) {
+                console.error('Not enough rows in CSV file.');
+                textDisplay.value = 'No data available.';
+                return;
+            }
 
-                if (columnIndex === -1) {
-                    console.error('Column "body_parent" not found');
-                    return;
-                }
+            const header = rows[0].split(','); // Extract the header row
+            columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
 
-                // Process the data rows, skipping the header row
-                data = rows.slice(1) // Skip the header row
-                    .map(row => {
-                        const columns = row.split(',');
-                        return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
-                    })
-                    .filter(text => text.trim() !== ''); // Remove any empty rows
+            if (columnIndex === -1) {
+                console.error('Column "body_parent" not found');
+                textDisplay.value = 'Column "body_parent" not found.';
+                return;
+            }
 
-                if (data.length > 0) {
-                    showRow(currentRow);
-                } else {
-                    console.error('No data available.');
-                }
-            })
-            .catch(error => console.error('Error loading CSV:', error));
+            data = rows.slice(1) // Skip the header row
+                .map(row => {
+                    const columns = row.split(',');
+                    return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
+                })
+                .filter(text => text.trim() !== ''); // Remove any empty rows
+
+            if (data.length > 0) {
+                showRow(currentRow);
+            } else {
+                console.error('No data available.');
+                textDisplay.value = 'No data available.';
+            }
+        } catch (error) {
+            console.error('Error loading CSV:', error);
+            textDisplay.value = 'Error loading CSV data.';
+        }
     }
 
+    // Function to display a specific row
     function showRow(index) {
         if (data.length === 0) return;
         textDisplay.value = data[index]; // Set textarea value instead of textContent
+        nextButton.disabled = data.length <= 1; // Disable button if only one row
     }
 
+    // Function to show the next row
     function showNextRow() {
         if (data.length === 0) return;
         currentRow = (currentRow + 1) % data.length;
         showRow(currentRow);
     }
 
-    function submitChanges() {
+    // Function to submit changes
+    async function submitChanges() {
         const updatedText = textDisplay.value; // Get value from textarea
-        fetch('/.netlify/functions/update-csv', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: currentRow, // Pass zero-based index, adjusted for no header
-                text: updatedText
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
+
+        // Disable submit button to prevent multiple submissions
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch('/.netlify/functions/update-csv', { // Adjusted URL for Netlify
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow, // Pass zero-based index
+                    text: updatedText
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
                 alert('Changes saved successfully!');
             } else {
-                alert('Error: ' + data.message);
+                alert('Error: ' + result.message);
             }
-        })
-        .catch(error => console.error('Error submitting changes:', error));
+        } catch (error) {
+            console.error('Error submitting changes:', error);
+            alert('Error submitting changes.');
+        } finally {
+            // Re-enable the submit button
+            submitButton.disabled = false;
+        }
     }
 
     nextButton.addEventListener('click', showNextRow);
