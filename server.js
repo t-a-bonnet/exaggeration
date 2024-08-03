@@ -16,6 +16,11 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 app.use(bodyParser.json());
 app.use(express.static('public')); // Serve static files from the 'public' directory
 
+// Serve index.html for root path
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 // Endpoint to fetch the text for a specific row
 app.get('/get-row/:rowIndex', async (req, res) => {
     const rowIndex = parseInt(req.params.rowIndex, 10);
