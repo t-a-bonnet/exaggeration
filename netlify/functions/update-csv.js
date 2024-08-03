@@ -8,7 +8,9 @@ const path = 'sampled_climate_data.csv'; // Path to your CSV file
 
 export async function handler(event) {
     try {
-        const { id, text } = JSON.parse(event.body);
+        let { id, text } = JSON.parse(event.body);
+        id = id.toString();
+        text = text.toString();
         if (typeof id !== 'string' || typeof text !== 'string') {
             return {
                 statusCode: 400,
