@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentRow = 0;
     let data = [];
-    let ids = []; // To store the IDs corresponding to the rows
     let columnIndex = -1; // To store the index of the 'body_parent' column
 
     function loadCSV() {
@@ -20,10 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const header = rows[0].split(','); // Extract the header row
                 columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
-                const idIndex = header.indexOf('id'); // Find the index of the 'id' column
 
-                if (columnIndex === -1 || idIndex === -1) {
-                    console.error('Required columns not found');
+                if (columnIndex === -1) {
+                    console.error('Column "body_parent" not found');
                     return;
                 }
 
@@ -31,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 data = rows.slice(1) // Skip the header row
                     .map(row => {
                         const columns = row.split(',');
-                        ids.push(columns[idIndex]); // Store the id for each row
                         return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
                     })
                     .filter(text => text.trim() !== ''); // Remove any empty rows
@@ -58,14 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submitChanges() {
         const updatedText = textDisplay.value; // Get value from textarea
-        const id = ids[currentRow]; // Get the id of the current row
         fetch('/.netlify/functions/update-csv', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: id, // Pass the id of the row to be updated
+                row: currentRow, // Pass zero-based index, adjusted for no header
                 text: updatedText
             })
         })
