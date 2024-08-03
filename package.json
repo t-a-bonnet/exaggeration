@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "build": "your-build-script"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +12,6 @@
   "description": "",
   "dependencies": {
     "axios": "^1.7.3",
-    "xlsx": "^0.18.5"
+    "csv-parser": "^3.0.0"
   }
 }
