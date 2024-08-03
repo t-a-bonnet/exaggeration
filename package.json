@@ -1,5 +1,5 @@
 {
-    "name": "csv-text-viewer",
+    "name": "item-creation",
     "version": "1.0.0",
     "description": "A web-based interface for viewing and editing CSV data.",
     "main": "index.html",
@@ -16,5 +16,6 @@
       "node": "14.x"
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "type": "module"
   }

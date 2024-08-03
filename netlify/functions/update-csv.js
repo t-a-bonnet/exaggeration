@@ -1,19 +1,57 @@
-import axios from 'axios';
-import { Buffer } from 'buffer'; // Import Buffer if needed, depending on your runtime environment
+import https from 'https';
 
 const owner = 't-b-bonnet';  // Replace with your GitHub username
 const repo = 'exaggeration'; // Replace with your repository name
 const path = 'sampled_climate_data.csv'; // Path to your CSV file
-const token = process.env.GITHUB_TOKEN; // Ensure this token is set in your environment variables
-console.log('GITHUB_TOKEN:', token);
+const token = process.env.GITHUB_TOKEN;
+
 const githubApiBase = 'https://api.github.com';
+
+const fetchFromGitHub = (endpoint, method = 'GET', data = null) => {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: 'api.github.com',
+            path: endpoint,
+            method: method,
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'User-Agent': 'Netlify Function' // GitHub requires a User-Agent header
+            }
+        };
+
+        const req = https.request(options, (res) => {
+            let responseData = '';
+            res.on('data', (chunk) => {
+                responseData += chunk;
+            });
+            res.on('end', () => {
+                try {
+                    resolve(JSON.parse(responseData));
+                } catch (error) {
+                    reject(new Error('Failed to parse response'));
+                }
+            });
+        });
+
+        req.on('error', (error) => {
+            reject(error);
+        });
+
+        if (data) {
+            req.write(JSON.stringify(data));
+        }
+
+        req.end();
+    });
+};
 
 export async function handler(event) {
     try {
         // Parse and validate input
         const { id, text } = JSON.parse(event.body);
-        const idString = id ? id.toString().trim() : '';
-        const textString = text ? text.toString().trim() : '';
+        const idString = id.toString();
+        const textString = text.toString();
 
         if (!idString || !textString) {
             console.error('Invalid input:', { id: idString, text: textString });
@@ -24,15 +62,10 @@ export async function handler(event) {
         }
 
         // Get the file content and SHA
-        const { data: fileData } = await axios.get(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json' // Ensure correct header is set
-            }
-        });
+        const fileData = await fetchFromGitHub(`/repos/${owner}/${repo}/contents/${path}`);
 
-        if (!fileData.content || !fileData.sha) {
-            throw new Error('File content or SHA is missing');
+        if (!fileData.content) {
+            throw new Error('File content is missing');
         }
 
         // Decode and process the file content
@@ -52,7 +85,7 @@ export async function handler(event) {
             const columns = row.split(',');
             if (columns[0] === idString) {
                 updated = true;
-                return [idString, textString, ...columns.slice(2)].join(','); // Ensure other columns are preserved
+                return [idString, textString].concat(columns.slice(2)).join(',');
             }
             return row;
         });
@@ -70,16 +103,13 @@ export async function handler(event) {
         const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
 
         // Update the file on GitHub
-        await axios.put(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
+        const updateData = {
             message: 'Update CSV file via API',
             content: updatedContentBase64,
             sha: fileData.sha
-        }, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json' // Ensure correct header is set
-            }
-        });
+        };
+
+        await fetchFromGitHub(`/repos/${owner}/${repo}/contents/${path}`, 'PUT', updateData);
 
         return {
             statusCode: 200,
@@ -92,4 +122,4 @@ export async function handler(event) {
             body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
         };
     }
-}
+};
