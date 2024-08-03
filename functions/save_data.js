@@ -3,8 +3,8 @@ const { parse, stringify } = require('csv');
 
 exports.handler = async function(event, context) {
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const owner = 'YOUR_GITHUB_USERNAME';
-    const repo = 'YOUR_REPO_NAME';
+    const owner = 't-a-bonnet';
+    const repo = 'exaggeration';
     const path = 'sampled_climate_data.csv';
 
     try {
