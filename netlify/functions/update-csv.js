@@ -1,14 +1,15 @@
 import { Octokit } from '@octokit/rest';
+
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-const owner = 't-a-bonnet';  // Replace with your GitHub username
+const owner = 't-b-bonnet';  // Replace with your GitHub username
 const repo = 'exaggeration';          // Replace with your repository name
 const path = 'sampled_climate_data.csv'; // Path to your CSV file
 
-exports.handler = async (event) => {
+export async function handler(event) {
     try {
-        const { row, text } = JSON.parse(event.body);
-        if (typeof row !== 'number' || typeof text !== 'string') {
+        const { id, text } = JSON.parse(event.body);
+        if (typeof id !== 'string' || typeof text !== 'string') {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Invalid input' })
@@ -25,17 +26,29 @@ exports.handler = async (event) => {
         const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
         const rows = currentContent.trim().split('\n');
 
-        // Ensure the row index is valid and update it
-        if (row < rows.length - 1) { // -1 to account for the header row
-            rows[row + 1] = text; // Update the specific row, skip header row
-        } else {
+        // Extract header and rows
+        const header = rows[0];
+        const dataRows = rows.slice(1);
+
+        // Find the row with the matching id
+        let updated = false;
+        const updatedRows = dataRows.map(row => {
+            const columns = row.split(',');
+            if (columns[0] === id) { // Check if id matches
+                updated = true;
+                return [id, text].join(','); // Update the row
+            }
+            return row;
+        });
+
+        if (!updated) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
+                body: JSON.stringify({ success: false, message: 'ID not found' })
             };
         }
 
-        const updatedContent = rows.join('\n');
+        const updatedContent = [header, ...updatedRows].join('\n');
 
         // Update the file on GitHub
         await octokit.repos.createOrUpdateFileContents({
@@ -57,4 +70,4 @@ exports.handler = async (event) => {
             body: JSON.stringify({ success: false, message: error.message })
         };
     }
-};
+}
