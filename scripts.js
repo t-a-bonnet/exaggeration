@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplay = document.getElementById('text-display');
     const nextButton = document.getElementById('next-button');
-    const submitButton = document.getElementById('submit-button'); // Added submit button
+    const submitButton = document.getElementById('submit-button');
 
     let currentRow = 0;
     let data = [];
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Process the data rows
+                // Process the data rows, skipping the header row
                 data = rows.slice(1) // Skip the header row
                     .map(row => {
                         const columns = row.split(',');
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submitChanges() {
         const updatedText = textDisplay.value; // Get value from textarea
-        fetch('/.netlify/functions/update-csv', { // Updated URL to Netlify function
+        fetch('/.netlify/functions/update-csv', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                row: currentRow,
+                row: currentRow, // Pass zero-based index, adjusted for no header
                 text: updatedText
             })
         })
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     nextButton.addEventListener('click', showNextRow);
-    submitButton.addEventListener('click', submitChanges); // Added event listener for submit button
+    submitButton.addEventListener('click', submitChanges);
 
     loadCSV();
 });

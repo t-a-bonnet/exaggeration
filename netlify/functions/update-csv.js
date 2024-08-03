@@ -7,7 +7,6 @@ const path = 'sampled_climate_data.csv'; // Path to your CSV file
 
 exports.handler = async (event) => {
     try {
-        // Parse the JSON body
         const { row, text } = JSON.parse(event.body);
         if (typeof row !== 'number' || typeof text !== 'string') {
             return {
@@ -16,7 +15,6 @@ exports.handler = async (event) => {
             };
         }
 
-        // Get the file content and SHA
         const { data: fileData } = await octokit.repos.getContent({
             owner,
             repo,
@@ -24,11 +22,11 @@ exports.handler = async (event) => {
         });
 
         const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
-        const rows = currentContent.split('\n');
+        const rows = currentContent.trim().split('\n');
 
         // Ensure the row index is valid and update it
-        if (row + 1 < rows.length) {
-            rows[row + 1] = text; // Update the specific row
+        if (row + 1 < rows.length) { // +1 to skip header row
+            rows[row + 1] = text; // Update the specific row, skip header row
         } else {
             return {
                 statusCode: 400,
