@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('/data/sampled_climate_data.csv');
+            const response = await fetch('sampled_climate_data.csv');
             const text = await response.text();
 
             const rows = text.trim().split('\n'); // Trim and split into rows
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.disabled = true;
 
         try {
-            const response = await fetch('/update-csv', { // Adjusted URL for local server
+            const response = await fetch('/.netlify/functions/update-csv', { // Adjusted URL for Netlify
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

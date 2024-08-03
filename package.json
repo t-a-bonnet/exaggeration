@@ -1,21 +1,20 @@
 {
-    "name": "item-creation",
+    "name": "csv-text-viewer",
     "version": "1.0.0",
     "description": "A web-based interface for viewing and editing CSV data.",
-    "main": "server.js",
+    "main": "index.html",
     "scripts": {
-        "start": "node server.js",
-        "dev": "nodemon server.js"
+      "start": "netlify dev",
+      "build": "echo 'No build step required'",
+      "test": "echo 'No tests specified' && exit 0"
     },
     "dependencies": {
-        "dotenv": "^16.4.5",
-        "express": "^4.18.2",
-        "node-fetch": "^3.3.1"
+      "@octokit/rest": "^18.0.0"
     },
-    "devDependencies": {
-        "nodemon": "^2.0.22"
+    "devDependencies": {},
+    "engines": {
+      "node": "14.x"
     },
-    "type": "module",
     "author": "",
     "license": "ISC"
-}
+  }
