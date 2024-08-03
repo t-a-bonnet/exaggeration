@@ -16,8 +16,8 @@ async function fetchCSV() {
     try {
         const response = await axios.get('/.netlify/functions/fetch-csv');
         csvData = response.data;
-        
-        // Extract headers
+
+        // Extract headers from first record
         if (csvData.length > 0) {
             headers = Object.keys(csvData[0]);
             bodyParentIndex = headers.indexOf('body_parent');

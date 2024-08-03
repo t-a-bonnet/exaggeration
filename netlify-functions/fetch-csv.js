@@ -27,7 +27,7 @@ export async function handler(event) {
 
         // Parse CSV content
         const records = parse(decodedContent, {
-            columns: true,
+            columns: true, // Use the first row as headers
             skip_empty_lines: true
         });
 
