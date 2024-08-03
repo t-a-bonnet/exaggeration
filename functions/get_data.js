@@ -11,12 +11,14 @@ exports.handler = async function(event, context) {
             .pipe(csvParser())
             .on('data', (data) => csvData.push(data))
             .on('end', () => {
+                console.log('CSV Data:', csvData); // Log the data to verify it
                 return {
                     statusCode: 200,
                     body: JSON.stringify(csvData),
                 };
             });
     } catch (error) {
+        console.error('Error fetching data:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({ error: 'Failed to fetch data from GitHub' }),
