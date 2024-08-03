@@ -26,13 +26,12 @@ exports.handler = async (event) => {
         }
 
         // Step 1: Fetch the current file content from GitHub
-        const response = await fetch('sampled_climate_data.csv');
-        //const response = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-        //    headers: {
-        //        'Authorization': `token ${GITHUB_TOKEN}`,
-        //        'Accept': 'application/vnd.github.v3.raw'
-        //    }
-        //});
+        const response = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3.raw'
+            }
+        });
 
         const fileContent = Buffer.from(response.data, 'base64').toString('utf8');
         console.log('File Content:', fileContent); // Log the entire file content
