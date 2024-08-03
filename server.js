@@ -1,64 +1,103 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { Buffer } from 'buffer';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
-const dataFilePath = path.join(__dirname, 'data', 'sampled_climate_data.csv');
 
-app.use(express.static('public'));
 app.use(express.json());
+app.use(express.static('public'));
 
-app.get('/data/sampled_climate_data.csv', (req, res) => {
-    res.sendFile(dataFilePath);
-});
+const owner = 't-a-bonnet';  // Replace with your GitHub username
+const repo = 'exaggeration'; // Replace with your repository name
+const filePath = 'sampled_climate_data.csv'; // Path to your CSV file
+const token = process.env.GITHUB_TOKEN;
 
-app.post('/update-csv', (req, res) => {
+app.post('/update-csv', async (req, res) => {
     const { id, text } = req.body;
+    const idString = id.toString();
+    const textString = text.toString();
 
-    fs.readFile(dataFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return res.status(500).json({ success: false, message: 'Error reading file' });
+    if (!idString || !textString) {
+        return res.status(400).json({ success: false, message: 'Invalid input: id and text must be non-empty strings' });
+    }
+
+    try {
+        // Fetch the file content and SHA
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`GitHub API response error: ${response.statusText}`);
         }
 
-        const rows = data.trim().split('\n');
+        const fileData = await response.json();
+
+        if (!fileData.content) {
+            throw new Error('File content is missing');
+        }
+
+        // Decode and process the file content
+        const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
+        const rows = currentContent.trim().split('\n');
 
         if (rows.length < 2) {
-            return res.status(400).json({ success: false, message: 'CSV file does not contain enough rows' });
+            throw new Error('CSV file does not contain enough rows');
         }
 
         const header = rows[0];
         const dataRows = rows.slice(1);
 
+        // Find and update the row with the matching id
         let updated = false;
-        const updatedRows = dataRows.map((row, index) => {
-            if (index === id) {
+        const updatedRows = dataRows.map(row => {
+            const columns = row.split(',');
+            if (columns[0] === idString) {
                 updated = true;
-                const columns = row.split(',');
-                columns[1] = text; // Assuming text is updated in the second column
-                return columns.join(',');
+                return [idString, textString].concat(columns.slice(2)).join(',');
             }
             return row;
         });
 
         if (!updated) {
+            console.error('ID not found:', idString);
             return res.status(400).json({ success: false, message: 'ID not found' });
         }
 
+        // Prepare updated content and encode it
         const updatedContent = [header, ...updatedRows].join('\n');
+        const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
 
-        fs.writeFile(dataFilePath, updatedContent, 'utf8', (err) => {
-            if (err) {
-                console.error('Error writing file:', err);
-                return res.status(500).json({ success: false, message: 'Error writing file' });
-            }
-            res.json({ success: true, message: 'File updated successfully' });
+        // Update the file on GitHub
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update CSV file via API',
+                content: updatedContentBase64,
+                sha: fileData.sha
+            })
         });
-    });
+
+        return res.status(200).json({ success: true, message: 'File updated successfully' });
+    } catch (error) {
+        console.error('Error:', error.message);
+        return res.status(500).json({ success: false, message: 'Internal Server Error', error: error.message });
+    }
 });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
