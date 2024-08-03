@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.disabled = true;
 
         try {
-            const response = await fetch('/.netlify/functions/update-csv', { // Adjusted URL for Netlify
+            const response = await fetch('/.update-csv', { // Adjusted URL for Netlify
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
