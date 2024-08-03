@@ -1,6 +1,4 @@
 import express from 'express';
-import fs from 'fs';
-import path from 'path';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
@@ -53,7 +51,15 @@ app.post('/update-csv', async (req, res) => {
             throw new Error('CSV file does not contain enough rows');
         }
 
-        const header = rows[0];
+        const header = rows[0].split(','); // Extract header row
+        console.log('Header:', header); // Log header row to debug
+
+        // Find the index of the 'body_parent' column by header name
+        const columnIndex = header.indexOf('body_parent');
+        if (columnIndex === -1) {
+            throw new Error('Column "body_parent" not found');
+        }
+
         const dataRows = rows.slice(1);
 
         // Find and update the row with the matching id
@@ -62,18 +68,19 @@ app.post('/update-csv', async (req, res) => {
             const columns = row.split(',');
             if (columns[0] === idString) {
                 updated = true;
-                return [idString, textString].concat(columns.slice(2)).join(',');
+                // Update the specific column by index
+                columns[columnIndex] = textString;
+                return columns.join(',');
             }
             return row;
         });
 
         if (!updated) {
-            console.error('ID not found:', idString);
             return res.status(400).json({ success: false, message: 'ID not found' });
         }
 
         // Prepare updated content and encode it
-        const updatedContent = [header, ...updatedRows].join('\n');
+        const updatedContent = [header.join(','), ...updatedRows].join('\n');
         const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
 
         // Update the file on GitHub
