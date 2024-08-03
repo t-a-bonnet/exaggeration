@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { parse, stringify } = require('csv');
+const { stringify } = require('csv-stringify');
 
 exports.handler = async function(event, context) {
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -8,12 +8,12 @@ exports.handler = async function(event, context) {
     const path = 'sampled_climate_data.csv';
 
     try {
-        const data = JSON.parse(event.body).data;
+        const { data } = JSON.parse(event.body);
 
-        // Convert JSON data back to CSV
+        // Convert JSON data to CSV format
         const csvContent = await new Promise((resolve, reject) => {
             stringify(data, { header: true }, (err, output) => {
-                if (err) reject(err);
+                if (err) return reject(err);
                 resolve(output);
             });
         });

@@ -6,18 +6,21 @@ exports.handler = async function(event, context) {
     const url = 'https://raw.githubusercontent.com/t-a-bonnet/exaggeration/main/sampled_climate_data.csv';
 
     try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, { responseType: 'stream' });
         const csvData = [];
-        Readable.from(response.data)
-            .pipe(csvParser())
-            .on('data', (data) => csvData.push(data))
-            .on('end', () => {
-                console.log('CSV Data:', csvData); // Log the data to verify it
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify(csvData),
-                };
-            });
+
+        await new Promise((resolve, reject) => {
+            Readable.from(response.data)
+                .pipe(csvParser())
+                .on('data', (data) => csvData.push(data))
+                .on('end', () => resolve())
+                .on('error', (error) => reject(error));
+        });
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(csvData),
+        };
     } catch (error) {
         console.error('Error fetching data:', error);
         return {

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submit-btn');
 
     // Fetch initial data
-    axios.get('/.netlify/functions/get-data')
+    axios.get('/.netlify/functions/get_data')  // Ensure this path matches your Netlify function
         .then(response => {
             data = response.data;
             console.log('Fetched Data:', data); // Log fetched data to verify it
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Submit button event listener
     submitBtn.addEventListener('click', () => {
         data[currentIndex].body_parent = textBody.value;
-        axios.post('/.netlify/functions/save-data', { data })
+        axios.post('/.netlify/functions/save_data', { data })
             .then(response => alert('Data saved successfully!'))
             .catch(error => console.error('Error saving data:', error));
     });
