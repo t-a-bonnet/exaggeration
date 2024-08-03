@@ -1,8 +1,8 @@
-const axios = require('axios');
-const csvParser = require('csv-parser');
-const { Readable } = require('stream');
+import axios from 'axios';
+import csvParser from 'csv-parser';
+import { Readable } from 'stream';
 
-exports.handler = async function(event, context) {
+export async function handler(event, context) {
     const url = 'https://raw.githubusercontent.com/t-a-bonnet/exaggeration/main/sampled_climate_data.csv';
 
     try {
@@ -12,7 +12,10 @@ exports.handler = async function(event, context) {
         await new Promise((resolve, reject) => {
             Readable.from(response.data)
                 .pipe(csvParser())
-                .on('data', (data) => csvData.push(data))
+                .on('data', (data) => {
+                    console.log('Row Data:', data); // Log each row to check data
+                    csvData.push(data);
+                })
                 .on('end', () => resolve())
                 .on('error', (error) => reject(error));
         });
