@@ -14,6 +14,7 @@ exports.handler = async function(event, context) {
 
     let name, email;
     try {
+        // Parse the incoming request body
         const { name, email } = JSON.parse(event.body);
 
         // Fetch the current content of the CSV file
@@ -23,8 +24,18 @@ exports.handler = async function(event, context) {
             }
         });
 
+        // Decode the current content and ensure it's properly formatted
         const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8');
-        const newContent = decodedContent + `${name},${email}\n`;
+        
+        // Check if the file is empty or has no headers
+        let newContent;
+        if (decodedContent.trim() === '') {
+            // If the file is empty, add headers and the new data
+            newContent = `Name,Email\n${name},${email}\n`;
+        } else {
+            // If the file has content, append the new data
+            newContent = decodedContent + `${name},${email}\n`;
+        }
 
         // Update the CSV file with the new content
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
