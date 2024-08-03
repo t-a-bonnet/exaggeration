@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Select HTML elements
 const textBox = document.getElementById('text-box');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
@@ -10,11 +11,13 @@ let csvData = [];
 let headers = [];
 let bodyParentIndex = -1;
 
+// Fetch CSV data from server
 async function fetchCSV() {
     try {
         const response = await axios.get('/data');
         const rows = response.data.trim().split('\n').map(row => row.split(','));
 
+        // Parse headers
         headers = rows[0];
         bodyParentIndex = headers.indexOf('body_parent');
         
@@ -22,6 +25,7 @@ async function fetchCSV() {
             throw new Error('body_parent column not found');
         }
 
+        // Store CSV data excluding the header row
         csvData = rows.slice(1);
         displayRow(currentIndex);
     } catch (error) {
@@ -29,12 +33,14 @@ async function fetchCSV() {
     }
 }
 
+// Display a row of the CSV in the text box
 function displayRow(index) {
     if (index >= 0 && index < csvData.length) {
         textBox.value = csvData[index][bodyParentIndex] || '';
     }
 }
 
+// Navigate to the previous row
 prevBtn.addEventListener('click', () => {
     if (currentIndex > 0) {
         currentIndex--;
@@ -42,6 +48,7 @@ prevBtn.addEventListener('click', () => {
     }
 });
 
+// Navigate to the next row
 nextBtn.addEventListener('click', () => {
     if (currentIndex < csvData.length - 1) {
         currentIndex++;
@@ -49,6 +56,7 @@ nextBtn.addEventListener('click', () => {
     }
 });
 
+// Submit edited text to server
 submitBtn.addEventListener('click', async () => {
     try {
         csvData[currentIndex][bodyParentIndex] = textBox.value;
@@ -60,4 +68,5 @@ submitBtn.addEventListener('click', async () => {
     }
 });
 
+// Initial data fetch
 fetchCSV();
