@@ -16,43 +16,47 @@ exports.handler = async function(event, context) {
     const { name, email } = JSON.parse(event.body);
 
     try {
-        // Fetch the current content of the XLSX file
+        // Fetch the current content of the Excel file
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`
-            },
-            responseType: 'arraybuffer'
+            }
         });
 
         // Decode the current content
-        const workbook = XLSX.read(fileData, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        
+        const decodedContent = Buffer.from(fileData.content, 'base64');
+
+        // Read the workbook
+        const workbook = XLSX.read(decodedContent, { type: 'buffer' });
+        let worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
         // Convert the worksheet to JSON
-        let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        
-        // Check if the file is empty or has headers
-        if (data.length === 0) {
-            // If the file is empty, add headers and the new data
-            data = [['Name', 'Email'], [name, email]];
-        } else {
-            // Add new data under existing headers
-            data.push([name, email]);
+        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+        // Check if headers are already present
+        const headers = data[0];
+        if (headers.join(',') !== 'Name,Email') {
+            // Add headers if not present
+            data.unshift(['Name', 'Email']);
         }
 
-        // Create a new worksheet and workbook
-        const newWorksheet = XLSX.utils.aoa_to_sheet(data);
+        // Add new data
+        data.push([name, email]);
+
+        // Create a new worksheet
+        worksheet = XLSX.utils.aoa_to_sheet(data);
+
+        // Create a new workbook and add the worksheet
         const newWorkbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, sheetName);
-        
-        // Write the workbook to a buffer
-        const newFileData = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-        
-        // Update the XLSX file with the new content
+        XLSX.utils.book_append_sheet(newWorkbook, worksheet, 'Sheet1');
+
+        // Write the new workbook to a buffer
+        const newBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'buffer' });
+
+        // Update the Excel file with the new content
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Add new submission',
-            content: Buffer.from(newFileData).toString('base64'),
+            content: Buffer.from(newBuffer).toString('base64'),
             sha: fileData.sha
         }, {
             headers: {
