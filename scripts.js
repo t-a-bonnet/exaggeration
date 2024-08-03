@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevButton = document.getElementById('prev-button');
     const submitButton = document.getElementById('submit-button');
 
-    let currentRow = 1; // Starting row index (1-based index)
-    const totalRows = 100; // Adjust this based on your data
+    let currentRow = 0; // Start from the first row (0-based index)
 
     function loadRow(rowIndex) {
         axios.get(`/get-row/${rowIndex}`)
@@ -19,14 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showNextRow() {
-        if (currentRow < totalRows) {
-            currentRow++;
-            loadRow(currentRow);
-        }
+        currentRow++;
+        loadRow(currentRow);
     }
 
     function showPrevRow() {
-        if (currentRow > 1) {
+        if (currentRow > 0) {
             currentRow--;
             loadRow(currentRow);
         }

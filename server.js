@@ -32,26 +32,27 @@ app.get('/get-row/:rowIndex', async (req, res) => {
         const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8');
 
         // Parse the CSV data
-        const parsedData = Papa.parse(decodedContent, { header: false });
+        const parsedData = Papa.parse(decodedContent, { header: true });
         let data = parsedData.data;
 
-        // Find the header and column index
-        const header = data[0];
-        const columnIndex = header.indexOf('body_parent');
+        // Find the column index for "body_parent"
+        const columnIndex = parsedData.meta.fields.indexOf('body_parent');
 
         if (columnIndex === -1) {
+            console.error('Column "body_parent" not found');
             return res.status(400).send('Column "body_parent" not found');
         }
 
         // Fetch the specified row data
-        if (rowIndex >= 1 && rowIndex < data.length) {
-            const rowText = data[rowIndex][columnIndex];
+        if (rowIndex >= 0 && rowIndex < data.length) {
+            const rowText = data[rowIndex]['body_parent'];
             res.json({ text: rowText });
         } else {
+            console.error('Invalid row index');
             res.status(400).send('Invalid row index');
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching data:', error);
         res.status(500).send('Error fetching data');
     }
 });
@@ -72,20 +73,19 @@ app.post('/update-csv', async (req, res) => {
         const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8');
 
         // Parse the CSV data
-        const parsedData = Papa.parse(decodedContent, { header: false });
+        const parsedData = Papa.parse(decodedContent, { header: true });
         let data = parsedData.data;
 
-        // Find the header and column index
-        const header = data[0];
-        const columnIndex = header.indexOf('body_parent');
+        // Find the column index for "body_parent"
+        const columnIndex = parsedData.meta.fields.indexOf('body_parent');
 
         if (columnIndex === -1) {
             return res.status(400).send('Column "body_parent" not found');
         }
 
         // Update the row data
-        if (row >= 1 && row < data.length) {
-            data[row][columnIndex] = text;
+        if (row >= 0 && row < data.length) {
+            data[row]['body_parent'] = text;
         } else {
             return res.status(400).send('Invalid row index');
         }
