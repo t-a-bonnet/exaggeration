@@ -1,22 +1,27 @@
-const { Octokit } = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 
 const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
 });
 
-exports.handler = async function(event, context) {
+export async function handler(event, context) {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const { name, email } = JSON.parse(event.body);
-
-    const content = `Name,Email\n${name},${email}\n`;
-    const repo = 'exaggeration';
-    const path = 'data.csv';
-    const owner = 't-a-bonnet';
-
+    let name, email;
     try {
+        const body = JSON.parse(event.body);
+        name = body.name;
+        email = body.email;
+
+        console.log('Received data:', { name, email });
+
+        const content = `Name,Email\n${name},${email}\n`;
+        const repo = 'exaggeration';
+        const path = 'data.csv';
+        const owner = 't-a-bonnet';
+
         const { data } = await octokit.repos.getContent({
             owner,
             repo,
@@ -40,10 +45,10 @@ exports.handler = async function(event, context) {
             body: JSON.stringify({ message: 'Data saved successfully!' }),
         };
     } catch (error) {
-        console.error(error);
+        console.error('Error:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Error saving data.' }),
+            body: JSON.stringify({ message: 'Error saving data.', error: error.message }),
         };
     }
-};
+}
