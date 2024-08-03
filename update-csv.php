@@ -1,53 +1,53 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    error_log('POST request received');
+$response = ['success' => false, 'message' => 'Unknown error'];
 
-    // Read the input data
-    $data = json_decode(file_get_contents('php://input'), true);
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $inputData = file_get_contents('php://input');
+        $data = json_decode($inputData, true);
 
-    if (isset($data['row']) && isset($data['text'])) {
-        error_log('Valid data received');
-        
-        $rowIndex = intval($data['row']);
-        $newText = $data['text'];
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $response['message'] = 'Invalid JSON data: ' . json_last_error_msg();
+        } elseif (isset($data['row']) && isset($data['text'])) {
+            $rowIndex = intval($data['row']);
+            $newText = $data['text'];
+            $csvFile = 'sampled_climate_data.csv';
 
-        // Path to the CSV file
-        $csvFile = 'sampled_climate_data.csv';
-        
-        if (!file_exists($csvFile)) {
-            error_log('CSV file does not exist');
-            echo json_encode(['success' => false, 'message' => 'CSV file does not exist']);
-            exit;
-        }
+            if (!file_exists($csvFile)) {
+                $response['message'] = 'CSV file does not exist';
+            } else {
+                $rows = array_map('str_getcsv', file($csvFile));
+                if (isset($rows[$rowIndex + 1])) {
+                    $rows[$rowIndex + 1][0] = $newText;
 
-        // Load CSV file and convert it to an array
-        $rows = array_map('str_getcsv', file($csvFile));
+                    $fp = fopen($csvFile, 'w');
+                    foreach ($rows as $row) {
+                        fputcsv($fp, $row);
+                    }
+                    fclose($fp);
 
-        // Update the row
-        if (isset($rows[$rowIndex + 1])) {
-            $rows[$rowIndex + 1][0] = $newText; // Update the specific column (assumes body_parent is in the first column)
-
-            // Write updated data back to CSV file
-            $fp = fopen($csvFile, 'w');
-            foreach ($rows as $row) {
-                fputcsv($fp, $row);
+                    $response['success'] = true;
+                    $response['message'] = 'Update successful';
+                } else {
+                    $response['message'] = 'Row not found';
+                }
             }
-            fclose($fp);
-
-            echo json_encode(['success' => true]);
         } else {
-            error_log('Row not found');
-            echo json_encode(['success' => false, 'message' => 'Row not found']);
+            $response['message'] = 'Invalid data';
         }
     } else {
-        error_log('Invalid data');
-        echo json_encode(['success' => false, 'message' => 'Invalid data']);
+        http_response_code(405);
+        $response['message'] = 'Method not allowed';
     }
-} else {
-    error_log('Method not allowed');
-    http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+} catch (Exception $e) {
+    $response['message'] = 'Exception: ' . $e->getMessage();
 }
+
+echo json_encode($response);
 ?>

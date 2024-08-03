@@ -56,10 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submitChanges() {
         const updatedText = textDisplay.value;
-        // Replace the current row data with the updated text
-        data[currentRow] = updatedText;
-
-        // Send the updated data to the server
         fetch('update_csv.php', {
             method: 'POST',
             headers: {
@@ -70,13 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: updatedText
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                messageArea.textContent = 'CSV updated successfully!';
-                messageArea.style.color = 'green'; // Success message color
-            } else {
-                messageArea.textContent = 'Failed to update CSV: ' + (data.message || 'Unknown error');
+        .then(response => response.text())  // Use text() to check raw response
+        .then(text => {
+            try {
+                const data = JSON.parse(text);  // Parse JSON manually
+                if (data.success) {
+                    messageArea.textContent = 'CSV updated successfully!';
+                    messageArea.style.color = 'green'; // Success message color
+                } else {
+                    messageArea.textContent = 'Failed to update CSV: ' + (data.message || 'Unknown error');
+                    messageArea.style.color = 'red'; // Error message color
+                }
+            } catch (error) {
+                messageArea.textContent = 'Error parsing response: ' + error.message;
                 messageArea.style.color = 'red'; // Error message color
             }
         })
