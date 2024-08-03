@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Text Viewer</title>
+    <title>CSV Text Editor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="container">
-        <div id="text-display"></div>
-        <button id="next-button">Next</button>
+        <textarea id="text-edit" rows="10" cols="50"></textarea>
+        <div>
+            <button id="prev-button">Previous</button>
+            <button id="next-button">Next</button>
+            <button id="submit-button">Submit</button>
+        </div>
     </div>
     <script src="scripts.js"></script>
 </body>
