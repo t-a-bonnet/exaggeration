@@ -4,17 +4,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentRow = 0;
     let data = [];
+    let columnIndex = -1; // To store the index of the 'body_parent' column
 
     function loadCSV() {
         fetch('sampled_climate_data.csv')
             .then(response => response.text())
             .then(text => {
-                const rows = text.split('\n').slice(1); // Skip header row
-                data = rows.map(row => {
-                    const columns = row.split(',');
-                    return columns[0]; // Assuming the text is in the first column
-                }).filter(text => text.trim() !== ''); // Remove any empty rows
-                showRow(currentRow);
+                const rows = text.trim().split('\n'); // Trim and split into rows
+                if (rows.length < 2) {
+                    console.error('Not enough rows in CSV file.');
+                    return;
+                }
+                
+                const header = rows[0].split(','); // Extract the header row
+                columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
+
+                if (columnIndex === -1) {
+                    console.error('Column "body_parent" not found');
+                    return;
+                }
+
+                // Process the data rows
+                data = rows.slice(1) // Skip the header row
+                    .map(row => {
+                        const columns = row.split(',');
+                        return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
+                    })
+                    .filter(text => text.trim() !== ''); // Remove any empty rows
+                
+                if (data.length > 0) {
+                    showRow(currentRow);
+                } else {
+                    console.error('No data available.');
+                }
             })
             .catch(error => console.error('Error loading CSV:', error));
     }
