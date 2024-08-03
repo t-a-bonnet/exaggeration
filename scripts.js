@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = 0;
     let data = [];
     let columnIndex = -1; // To store the index of the 'body_parent' column
-    let idColumnIndex = -1; // To store the index of the 'id' column
 
     function loadCSV() {
         fetch('sampled_climate_data.csv')
@@ -20,10 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const header = rows[0].split(','); // Extract the header row
                 columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
-                idColumnIndex = header.indexOf('id'); // Find the index of the 'id' column
 
-                if (columnIndex === -1 || idColumnIndex === -1) {
-                    console.error('Required columns not found');
+                if (columnIndex === -1) {
+                    console.error('Column "body_parent" not found');
                     return;
                 }
 
@@ -31,14 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 data = rows.slice(1) // Skip the header row
                     .map(row => {
                         const columns = row.split(',');
-                        return {
-                            id: columns[idColumnIndex], // Use the id column value
-                            text: columns[columnIndex] || '' // Use the columnIndex to get the 'body_parent' column value
-                        };
+                        return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
                     })
-                    .filter(item => item.text.trim() !== ''); // Remove any empty rows
-
-                console.log('Data loaded:', data); // Debugging line
+                    .filter(text => text.trim() !== ''); // Remove any empty rows
 
                 if (data.length > 0) {
                     showRow(currentRow);
@@ -50,12 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showRow(index) {
-        if (data.length === 0 || index < 0 || index >= data.length) {
-            console.error('Invalid row index:', index); // Debugging line
-            return;
-        }
-        console.log('Showing row:', data[index]); // Debugging line
-        textDisplay.value = data[index].text; // Set textarea value instead of textContent
+        if (data.length === 0) return;
+        textDisplay.value = data[index]; // Set textarea value instead of textContent
     }
 
     function showNextRow() {
@@ -66,14 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submitChanges() {
         const updatedText = textDisplay.value; // Get value from textarea
-        const id = data[currentRow].id; // Get the id of the current row
         fetch('/.netlify/functions/update-csv', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id, // Pass the id of the row to update
+                row: currentRow, // Pass zero-based index, adjusted for no header
                 text: updatedText
             })
         })
