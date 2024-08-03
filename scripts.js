@@ -4,37 +4,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevButton = document.getElementById('prev-button');
     const submitButton = document.getElementById('submit-button');
 
-    let currentRow = 0;
-    let data = [];
-    let columnIndex = -1;
+    let currentRow = 1; // Starting row index (1-based index)
+    const totalRows = 100; // Adjust this based on your data
 
-    function loadCSV() {
-        // Fetch the CSV file content from the backend if needed
-        // In this case, we'll assume it's already loaded and handled in the backend directly
-    }
-
-    function showRow(index) {
-        if (data.length === 0) return;
-        textEdit.value = data[index];
+    function loadRow(rowIndex) {
+        axios.get(`/get-row/${rowIndex}`)
+            .then(response => {
+                textEdit.value = response.data.text || '';
+            })
+            .catch(error => {
+                console.error('Error fetching row:', error);
+                textEdit.value = 'Error loading row';
+            });
     }
 
     function showNextRow() {
-        if (data.length === 0) return;
-        currentRow = (currentRow + 1) % data.length;
-        showRow(currentRow);
+        if (currentRow < totalRows) {
+            currentRow++;
+            loadRow(currentRow);
+        }
     }
 
     function showPrevRow() {
-        if (data.length === 0) return;
-        currentRow = (currentRow - 1 + data.length) % data.length;
-        showRow(currentRow);
+        if (currentRow > 1) {
+            currentRow--;
+            loadRow(currentRow);
+        }
     }
 
     function submitChanges() {
-        if (data.length === 0) return;
-
         axios.post('/update-csv', {
-            row: currentRow + 1, // Adjust if your backend expects 1-based index
+            row: currentRow,
             text: textEdit.value
         })
         .then(response => {
@@ -51,5 +51,5 @@ document.addEventListener('DOMContentLoaded', () => {
     prevButton.addEventListener('click', showPrevRow);
     submitButton.addEventListener('click', submitChanges);
 
-    loadCSV(); // Adjust if you need to load the CSV or handle it differently
+    loadRow(currentRow); // Load initial row
 });
