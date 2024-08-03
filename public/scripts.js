@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                row: currentRow, // Pass zero-based index, adjusted for no header
+                id: currentRow, // Pass zero-based index, adjusted for no header
                 text: updatedText
             })
         })

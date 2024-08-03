@@ -14,6 +14,7 @@ export async function handler(event) {
         const textString = text.toString();
 
         if (!idString || !textString) {
+            console.error('Invalid input:', { id: idString, text: textString });
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Invalid input: id and text must be non-empty strings' })
@@ -35,7 +36,10 @@ export async function handler(event) {
         const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
         const rows = currentContent.trim().split('\n');
 
-        // Extract header and rows
+        if (rows.length < 2) {
+            throw new Error('CSV file does not contain enough rows');
+        }
+
         const header = rows[0];
         const dataRows = rows.slice(1);
 
@@ -45,12 +49,13 @@ export async function handler(event) {
             const columns = row.split(',');
             if (columns[0] === idString) {
                 updated = true;
-                return [idString, textString].join(','); // Update the row
+                return [idString, textString].join(',');
             }
             return row;
         });
 
         if (!updated) {
+            console.error('ID not found:', idString);
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'ID not found' })
@@ -76,7 +81,7 @@ export async function handler(event) {
             body: JSON.stringify({ success: true, message: 'File updated successfully' })
         };
     } catch (error) {
-        console.error('Error:', error); // Log the error for debugging
+        console.error('Error:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
