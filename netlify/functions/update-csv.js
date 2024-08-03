@@ -1,9 +1,9 @@
 const { Octokit } = require('@octokit/rest');
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-const owner = 't-a-bonnet';
-const repo = 'exaggeration';
-const path = 'sampled_climate_data.csv';
+const owner = 't-a-bonnet';  // Replace with your GitHub username
+const repo = 'exaggeration';          // Replace with your repository name
+const path = 'sampled_climate_data.csv'; // Path to your CSV file
 
 exports.handler = async (event) => {
     try {
@@ -25,7 +25,16 @@ exports.handler = async (event) => {
 
         const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
         const rows = currentContent.split('\n');
-        rows[row + 1] = text;
+
+        // Ensure the row index is valid and update it
+        if (row + 1 < rows.length) {
+            rows[row + 1] = text; // Update the specific row
+        } else {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
+            };
+        }
 
         const updatedContent = rows.join('\n');
 
