@@ -1,21 +1,21 @@
 {
-    "name": "item-creation",
+    "name": "csv-text-viewer",
     "version": "1.0.0",
     "description": "A web-based interface for viewing and editing CSV data.",
     "main": "index.html",
+    "type": "module",
     "scripts": {
       "start": "netlify dev",
       "build": "echo 'No build step required'",
       "test": "echo 'No tests specified' && exit 0"
     },
     "dependencies": {
-      "axios": "^1.4.0"
+      "node-fetch": "^3.0.0"
     },
     "devDependencies": {},
     "engines": {
       "node": "14.x"
     },
     "author": "",
-    "license": "ISC",
-    "type": "module"
+    "license": "ISC"
   }

@@ -1,50 +1,11 @@
-import https from 'https';
+import fetch from 'node-fetch';
 
-const owner = 't-b-bonnet';  // Replace with your GitHub username
-const repo = 'exaggeration'; // Replace with your repository name
-const path = 'sampled_climate_data.csv'; // Path to your CSV file
+const owner = 't-a-bonnet';  // Correct GitHub username
+const repo = 'exaggeration'; // Correct repository name
+const path = 'sampled_climate_data.csv'; // Correct path to your CSV file
 const token = process.env.GITHUB_TOKEN;
 
 const githubApiBase = 'https://api.github.com';
-
-const fetchFromGitHub = (endpoint, method = 'GET', data = null) => {
-    return new Promise((resolve, reject) => {
-        const options = {
-            hostname: 'api.github.com',
-            path: endpoint,
-            method: method,
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'User-Agent': 'Netlify Function' // GitHub requires a User-Agent header
-            }
-        };
-
-        const req = https.request(options, (res) => {
-            let responseData = '';
-            res.on('data', (chunk) => {
-                responseData += chunk;
-            });
-            res.on('end', () => {
-                try {
-                    resolve(JSON.parse(responseData));
-                } catch (error) {
-                    reject(new Error('Failed to parse response'));
-                }
-            });
-        });
-
-        req.on('error', (error) => {
-            reject(error);
-        });
-
-        if (data) {
-            req.write(JSON.stringify(data));
-        }
-
-        req.end();
-    });
-};
 
 export async function handler(event) {
     try {
@@ -61,8 +22,23 @@ export async function handler(event) {
             };
         }
 
+        // Log the GitHub API request URL
+        const fileUrl = `${githubApiBase}/repos/${owner}/${repo}/contents/${path}`;
+        console.log(`Fetching file from: ${fileUrl}`);
+
         // Get the file content and SHA
-        const fileData = await fetchFromGitHub(`/repos/${owner}/${repo}/contents/${path}`);
+        const response = await fetch(fileUrl, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`GitHub API response error: ${response.status} ${response.statusText}`);
+        }
+
+        const fileData = await response.json();
 
         if (!fileData.content) {
             throw new Error('File content is missing');
@@ -103,13 +79,23 @@ export async function handler(event) {
         const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
 
         // Update the file on GitHub
-        const updateData = {
-            message: 'Update CSV file via API',
-            content: updatedContentBase64,
-            sha: fileData.sha
-        };
+        const updateResponse = await fetch(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update CSV file via API',
+                content: updatedContentBase64,
+                sha: fileData.sha
+            })
+        });
 
-        await fetchFromGitHub(`/repos/${owner}/${repo}/contents/${path}`, 'PUT', updateData);
+        if (!updateResponse.ok) {
+            throw new Error(`GitHub API response error: ${updateResponse.status} ${updateResponse.statusText}`);
+        }
 
         return {
             statusCode: 200,
@@ -122,4 +108,4 @@ export async function handler(event) {
             body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
         };
     }
-};
+}
