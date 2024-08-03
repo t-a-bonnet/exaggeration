@@ -11,10 +11,10 @@ let csvData = [];
 let headers = [];
 let bodyParentIndex = -1;
 
-// Fetch CSV data from server
+// Fetch CSV data from Netlify Function
 async function fetchCSV() {
     try {
-        const response = await axios.get('/data');
+        const response = await axios.get('/.netlify/functions/fetch-csv');
         const rows = response.data.trim().split('\n').map(row => row.split(','));
 
         // Parse headers
@@ -56,12 +56,12 @@ nextBtn.addEventListener('click', () => {
     }
 });
 
-// Submit edited text to server
+// Submit edited text to Netlify Function
 submitBtn.addEventListener('click', async () => {
     try {
         csvData[currentIndex][bodyParentIndex] = textBox.value;
         const csvString = [headers.join(','), ...csvData.map(row => row.join(','))].join('\n');
-        await axios.post('/update', { csvString });
+        await axios.post('/.netlify/functions/update-csv', { csvString });
         alert('Changes saved!');
     } catch (error) {
         console.error('Error saving CSV data:', error);
