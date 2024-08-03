@@ -9,30 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndex = -1;
 
     function loadCSV() {
-        fetch('sampled_climate_data.csv')
-            .then(response => response.text())
-            .then(text => {
-                const rows = text.trim().split('\n');
-                if (rows.length < 2) {
-                    console.error('Not enough rows in CSV file.');
-                    return;
-                }
-
-                const header = rows[0].split(',');
-                columnIndex = header.indexOf('body_parent');
-
-                if (columnIndex === -1) {
-                    console.error('Column "body_parent" not found');
-                    return;
-                }
-
-                data = rows.slice(1)
-                    .map(row => row.split(',')[columnIndex] || '')
-                    .filter(text => text.trim() !== '');
-
-                showRow(currentRow);
-            })
-            .catch(error => console.error('Error loading CSV:', error));
+        // Fetch the CSV file content from the backend if needed
+        // In this case, we'll assume it's already loaded and handled in the backend directly
     }
 
     function showRow(index) {
@@ -54,29 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function submitChanges() {
         if (data.length === 0) return;
-        data[currentRow] = textEdit.value;
 
-        // Send updated data to the server
-        fetch('/update-csv', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                row: currentRow,
-                text: textEdit.value,
-            }),
+        axios.post('/update-csv', {
+            row: currentRow + 1, // Adjust if your backend expects 1-based index
+            text: textEdit.value
         })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result);
+        .then(response => {
+            console.log('Success:', response.data);
+            alert('Changes saved successfully!');
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving changes.');
+        });
     }
 
     nextButton.addEventListener('click', showNextRow);
     prevButton.addEventListener('click', showPrevRow);
     submitButton.addEventListener('click', submitChanges);
 
-    loadCSV();
+    loadCSV(); // Adjust if you need to load the CSV or handle it differently
 });
