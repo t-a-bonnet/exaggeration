@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showRow(index) {
         if (data.length === 0) return;
-        textDisplay.textContent = data[index];
+        textDisplay.value = data[index]; // Set textarea value instead of textContent
     }
 
     function showNextRow() {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function submitChanges() {
-        const updatedText = textDisplay.textContent;
+        const updatedText = textDisplay.value; // Get value from textarea
         fetch('/.netlify/functions/update-csv', { // Updated URL to Netlify function
             method: 'POST',
             headers: {
