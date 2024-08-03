@@ -2,7 +2,7 @@ const axios = require('axios');
 const csvParser = require('csv-parser');
 
 exports.handler = async function(event, context) {
-    const url = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/sampled_climate_data.csv';
+    const url = 'https://raw.githubusercontent.com/t-a-bonnet/exaggeration/main/sampled_climate_data.csv';
 
     try {
         const response = await axios.get(url);
