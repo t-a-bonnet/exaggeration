@@ -10,7 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@octokit/rest": "^21.0.1"
-  },
-  "type": "module"
+    "axios": "^1.7.3"
+  }
 }
