@@ -1,90 +1,95 @@
-import { Octokit } from '@octokit/rest';
+const axios = require('axios');
+const { Buffer } = require('buffer');
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const GITHUB_API_URL = 'https://api.github.com';
+const REPO_OWNER = 't-a-bonnet';
+const REPO_NAME = 'exaggeration';
+const FILE_PATH = 'data.csv';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const owner = 't-b-bonnet';  // Replace with your GitHub username
-const repo = 'exaggeration'; // Replace with your repository name
-const path = 'sampled_climate_data.csv'; // Path to your CSV file
+exports.handler = async (event) => {
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ success: false, message: 'Method Not Allowed' })
+        };
+    }
 
-export async function handler(event) {
     try {
-        // Parse and validate input
         const { id, text } = JSON.parse(event.body);
-        const idString = id ? id.toString().trim() : '';
-        const textString = text ? text.toString().trim() : '';
 
-        if (!idString || !textString) {
-            console.error('Invalid input:', { id: idString, text: textString });
+        if (typeof id !== 'number' || typeof text !== 'string') {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Invalid input: id and text must be non-empty strings' })
+                body: JSON.stringify({ success: false, message: 'Invalid input' })
             };
         }
 
-        // Get the file content and SHA
-        const { data: fileData } = await octokit.repos.getContent({
-            owner,
-            repo,
-            path
-        });
-
-        if (!fileData.content) {
-            throw new Error('File content is missing');
-        }
-
-        // Decode and process the file content
-        const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
-        const rows = currentContent.trim().split('\n');
-
-        if (rows.length < 2) {
-            throw new Error('CSV file does not contain enough rows');
-        }
-
-        const header = rows[0];
-        const dataRows = rows.slice(1);
-
-        // Find and update the row with the matching id
-        let updated = false;
-        const updatedRows = dataRows.map(row => {
-            const columns = row.split(',');
-            if (columns[0] === idString) {
-                updated = true;
-                return [idString, textString].join(',');
+        // Step 1: Fetch the current file content from GitHub
+        const response = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3.raw'
             }
-            return row;
         });
 
-        if (!updated) {
-            console.error('ID not found:', idString);
+        const fileContent = Buffer.from(response.data, 'base64').toString('utf8');
+        const rows = fileContent.trim().split('\n').map(row => row.split(','));
+
+        // Step 2: Update the specified row
+        if (id < 0 || id >= rows.length - 1) { // -1 to exclude header row
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'ID not found' })
+                body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
             };
         }
 
-        // Prepare updated content and encode it
-        const updatedContent = [header, ...updatedRows].join('\n');
-        const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
+        // Assuming the 'body_parent' column exists in the CSV
+        const header = rows[0];
+        const columnIndex = header.indexOf('body_parent');
 
-        // Update the file on GitHub
-        await octokit.repos.createOrUpdateFileContents({
-            owner,
-            repo,
-            path,
-            message: 'Update CSV file via API',
-            content: updatedContentBase64,
-            sha: fileData.sha
+        if (columnIndex === -1) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found' })
+            };
+        }
+
+        rows[id + 1][columnIndex] = text; // Update the row
+
+        // Convert rows back to CSV format
+        const updatedContent = rows.map(row => row.join(',')).join('\n');
+
+        // Step 3: Get the SHA of the current file (needed for updating)
+        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        // Step 4: Update the file on GitHub
+        await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            message: 'Update data.csv',
+            content: Buffer.from(updatedContent).toString('base64'),
+            sha: fileData.sha // Required SHA for the update
+        }, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
         });
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ success: true, message: 'File updated successfully' })
+            body: JSON.stringify({ success: true })
         };
+
     } catch (error) {
         console.error('Error:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
+            body: JSON.stringify({ success: false, message: 'Internal Server Error' })
         };
     }
-}
+};
