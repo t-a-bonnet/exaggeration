@@ -1,10 +1,11 @@
 const axios = require('axios');
 const { Buffer } = require('buffer');
+const XLSX = require('xlsx');
 
 const GITHUB_API_URL = 'https://api.github.com';
 const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'data.csv';
+const FILE_PATH = 'data.xlsx';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 exports.handler = async function(event, context) {
@@ -15,40 +16,43 @@ exports.handler = async function(event, context) {
     const { name, email } = JSON.parse(event.body);
 
     try {
-        // Fetch the current content of the CSV file
+        // Fetch the current content of the XLSX file
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`
-            }
+            },
+            responseType: 'arraybuffer'
         });
 
         // Decode the current content
-        const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8').trim();
-
-        // Check if the file is empty or has no headers
-        let newContent;
-        if (decodedContent === '') {
+        const workbook = XLSX.read(fileData, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        
+        // Convert the worksheet to JSON
+        let data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        
+        // Check if the file is empty or has headers
+        if (data.length === 0) {
             // If the file is empty, add headers and the new data
-            newContent = `Name,Email\n${name},${email}\n`;
+            data = [['Name', 'Email'], [name, email]];
         } else {
-            // Split content by lines
-            const lines = decodedContent.split('\n');
-            
-            // Check if headers are already present
-            const headers = lines[0];
-            if (headers !== 'Name,Email') {
-                // Add headers if not present
-                newContent = `Name,Email\n${decodedContent}\n${name},${email}`;
-            } else {
-                // Append the new data under the existing headers
-                newContent = `${decodedContent}\n${name},${email}`;
-            }
+            // Add new data under existing headers
+            data.push([name, email]);
         }
 
-        // Update the CSV file with the new content
+        // Create a new worksheet and workbook
+        const newWorksheet = XLSX.utils.aoa_to_sheet(data);
+        const newWorkbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, sheetName);
+        
+        // Write the workbook to a buffer
+        const newFileData = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
+        
+        // Update the XLSX file with the new content
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Add new submission',
-            content: Buffer.from(newContent).toString('base64'),
+            content: Buffer.from(newFileData).toString('base64'),
             sha: fileData.sha
         }, {
             headers: {
