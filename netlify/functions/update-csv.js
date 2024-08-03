@@ -25,15 +25,18 @@ exports.handler = async (event) => {
             };
         }
 
-        // Step 1: Fetch the current file content from GitHub
-        const response = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+        // Step 1: Fetch the file metadata to get the SHA
+        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3.raw'
+                'Accept': 'application/vnd.github.v3+json'
             }
         });
 
-        const fileContent = Buffer.from(response.data, 'base64').toString('utf8');
+        // Step 2: Fetch the raw content of the file using the download URL
+        const fileContentResponse = await axios.get(fileData.download_url);
+        const fileContent = fileContentResponse.data;
+
         console.log('File Content:', fileContent); // Log the entire file content
 
         const rows = fileContent.trim().split('\n'); // Split into rows
@@ -74,15 +77,7 @@ exports.handler = async (event) => {
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
-        // Step 3: Get the SHA of the current file (needed for updating)
-        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-
-        // Step 4: Update the file on GitHub
+        // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Update sampled_climate_data.csv',
             content: Buffer.from(updatedContent).toString('base64'),
