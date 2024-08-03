@@ -12,9 +12,9 @@ exports.handler = async function(event, context) {
     const { name, email } = JSON.parse(event.body);
 
     const content = `Name,Email\n${name},${email}\n`;
-    const repo = 'exaggeration';  // Replace with your GitHub repo name
-    const path = 'data.csv';  // Replace with the path to your CSV file
-    const owner = 't-a-bonnet';  // Replace with your GitHub username
+    const repo = 'exaggeration';
+    const path = 'data.csv';
+    const owner = 't-a-bonnet';
 
     try {
         const { data } = await octokit.repos.getContent({
