@@ -12,11 +12,9 @@ exports.handler = async function(event, context) {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    let name, email;
-    try {
-        // Parse the incoming request body
-        const { name, email } = JSON.parse(event.body);
+    const { name, email } = JSON.parse(event.body);
 
+    try {
         // Fetch the current content of the CSV file
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
@@ -24,17 +22,27 @@ exports.handler = async function(event, context) {
             }
         });
 
-        // Decode the current content and ensure it's properly formatted
-        const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8');
-        
+        // Decode the current content
+        const decodedContent = Buffer.from(fileData.content, 'base64').toString('utf8').trim();
+
         // Check if the file is empty or has no headers
         let newContent;
-        if (decodedContent.trim() === '') {
+        if (decodedContent === '') {
             // If the file is empty, add headers and the new data
             newContent = `Name,Email\n${name},${email}\n`;
         } else {
-            // If the file has content, append the new data
-            newContent = decodedContent + `${name},${email}\n`;
+            // Split content by lines
+            const lines = decodedContent.split('\n');
+            
+            // Check if headers are already present
+            const headers = lines[0];
+            if (headers !== 'Name,Email') {
+                // Add headers if not present
+                newContent = `Name,Email\n${decodedContent}\n${name},${email}`;
+            } else {
+                // Append the new data under the existing headers
+                newContent = `${decodedContent}\n${name},${email}`;
+            }
         }
 
         // Update the CSV file with the new content
