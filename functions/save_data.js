@@ -11,7 +11,7 @@ exports.handler = async function(event, context) {
         const data = JSON.parse(event.body).data;
         const csvWriter = createObjectCsvWriter({
             path: '/tmp/sampled_climate_data.csv',
-            header: Object.keys(data[0]).map(key => ({ id: key, title: key }))
+            header: [{ id: 'body_parent', title: 'body_parent' }]
         });
 
         await csvWriter.writeRecords(data);
