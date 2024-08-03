@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentRow = 0;
     let data = [];
-    let ids = [];
     let columnIndex = -1; // To store the index of the 'body_parent' column
     let idColumnIndex = -1; // To store the index of the 'id' column
 
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .filter(item => item.text.trim() !== ''); // Remove any empty rows
 
-                ids = data.map(item => item.id); // Extract ids for submission
+                console.log('Data loaded:', data); // Debugging line
 
                 if (data.length > 0) {
                     showRow(currentRow);
@@ -51,14 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showRow(index) {
-        if (data.length === 0) return;
+        if (data.length === 0 || index < 0 || index >= data.length) {
+            console.error('Invalid row index:', index); // Debugging line
+            return;
+        }
+        console.log('Showing row:', data[index]); // Debugging line
         textDisplay.value = data[index].text; // Set textarea value instead of textContent
     }
 
     function showNextRow() {
         if (data.length === 0) return;
         currentRow = (currentRow + 1) % data.length;
-        console.log('Showing row:', currentRow); // Debugging line
         showRow(currentRow);
     }
 
