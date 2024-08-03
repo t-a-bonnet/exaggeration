@@ -26,12 +26,22 @@ app.post('/update-csv', (req, res) => {
             return res.status(400).send('Invalid row index');
         }
 
-        const header = rows[0];
+        const header = rows[0].split(',');
+        const columnIndex = header.indexOf('body_parent');
+
+        if (columnIndex === -1) {
+            return res.status(400).send('Column "body_parent" not found');
+        }
+
         const columns = rows[row + 1].split(',');
 
         // Update the column data
-        columns[0] = text; // Assuming 'body_parent' is the first column
-        rows[row + 1] = columns.join(',');
+        if (columns.length > columnIndex) {
+            columns[columnIndex] = text;
+            rows[row + 1] = columns.join(',');
+        } else {
+            return res.status(400).send('Invalid column index');
+        }
 
         // Write back the updated data to the CSV file
         const updatedData = rows.join('\n');
