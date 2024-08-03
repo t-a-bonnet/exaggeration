@@ -1,10 +1,11 @@
-import { Octokit } from '@octokit/rest';
-
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+import axios from 'axios';
 
 const owner = 't-b-bonnet';  // Replace with your GitHub username
 const repo = 'exaggeration'; // Replace with your repository name
 const path = 'sampled_climate_data.csv'; // Path to your CSV file
+const token = process.env.GITHUB_TOKEN;
+
+const githubApiBase = 'https://api.github.com';
 
 export async function handler(event) {
     try {
@@ -22,10 +23,10 @@ export async function handler(event) {
         }
 
         // Get the file content and SHA
-        const { data: fileData } = await octokit.repos.getContent({
-            owner,
-            repo,
-            path
+        const { data: fileData } = await axios.get(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
+            headers: {
+                'Authorization': `token ${token}`
+            }
         });
 
         if (!fileData.content) {
@@ -49,7 +50,7 @@ export async function handler(event) {
             const columns = row.split(',');
             if (columns[0] === idString) {
                 updated = true;
-                return [idString, textString].join(',');
+                return [idString, textString].concat(columns.slice(2)).join(',');
             }
             return row;
         });
@@ -67,13 +68,15 @@ export async function handler(event) {
         const updatedContentBase64 = Buffer.from(updatedContent).toString('base64');
 
         // Update the file on GitHub
-        await octokit.repos.createOrUpdateFileContents({
-            owner,
-            repo,
-            path,
+        await axios.put(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
             message: 'Update CSV file via API',
             content: updatedContentBase64,
             sha: fileData.sha
+        }, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
         });
 
         return {
@@ -81,7 +84,7 @@ export async function handler(event) {
             body: JSON.stringify({ success: true, message: 'File updated successfully' })
         };
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         return {
             statusCode: 500,
             body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
