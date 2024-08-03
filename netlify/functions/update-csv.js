@@ -33,6 +33,7 @@ exports.handler = async (event) => {
             }
         });
 
+        // Decode base64 content properly
         const fileContent = Buffer.from(response.data, 'base64').toString('utf8');
         const rows = fileContent.trim().split('\n').map(row => row.split(','));
 
@@ -49,13 +50,15 @@ exports.handler = async (event) => {
         const columnIndex = header.indexOf('body_parent');
 
         if (columnIndex === -1) {
+            console.error('Column "body_parent" not found in header:', header);
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found' })
+                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found', headers: header })
             };
         }
 
-        rows[id + 1][columnIndex] = text; // Update the row
+        // Update the row in the CSV
+        rows[id + 1][columnIndex] = text;
 
         // Convert rows back to CSV format
         const updatedContent = rows.map(row => row.join(',')).join('\n');
@@ -86,10 +89,10 @@ exports.handler = async (event) => {
         };
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.response ? error.response.data : error.message);
         return {
             statusCode: 500,
-            body: JSON.stringify({ success: false, message: 'Internal Server Error' })
+            body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
         };
     }
 };
