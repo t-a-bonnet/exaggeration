@@ -34,16 +34,17 @@ export async function handler(event) {
         let updated = false;
         const updatedRows = dataRows.map(row => {
             const columns = row.split(',');
-            if (columns[0] === id) { // Check if id matches
+            if (columns[0] === id) { // Check if id matches (assuming 'id' is the first column)
                 updated = true;
-                return [id, text].join(','); // Update the row
+                // Update the entire row but keep the original id and update other columns as needed
+                return [id, ...columns.slice(1).map((col, idx) => idx === 0 ? text : col)].join(',');
             }
             return row;
         });
 
         if (!updated) {
             return {
-                statusCode: 400,
+                statusCode: 404,
                 body: JSON.stringify({ success: false, message: 'ID not found' })
             };
         }
