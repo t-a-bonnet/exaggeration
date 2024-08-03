@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 
-const csvFilePath = path.join(__dirname, '../../sampled_climate_data.csv');
+const csvFilePath = path.join(__dirname, '../..', 'sampled_climate_data.csv');
 const rows = [];
 
 // Read CSV file and parse data
