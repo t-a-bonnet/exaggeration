@@ -8,22 +8,30 @@ const submitBtn = document.getElementById('submit-btn');
 let currentIndex = 0;
 let csvData = [];
 let headers = [];
+let bodyParentIndex = -1;
 
 async function fetchCSV() {
     try {
         const response = await axios.get('/data');
-        const rows = response.data.split('\n').map(row => row.split(','));
+        const rows = response.data.trim().split('\n').map(row => row.split(','));
+
         headers = rows[0];
+        bodyParentIndex = headers.indexOf('body_parent');
+        
+        if (bodyParentIndex === -1) {
+            throw new Error('body_parent column not found');
+        }
+
         csvData = rows.slice(1);
         displayRow(currentIndex);
     } catch (error) {
-        console.error('Error fetching CSV data:', error);
+        console.error('Error fetching or parsing CSV data:', error);
     }
 }
 
 function displayRow(index) {
     if (index >= 0 && index < csvData.length) {
-        textBox.value = csvData[index][headers.indexOf('body_parent')] || '';
+        textBox.value = csvData[index][bodyParentIndex] || '';
     }
 }
 
@@ -43,7 +51,7 @@ nextBtn.addEventListener('click', () => {
 
 submitBtn.addEventListener('click', async () => {
     try {
-        csvData[currentIndex][headers.indexOf('body_parent')] = textBox.value;
+        csvData[currentIndex][bodyParentIndex] = textBox.value;
         const csvString = [headers.join(','), ...csvData.map(row => row.join(','))].join('\n');
         await axios.post('/update', { csvString });
         alert('Changes saved!');
