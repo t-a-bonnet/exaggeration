@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Not enough rows in CSV file.');
                     return;
                 }
-                
+
                 const header = rows[0].split(','); // Extract the header row
                 columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
                     })
                     .filter(text => text.trim() !== ''); // Remove any empty rows
-                
+
                 if (data.length > 0) {
                     showRow(currentRow);
                 } else {

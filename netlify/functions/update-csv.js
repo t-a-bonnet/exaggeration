@@ -1,4 +1,4 @@
-const { Octokit } = require('@octokit/rest');
+import { Octokit } from '@octokit/rest';
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 const owner = 't-a-bonnet';  // Replace with your GitHub username
@@ -15,6 +15,7 @@ exports.handler = async (event) => {
             };
         }
 
+        // Get the file content and SHA
         const { data: fileData } = await octokit.repos.getContent({
             owner,
             repo,
@@ -25,7 +26,7 @@ exports.handler = async (event) => {
         const rows = currentContent.trim().split('\n');
 
         // Ensure the row index is valid and update it
-        if (row + 1 < rows.length) { // +1 to skip header row
+        if (row < rows.length - 1) { // -1 to account for the header row
             rows[row + 1] = text; // Update the specific row, skip header row
         } else {
             return {
