@@ -1,18 +1,19 @@
 import axios from 'axios';
+import { Buffer } from 'buffer'; // Import Buffer if needed, depending on your runtime environment
 
 const owner = 't-b-bonnet';  // Replace with your GitHub username
 const repo = 'exaggeration'; // Replace with your repository name
 const path = 'sampled_climate_data.csv'; // Path to your CSV file
-const token = process.env.GITHUB_TOKEN;
-
+const token = process.env.GITHUB_TOKEN; // Ensure this token is set in your environment variables
+console.log('GITHUB_TOKEN:', token);
 const githubApiBase = 'https://api.github.com';
 
 export async function handler(event) {
     try {
         // Parse and validate input
         const { id, text } = JSON.parse(event.body);
-        const idString = id.toString();
-        const textString = text.toString();
+        const idString = id ? id.toString().trim() : '';
+        const textString = text ? text.toString().trim() : '';
 
         if (!idString || !textString) {
             console.error('Invalid input:', { id: idString, text: textString });
@@ -25,12 +26,13 @@ export async function handler(event) {
         // Get the file content and SHA
         const { data: fileData } = await axios.get(`${githubApiBase}/repos/${owner}/${repo}/contents/${path}`, {
             headers: {
-                'Authorization': `token ${token}`
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json' // Ensure correct header is set
             }
         });
 
-        if (!fileData.content) {
-            throw new Error('File content is missing');
+        if (!fileData.content || !fileData.sha) {
+            throw new Error('File content or SHA is missing');
         }
 
         // Decode and process the file content
@@ -50,7 +52,7 @@ export async function handler(event) {
             const columns = row.split(',');
             if (columns[0] === idString) {
                 updated = true;
-                return [idString, textString].concat(columns.slice(2)).join(',');
+                return [idString, textString, ...columns.slice(2)].join(','); // Ensure other columns are preserved
             }
             return row;
         });
@@ -75,7 +77,7 @@ export async function handler(event) {
         }, {
             headers: {
                 'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
+                'Accept': 'application/vnd.github.v3+json' // Ensure correct header is set
             }
         });
 
