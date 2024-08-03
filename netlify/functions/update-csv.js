@@ -33,35 +33,46 @@ exports.handler = async (event) => {
             }
         });
 
-        // Decode base64 content properly
         const fileContent = Buffer.from(response.data, 'base64').toString('utf8');
-        const rows = fileContent.trim().split('\n').map(row => row.split(','));
+        console.log('File Content:', fileContent); // Log the entire file content
 
-        // Step 2: Update the specified row
-        if (id < 0 || id >= rows.length - 1) { // -1 to exclude header row
+        const rows = fileContent.trim().split('\n'); // Split into rows
+        if (rows.length < 2) {
+            console.error('Not enough rows in CSV file.');
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'Not enough rows in CSV file' })
+            };
+        }
+
+        const header = rows[0].split(','); // Extract the header row
+        const columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
+
+        console.log('Header:', header); // Log the header row
+        console.log('Column Index of body_parent:', columnIndex); // Log the column index
+
+        if (columnIndex === -1) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found' })
+            };
+        }
+
+        const dataRows = rows.slice(1); // Skip the header row
+        const parsedRows = dataRows.map(row => row.split(','));
+        console.log('Parsed Rows:', parsedRows); // Log the parsed rows
+
+        if (id < 0 || id >= parsedRows.length) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
             };
         }
 
-        // Assuming the 'body_parent' column exists in the CSV
-        const header = rows[0];
-        const columnIndex = header.indexOf('body_parent');
-
-        if (columnIndex === -1) {
-            console.error('Column "body_parent" not found in header:', header);
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found', headers: header })
-            };
-        }
-
-        // Update the row in the CSV
-        rows[id + 1][columnIndex] = text;
+        parsedRows[id][columnIndex] = text; // Update the row
 
         // Convert rows back to CSV format
-        const updatedContent = rows.map(row => row.join(',')).join('\n');
+        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
         // Step 3: Get the SHA of the current file (needed for updating)
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
