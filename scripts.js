@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplay = document.getElementById('text-display');
     const nextButton = document.getElementById('next-button');
     const submitButton = document.getElementById('submit-button');
+    const messageArea = document.getElementById('message'); // Message area
 
     let currentRow = 0;
     let data = [];
@@ -72,12 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log('CSV updated successfully');
+                messageArea.textContent = 'CSV updated successfully!';
+                messageArea.style.color = 'green'; // Success message color
             } else {
-                console.error('Failed to update CSV');
+                messageArea.textContent = 'Failed to update CSV: ' + (data.message || 'Unknown error');
+                messageArea.style.color = 'red'; // Error message color
             }
         })
-        .catch(error => console.error('Error updating CSV:', error));
+        .catch(error => {
+            messageArea.textContent = 'Error updating CSV: ' + error.message;
+            messageArea.style.color = 'red'; // Error message color
+        });
     }
 
     nextButton.addEventListener('click', showNextRow);
