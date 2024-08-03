@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplay = document.getElementById('text-display');
     const nextButton = document.getElementById('next-button');
-    const submitButton = document.getElementById('submit-button');
-    const messageArea = document.getElementById('message'); // Message area
+    const submitButton = document.getElementById('submit-button'); // Added submit button
 
     let currentRow = 0;
     let data = [];
@@ -45,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showRow(index) {
         if (data.length === 0) return;
-        textDisplay.value = data[index];
+        textDisplay.textContent = data[index];
     }
 
     function showNextRow() {
@@ -55,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function submitChanges() {
-        const updatedText = textDisplay.value;
-        fetch('update_csv.php', {
+        const updatedText = textDisplay.textContent;
+        fetch('/.netlify/functions/update-csv', { // Updated URL to Netlify function
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,30 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: updatedText
             })
         })
-        .then(response => response.text())  // Use text() to check raw response
-        .then(text => {
-            try {
-                const data = JSON.parse(text);  // Parse JSON manually
-                if (data.success) {
-                    messageArea.textContent = 'CSV updated successfully!';
-                    messageArea.style.color = 'green'; // Success message color
-                } else {
-                    messageArea.textContent = 'Failed to update CSV: ' + (data.message || 'Unknown error');
-                    messageArea.style.color = 'red'; // Error message color
-                }
-            } catch (error) {
-                messageArea.textContent = 'Error parsing response: ' + error.message;
-                messageArea.style.color = 'red'; // Error message color
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Changes saved successfully!');
+            } else {
+                alert('Error: ' + data.message);
             }
         })
-        .catch(error => {
-            messageArea.textContent = 'Error updating CSV: ' + error.message;
-            messageArea.style.color = 'red'; // Error message color
-        });
+        .catch(error => console.error('Error submitting changes:', error));
     }
 
     nextButton.addEventListener('click', showNextRow);
-    submitButton.addEventListener('click', submitChanges);
+    submitButton.addEventListener('click', submitChanges); // Added event listener for submit button
 
     loadCSV();
 });
