@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplay = document.getElementById('text-display');
     const nextButton = document.getElementById('next-button');
+    const submitButton = document.getElementById('submit-button');
 
     let currentRow = 0;
     let data = [];
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showRow(index) {
         if (data.length === 0) return;
-        textDisplay.textContent = data[index];
+        textDisplay.value = data[index];
     }
 
     function showNextRow() {
@@ -52,7 +53,35 @@ document.addEventListener('DOMContentLoaded', () => {
         showRow(currentRow);
     }
 
+    function submitChanges() {
+        const updatedText = textDisplay.value;
+        // Replace the current row data with the updated text
+        data[currentRow] = updatedText;
+
+        // Send the updated data to the server
+        fetch('update_csv.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                row: currentRow,
+                text: updatedText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('CSV updated successfully');
+            } else {
+                console.error('Failed to update CSV');
+            }
+        })
+        .catch(error => console.error('Error updating CSV:', error));
+    }
+
     nextButton.addEventListener('click', showNextRow);
+    submitButton.addEventListener('click', submitChanges);
 
     loadCSV();
 });
