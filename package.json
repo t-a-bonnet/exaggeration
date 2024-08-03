@@ -1,20 +1,16 @@
 {
-    "name": "csv-text-viewer",
-    "version": "1.0.0",
-    "description": "A web-based interface for viewing and editing CSV data.",
-    "main": "index.html",
-    "scripts": {
-      "start": "netlify dev",
-      "build": "echo 'No build step required'",
-      "test": "echo 'No tests specified' && exit 0"
-    },
-    "dependencies": {
-      "@octokit/rest": "^18.0.0"
-    },
-    "devDependencies": {},
-    "engines": {
-      "node": "14.x"
-    },
-    "author": "",
-    "license": "ISC"
+  "name": "exaggeration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "your-build-script"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "14.x"
   }
+}
