@@ -55,6 +55,24 @@ textarea {
     resize: vertical;
 }
 
+/* New styles for the status dropdown */
+.status-control {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+#status-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
 #controls {
     margin-top: 10px;
 }
