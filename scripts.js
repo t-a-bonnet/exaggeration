@@ -2,10 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const nextButton = document.getElementById('next-button');
-    const prevButton = document.getElementById('prev-button');
     const submitButton = document.getElementById('submit-button');
-    const jumpButton = document.getElementById('jump-button');
-    const rowInput = document.getElementById('row-input');
 
     let currentRow = 0;
     let dataA = [];
@@ -71,8 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dataA.length === 0 || dataB.length === 0) return;
         textDisplayA.value = dataA[index] || ''; // Set textarea value instead of textContent
         textDisplayB.value = dataB[index] || ''; // Set textarea value instead of textContent
-        nextButton.disabled = dataA.length <= 1; // Disable next button if only one row
-        prevButton.disabled = dataA.length <= 1; // Disable previous button if only one row
+        nextButton.disabled = dataA.length <= 1; // Disable button if only one row
     }
 
     // Function to show the next row
@@ -80,24 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dataA.length === 0 || dataB.length === 0) return;
         currentRow = (currentRow + 1) % dataA.length;
         showRow(currentRow);
-    }
-
-    // Function to show the previous row
-    function showPrevRow() {
-        if (dataA.length === 0 || dataB.length === 0) return;
-        currentRow = (currentRow - 1 + dataA.length) % dataA.length;
-        showRow(currentRow);
-    }
-
-    // Function to jump to a specific row
-    function jumpToRow() {
-        const rowNumber = parseInt(rowInput.value, 10) - 1; // Convert input to zero-based index
-        if (rowNumber >= 0 && rowNumber < dataA.length) {
-            currentRow = rowNumber;
-            showRow(currentRow);
-        } else {
-            alert('Invalid row number.');
-        }
     }
 
     // Function to submit changes
@@ -155,8 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     nextButton.addEventListener('click', showNextRow);
-    prevButton.addEventListener('click', showPrevRow);
-    jumpButton.addEventListener('click', jumpToRow);
     submitButton.addEventListener('click', submitChanges);
 
     loadCSV();

@@ -9,38 +9,36 @@ body {
 }
 
 #container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
     text-align: center;
+    padding: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    max-width: 800px; /* Limits the width of the container */
     width: 100%;
 }
 
 h1 {
-    margin: 0;
     font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-p {
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-#text-areas {
+.text-pair {
     display: flex;
     gap: 20px;
-    width: 100%;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+    justify-content: center;
+}
+
+.text-box {
+    flex: 1;
+    min-width: 300px; /* Ensures each text box has a minimum width */
 }
 
 textarea {
     width: 100%;
-    height: 300px;
+    height: 300px; /* Adjusted to fit your design */
     box-sizing: border-box;
     margin-bottom: 20px;
     font-size: 18px;
@@ -48,7 +46,7 @@ textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: vertical;
+    resize: vertical; /* Allows vertical resizing only */
 }
 
 button {
@@ -75,64 +73,10 @@ button:active {
     background-color: #004085; /* Even darker shade for active state */
 }
 
-#row-jump {
-    margin-top: 20px;
-}
-
-#row-jump label {
-    margin-right: 10px;
-    font-size: 16px;
-}
-
-#row-jump input {
-    padding: 5px;
-    font-size: 16px;
-    width: 100px;
-    text-align: center;
-}
-
-#row-jump button {
-    padding: 5px 10px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    margin-left: 10px;
-}
-
-#row-jump button:hover {
-    background-color: #0056b3;
-}
-
+/* Add media query for better responsiveness on smaller screens */
 @media (max-width: 768px) {
-    #container {
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    #text-areas {
+    .text-pair {
         flex-direction: column;
         gap: 10px;
-    }
-
-    textarea {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 5px;
-    }
-
-    #row-jump {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #row-jump input {
-        margin-bottom: 10px;
     }
 }

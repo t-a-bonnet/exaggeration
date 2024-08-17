@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +15,19 @@
             align-items: center;
             gap: 20px;
             padding: 20px;
-            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .text-pair {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         textarea {
@@ -25,47 +38,21 @@
             font-family: Arial, sans-serif;
         }
 
+        #controls {
+            margin-top: 10px;
+        }
+
         button {
             display: block;
-            margin-top: 10px;
+            margin-top: 5px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
         }
 
-        #row-jump {
-            margin-top: 20px;
-        }
-
-        #row-jump label {
-            margin-right: 10px;
-        }
-
-        #row-jump input {
-            padding: 5px;
-            font-size: 16px;
-            width: 100px;
-            text-align: center;
-        }
-
-        #row-jump button {
-            padding: 5px 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-
-        #row-jump button:hover {
-            background-color: #0056b3;
-        }
-
         /* Add media query for better responsiveness on smaller screens */
         @media (max-width: 768px) {
-            #container {
+            .text-pair {
                 flex-direction: column;
             }
 
@@ -84,21 +71,19 @@
 <body>
     <div id="container">
         <h1>Task 1</h1>
-        <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with <b>WORD</b>.</p>
-        <div id="text-areas">
-            <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
-            <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+        <div class="text-pair">
+            <div class="text-box">
+                <label for="text-display-a">Speaker A:</label>
+                <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+            </div>
+            <div class="text-box">
+                <label for="text-display-b">Speaker B:</label>
+                <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+            </div>
         </div>
         <div id="controls">
-            <button id="previous-button" aria-label="Show previous row">Previous</button>
             <button id="next-button" aria-label="Show next row">Next</button>
             <button id="submit-button" aria-label="Submit changes">Submit</button>
-            <!-- Add this section for row jump input -->
-            <div id="row-jump">
-                <label for="row-number">Jump to row:</label>
-                <input type="number" id="row-number" min="1" placeholder="Enter row number">
-                <button id="jump-button" aria-label="Jump to specified row">Jump</button>
-            </div>
         </div>
     </div>
     <script src="scripts.js"></script>
