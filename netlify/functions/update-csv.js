@@ -16,9 +16,9 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { id, text } = JSON.parse(event.body);
+        const { id, text, column } = JSON.parse(event.body);
 
-        if (typeof id !== 'number' || typeof text !== 'string') {
+        if (typeof id !== 'number' || typeof text !== 'string' || typeof column !== 'string') {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Invalid input' })
@@ -49,15 +49,15 @@ exports.handler = async (event) => {
         }
 
         const header = rows[0].split(','); // Extract the header row
-        const columnIndex = header.indexOf('speaker_a_task_1'); // Find the index of the 'speaker_a_task_1' column
+        const columnIndex = header.indexOf(column); // Find the index of the specified column
 
         console.log('Header:', header); // Log the header row
-        console.log('Column Index of speaker_a_task_1:', columnIndex); // Log the column index
+        console.log('Column Index of', column, ':', columnIndex); // Log the column index
 
         if (columnIndex === -1) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Column "speaker_a_task_1" not found' })
+                body: JSON.stringify({ success: false, message: `Column "${column}" not found` })
             };
         }
 
@@ -72,7 +72,7 @@ exports.handler = async (event) => {
             };
         }
 
-        parsedRows[id][columnIndex] = text; // Update the row
+        parsedRows[id][columnIndex] = text; // Update the specified column
 
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');

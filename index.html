@@ -6,12 +6,57 @@
     <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
     <title>CSV Text Viewer</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add some basic styles for the layout */
+        #container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            box-sizing: border-box;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Add media query for better responsiveness on smaller screens */
+        @media (max-width: 768px) {
+            #container {
+                flex-direction: column;
+            }
+
+            textarea {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="container">
-        <textarea id="text-display" rows="10" cols="50" aria-label="CSV text display"></textarea>
-        <button id="next-button" aria-label="Show next row">Next</button>
-        <button id="submit-button" aria-label="Submit changes">Submit</button>
+        <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+        <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+        <div id="controls">
+            <button id="next-button" aria-label="Show next row">Next</button>
+            <button id="submit-button" aria-label="Submit changes">Submit</button>
+        </div>
     </div>
     <script src="scripts.js"></script>
 </body>
