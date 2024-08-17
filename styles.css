@@ -18,9 +18,27 @@ body {
     width: 100%;
 }
 
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.text-pair {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+    justify-content: center;
+}
+
+.text-box {
+    flex: 1;
+    min-width: 300px; /* Ensures each text box has a minimum width */
+}
+
 textarea {
     width: 100%;
-    max-width: 100%;
+    height: 300px; /* Adjusted to fit your design */
     box-sizing: border-box;
     margin-bottom: 20px;
     font-size: 18px;
@@ -53,4 +71,12 @@ button:hover, button:focus {
 
 button:active {
     background-color: #004085; /* Even darker shade for active state */
+}
+
+/* Add media query for better responsiveness on smaller screens */
+@media (max-width: 768px) {
+    .text-pair {
+        flex-direction: column;
+        gap: 10px;
+    }
 }

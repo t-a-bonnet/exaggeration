@@ -10,9 +10,23 @@
         /* Add some basic styles for the layout */
         #container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            align-items: center;
             gap: 20px;
             padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .text-pair {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         textarea {
@@ -23,9 +37,13 @@
             font-family: Arial, sans-serif;
         }
 
+        #controls {
+            margin-top: 10px;
+        }
+
         button {
             display: block;
-            margin-top: 10px;
+            margin-top: 5px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -33,7 +51,7 @@
 
         /* Add media query for better responsiveness on smaller screens */
         @media (max-width: 768px) {
-            #container {
+            .text-pair {
                 flex-direction: column;
             }
 
@@ -51,8 +69,17 @@
 </head>
 <body>
     <div id="container">
-        <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
-        <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+        <h1>Task 1</h1>
+        <div class="text-pair">
+            <div class="text-box">
+                <label for="text-display-a">Speaker A:</label>
+                <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+            </div>
+            <div class="text-box">
+                <label for="text-display-b">Speaker B:</label>
+                <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+            </div>
+        </div>
         <div id="controls">
             <button id="next-button" aria-label="Show next row">Next</button>
             <button id="submit-button" aria-label="Submit changes">Submit</button>
