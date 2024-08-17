@@ -11,21 +11,22 @@
         #container {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 20px;
             padding: 20px;
-            text-align: center; /* Center-aligns text and buttons */
         }
 
-        .task-header {
+        h1 {
             font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-        .task-description {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #333;
+        .text-pair {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         textarea {
@@ -34,38 +35,23 @@
             box-sizing: border-box;
             padding: 10px;
             font-family: Arial, sans-serif;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical; /* Allows vertical resizing only */
+        }
+
+        #controls {
+            margin-top: 10px;
         }
 
         button {
+            display: block;
+            margin-top: 5px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            width: 100%;
-            max-width: 200px;
-            margin: 10px auto;
-            background-color: #007bff; /* Primary color */
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        button:hover, button:focus {
-            background-color: #0056b3; /* Darker shade for hover and focus */
-            outline: none; /* Removes default focus outline */
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
-        }
-
-        button:active {
-            background-color: #004085; /* Even darker shade for active state */
         }
 
         /* Add media query for better responsiveness on smaller screens */
         @media (max-width: 768px) {
-            #container {
+            .text-pair {
                 flex-direction: column;
             }
 
@@ -83,12 +69,18 @@
 </head>
 <body>
     <div id="container">
-        <div class="task-header">Task 1</div>
-        <p class="task-description">
-            Mask a word in the Speaker A or Speaker B turn by replacing a word with <b>WORD</b>.
-        </p>
-        <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
-        <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+        <h1>Task 1</h1>
+        <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with <b>WORD</b>.</p>
+        <div class="text-pair">
+            <div class="text-box">
+                <label for="text-display-a">Speaker A:</label>
+                <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+            </div>
+            <div class="text-box">
+                <label for="text-display-b">Speaker B:</label>
+                <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+            </div>
+        </div>
         <div id="controls">
             <button id="next-button" aria-label="Show next row">Next</button>
             <button id="submit-button" aria-label="Submit changes">Submit</button>
