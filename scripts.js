@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
+    const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const submitButton = document.getElementById('submit-button');
 
@@ -68,13 +69,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dataA.length === 0 || dataB.length === 0) return;
         textDisplayA.value = dataA[index] || ''; // Set textarea value instead of textContent
         textDisplayB.value = dataB[index] || ''; // Set textarea value instead of textContent
-        nextButton.disabled = dataA.length <= 1; // Disable button if only one row
     }
 
     // Function to show the next row
     function showNextRow() {
         if (dataA.length === 0 || dataB.length === 0) return;
         currentRow = (currentRow + 1) % dataA.length;
+        showRow(currentRow);
+    }
+
+    // Function to show the previous row
+    function showPreviousRow() {
+        if (dataA.length === 0 || dataB.length === 0) return;
+        currentRow = (currentRow - 1 + dataA.length) % dataA.length;
         showRow(currentRow);
     }
 
@@ -132,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    previousButton.addEventListener('click', showPreviousRow);
     nextButton.addEventListener('click', showNextRow);
     submitButton.addEventListener('click', submitChanges);
 
