@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayB = document.getElementById('text-display-b');
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
+    const goButton = document.getElementById('go-button');
+    const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
 
     let currentRow = 0;
@@ -69,19 +71,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dataA.length === 0 || dataB.length === 0) return;
         textDisplayA.value = dataA[index] || ''; // Set textarea value instead of textContent
         textDisplayB.value = dataB[index] || ''; // Set textarea value instead of textContent
-    }
-
-    // Function to show the next row
-    function showNextRow() {
-        if (dataA.length === 0 || dataB.length === 0) return;
-        currentRow = (currentRow + 1) % dataA.length;
-        showRow(currentRow);
+        previousButton.disabled = index === 0; // Disable previous button if at the first row
+        nextButton.disabled = index === dataA.length - 1; // Disable next button if at the last row
     }
 
     // Function to show the previous row
     function showPreviousRow() {
         if (dataA.length === 0 || dataB.length === 0) return;
-        currentRow = (currentRow - 1 + dataA.length) % dataA.length;
+        if (currentRow > 0) {
+            currentRow -= 1;
+            showRow(currentRow);
+        }
+    }
+
+    // Function to show the next row
+    function showNextRow() {
+        if (dataA.length === 0 || dataB.length === 0) return;
+        if (currentRow < dataA.length - 1) {
+            currentRow += 1;
+            showRow(currentRow);
+        }
+    }
+
+    // Function to jump to a specific row
+    function goToRow() {
+        const rowNumber = parseInt(rowInput.value, 10);
+        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > dataA.length) {
+            alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
+            return;
+        }
+        currentRow = rowNumber - 1; // Convert to zero-based index
         showRow(currentRow);
     }
 
@@ -141,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previousButton.addEventListener('click', showPreviousRow);
     nextButton.addEventListener('click', showNextRow);
+    goButton.addEventListener('click', goToRow);
     submitButton.addEventListener('click', submitChanges);
 
     loadCSV();

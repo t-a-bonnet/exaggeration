@@ -79,10 +79,42 @@ button:active {
     background-color: #004085; /* Even darker shade for active state */
 }
 
+#controls {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row-navigation {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+input[type="number"] {
+    width: 60px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
 /* Add media query for better responsiveness on smaller screens */
 @media (max-width: 768px) {
     .text-pair {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .row-navigation {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    input[type="number"] {
+        width: 100%;
     }
 }
