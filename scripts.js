@@ -1,21 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
-    const statusDisplay = document.getElementById('status-display');
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
     const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
-    const changeStatusButton = document.getElementById('change-status-button');
 
     let currentRow = 0;
     let dataA = [];
     let dataB = [];
-    let status = [];
     let columnIndexA = -1;
     let columnIndexB = -1;
-    let statusIndex = -1;
 
     // Function to load the CSV data
     async function loadCSV() {
@@ -28,20 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
                 textDisplayB.value = 'No data available.';
-                statusDisplay.value = 'No data available.';
                 return;
             }
 
             const header = rows[0].split(','); // Extract the header row
             columnIndexA = header.indexOf('speaker_a_task_1'); // Find the index of the 'speaker_a_task_1' column
             columnIndexB = header.indexOf('speaker_b_task_1'); // Find the index of the 'speaker_b_task_1' column
-            statusIndex = header.indexOf('status'); // Find the index of the 'status' column
 
-            if (columnIndexA === -1 || columnIndexB === -1 || statusIndex === -1) {
+            if (columnIndexA === -1 || columnIndexB === -1) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Column "speaker_a_task_1" not found.';
                 textDisplayB.value = 'Column "speaker_b_task_1" not found.';
-                statusDisplay.value = 'Column "status" not found.';
                 return;
             }
 
@@ -59,42 +52,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .filter(text => text.trim() !== ''); // Remove any empty rows
 
-            status = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[statusIndex] || ''; // Use the statusIndex to get the 'status' column value
-                })
-                .filter(status => status.trim() !== ''); // Remove any empty rows
-
-            if (dataA.length > 0 && dataB.length > 0 && status.length > 0) {
+            if (dataA.length > 0 && dataB.length > 0) {
                 showRow(currentRow);
             } else {
                 console.error('No data available.');
                 textDisplayA.value = 'No data available.';
                 textDisplayB.value = 'No data available.';
-                statusDisplay.value = 'No data available.';
             }
         } catch (error) {
             console.error('Error loading CSV:', error);
             textDisplayA.value = 'Error loading CSV data.';
             textDisplayB.value = 'Error loading CSV data.';
-            statusDisplay.value = 'Error loading CSV data.';
         }
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || status.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0) return;
         textDisplayA.value = dataA[index] || ''; // Set textarea value instead of textContent
         textDisplayB.value = dataB[index] || ''; // Set textarea value instead of textContent
-        statusDisplay.value = status[index] || ''; // Set textarea value for status
         previousButton.disabled = index === 0; // Disable previous button if at the first row
         nextButton.disabled = index === dataA.length - 1; // Disable next button if at the last row
     }
 
     // Function to show the previous row
     function showPreviousRow() {
-        if (dataA.length === 0 || dataB.length === 0 || status.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0) return;
         if (currentRow > 0) {
             currentRow -= 1;
             showRow(currentRow);
@@ -103,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show the next row
     function showNextRow() {
-        if (dataA.length === 0 || dataB.length === 0 || status.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0) return;
         if (currentRow < dataA.length - 1) {
             currentRow += 1;
             showRow(currentRow);
@@ -162,23 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const resultB = await responseB.json();
             if (!resultB.success) {
                 alert('Error updating column "speaker_b_task_1": ' + resultB.message);
-            }
-
-            const responseStatus = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
-                    text: statusDisplay.value,
-                    column: 'status'
-                })
-            });
-
-            const resultStatus = await responseStatus.json();
-            if (!resultStatus.success) {
-                alert('Error updating column "status": ' + resultStatus.message);
             } else {
                 alert('Changes saved successfully!');
             }
@@ -192,18 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to change status
-    function changeStatus() {
-        const currentStatus = statusDisplay.value;
-        const newStatus = currentStatus === 'Incomplete' ? 'Complete' : 'Incomplete';
-        statusDisplay.value = newStatus;
-    }
-
     previousButton.addEventListener('click', showPreviousRow);
     nextButton.addEventListener('click', showNextRow);
     goButton.addEventListener('click', goToRow);
     submitButton.addEventListener('click', submitChanges);
-    changeStatusButton.addEventListener('click', changeStatus);
 
     loadCSV();
 });
