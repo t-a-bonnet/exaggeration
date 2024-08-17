@@ -57,15 +57,13 @@ textarea {
 
 #controls {
     margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Add spacing between rows */
 }
 
 .button-row {
     display: flex;
     gap: 10px;
     justify-content: center;
+    margin-bottom: 10px; /* Adds space between the two rows */
 }
 
 input[type="number"] {
@@ -111,10 +109,6 @@ button:active {
     }
 
     input[type="number"] {
-        width: 100%;
-    }
-
-    button, input[type="number"] {
         width: 100%;
     }
 }
