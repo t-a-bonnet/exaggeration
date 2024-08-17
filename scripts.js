@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentRow = 0;
     let data = [];
-    let columnIndex = -1; // To store the index of the 'body_parent' column
+    let columnIndex = -1; // To store the index of the 'speaker_a_task_1' column
 
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('sampled_climate_data.csv');
+            const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
             const rows = text.trim().split('\n'); // Trim and split into rows
@@ -21,18 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0].split(','); // Extract the header row
-            columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
+            columnIndex = header.indexOf('speaker_a_task_1'); // Find the index of the 'speaker_a_task_1' column
 
             if (columnIndex === -1) {
-                console.error('Column "body_parent" not found');
-                textDisplay.value = 'Column "body_parent" not found.';
+                console.error('Column "speaker_a_task_1" not found');
+                textDisplay.value = 'Column "speaker_a_task_1" not found.';
                 return;
             }
 
             data = rows.slice(1) // Skip the header row
                 .map(row => {
                     const columns = row.split(',');
-                    return columns[columnIndex] || ''; // Use the columnIndex to get the 'body_parent' column value
+                    return columns[columnIndex] || ''; // Use the columnIndex to get the 'speaker_a_task_1' column value
                 })
                 .filter(text => text.trim() !== ''); // Remove any empty rows
 

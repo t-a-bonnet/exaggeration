@@ -4,7 +4,7 @@ const { Buffer } = require('buffer');
 const GITHUB_API_URL = 'https://api.github.com';
 const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'sampled_climate_data.csv';
+const FILE_PATH = 'Appen data 16.8.2024.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 exports.handler = async (event) => {
@@ -49,15 +49,15 @@ exports.handler = async (event) => {
         }
 
         const header = rows[0].split(','); // Extract the header row
-        const columnIndex = header.indexOf('body_parent'); // Find the index of the 'body_parent' column
+        const columnIndex = header.indexOf('speaker_a_task_1'); // Find the index of the 'speaker_a_task_1' column
 
         console.log('Header:', header); // Log the header row
-        console.log('Column Index of body_parent:', columnIndex); // Log the column index
+        console.log('Column Index of speaker_a_task_1:', columnIndex); // Log the column index
 
         if (columnIndex === -1) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Column "body_parent" not found' })
+                body: JSON.stringify({ success: false, message: 'Column "speaker_a_task_1" not found' })
             };
         }
 
@@ -79,7 +79,7 @@ exports.handler = async (event) => {
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-            message: 'Update sampled_climate_data.csv',
+            message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha // Required SHA for the update
         }, {
