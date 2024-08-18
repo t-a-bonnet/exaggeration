@@ -11,9 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const goButton = document.getElementById('go-button');
     const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
-    const robertaPreds = document.getElementById('roberta-preds');
-    const llamaPreds = document.getElementById('llama-preds');
-    const gemmaPreds = document.getElementById('gemma-preds');
 
     let currentRow = 0;
     let dataA = [];
@@ -30,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexATask3;
     let columnIndexBTask3;
     let statusColumnIndex;
-    let columnIndexRoberta;
-    let columnIndexLlama;
-    let columnIndexGemma;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -56,11 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
-            const rows = parseCSV(text); // Use the new parseCSV function
 
+            const rows = parseCSV(text); // Use the new parseCSV function
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                displayNoData();
+                textDisplayA.value = 'No data available.';
+                textDisplayB.value = 'No data available.';
+                textDisplayATask2.value = 'No data available.';
+                textDisplayBTask2.value = 'No data available.';
+                textDisplayATask3.value = 'No data available.';
+                textDisplayBTask3.value = 'No data available.';
                 return;
             }
 
@@ -72,74 +71,59 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             statusColumnIndex = header.indexOf('status');
-            columnIndexRoberta = header.indexOf('roberta_preds');
-            columnIndexLlama = header.indexOf('llama_preds');
-            columnIndexGemma = header.indexOf('gemma_preds');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
-                displayColumnNotFound();
+                textDisplayA.value = 'Required columns not found.';
+                textDisplayB.value = 'Required columns not found.';
+                textDisplayATask2.value = 'Required columns not found.';
+                textDisplayBTask2.value = 'Required columns not found.';
+                textDisplayATask3.value = 'Required columns not found.';
+                textDisplayBTask3.value = 'Required columns not found.';
                 return;
             }
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || '');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || '');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
+            dataA = rows.slice(1)
+                .map(row => row[columnIndexA] || '');
 
-            // Display predictions from the first row (usually the header is not included in the data)
-            robertaPreds.textContent = 'RoBERTa predictions: ' + (rows[1][columnIndexRoberta] || 'Not available.');
-            llamaPreds.textContent = 'Llama suggests: ' + (rows[1][columnIndexLlama] || 'Not available.');
-            gemmaPreds.textContent = 'Gemma suggests: ' + (rows[1][columnIndexGemma] || 'Not available.');
+            dataB = rows.slice(1)
+                .map(row => row[columnIndexB] || '');
+
+            dataATask2 = rows.slice(1)
+                .map(row => row[columnIndexATask2] || '');
+
+            dataBTask2 = rows.slice(1)
+                .map(row => row[columnIndexBTask2] || '');
+
+            dataATask3 = rows.slice(1)
+                .map(row => row[columnIndexATask3] || '');
+
+            dataBTask3 = rows.slice(1)
+                .map(row => row[columnIndexBTask3] || '');
+
+            statusData = rows.slice(1)
+                .map(row => row[statusColumnIndex] || '');
 
             if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0) {
                 showRow(currentRow);
             } else {
-                displayNoData();
+                console.error('No data available.');
+                textDisplayA.value = 'No data available.';
+                textDisplayB.value = 'No data available.';
+                textDisplayATask2.value = 'No data available.';
+                textDisplayBTask2.value = 'No data available.';
+                textDisplayATask3.value = 'No data available.';
+                textDisplayBTask3.value = 'No data available.';
             }
         } catch (error) {
             console.error('Error loading CSV:', error);
-            displayError();
+            textDisplayA.value = 'Error loading CSV data.';
+            textDisplayB.value = 'Error loading CSV data.';
+            textDisplayATask2.value = 'Error loading CSV data.';
+            textDisplayBTask2.value = 'Error loading CSV data.';
+            textDisplayATask3.value = 'Error loading CSV data.';
+            textDisplayBTask3.value = 'Error loading CSV data.';
         }
-    }
-
-    function displayNoData() {
-        textDisplayA.value = 'No data available.';
-        textDisplayB.value = 'No data available.';
-        textDisplayATask2.value = 'No data available.';
-        textDisplayBTask2.value = 'No data available.';
-        textDisplayATask3.value = 'No data available.';
-        textDisplayBTask3.value = 'No data available.';
-        robertaPreds.textContent = 'RoBERTa predictions: Not available.';
-        llamaPreds.textContent = 'Llama suggests: Not available.';
-        gemmaPreds.textContent = 'Gemma suggests: Not available.';
-    }
-
-    function displayColumnNotFound() {
-        textDisplayA.value = 'Required columns not found.';
-        textDisplayB.value = 'Required columns not found.';
-        textDisplayATask2.value = 'Required columns not found.';
-        textDisplayBTask2.value = 'Required columns not found.';
-        textDisplayATask3.value = 'Required columns not found.';
-        textDisplayBTask3.value = 'Required columns not found.';
-        robertaPreds.textContent = 'RoBERTa predictions: Not available.';
-        llamaPreds.textContent = 'Llama suggests: Not available.';
-        gemmaPreds.textContent = 'Gemma suggests: Not available.';
-    }
-
-    function displayError() {
-        textDisplayA.value = 'Error loading CSV data.';
-        textDisplayB.value = 'Error loading CSV data.';
-        textDisplayATask2.value = 'Error loading CSV data.';
-        textDisplayBTask2.value = 'Error loading CSV data.';
-        textDisplayATask3.value = 'Error loading CSV data.';
-        textDisplayBTask3.value = 'Error loading CSV data.';
-        robertaPreds.textContent = 'RoBERTa predictions: Error loading data.';
-        llamaPreds.textContent = 'Llama suggests: Error loading data.';
-        gemmaPreds.textContent = 'Gemma suggests: Error loading data.';
     }
 
     // Function to display a specific row
@@ -152,11 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
-        robertaPreds.textContent = 'RoBERTa predictions: ' + (rows[index + 1][columnIndexRoberta] || 'Not available.'); // Adjust index to align with data rows
-        llamaPreds.textContent = 'Llama suggests: ' + (rows[index + 1][columnIndexLlama] || 'Not available.'); // Adjust index to align with data rows
-        gemmaPreds.textContent = 'Gemma suggests: ' + (rows[index + 1][columnIndexGemma] || 'Not available.'); // Adjust index to align with data rows
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
+    }
+
+    // Function to show the previous row
+    function showPreviousRow() {
+        if (currentRow > 0) {
+            currentRow -= 1;
+            showRow(currentRow);
+        }
     }
 
     // Function to show the next row
@@ -187,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
-
+    
         submitButton.disabled = true;
-
+    
         try {
             const responseA = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
@@ -202,12 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_1'
                 })
             });
-
+    
             const resultA = await responseA.json();
             if (!resultA.success) {
                 alert('Error updating column "speaker_a_task_1": ' + resultA.message);
             }
-
+    
             const responseB = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -219,12 +208,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_1'
                 })
             });
-
+    
             const resultB = await responseB.json();
             if (!resultB.success) {
                 alert('Error updating column "speaker_b_task_1": ' + resultB.message);
             }
-
+    
             const responseATask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -236,12 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_2'
                 })
             });
-
+    
             const resultATask2 = await responseATask2.json();
             if (!resultATask2.success) {
                 alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
             }
-
+    
             const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -253,12 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_2'
                 })
             });
-
+    
             const resultBTask2 = await responseBTask2.json();
             if (!resultBTask2.success) {
                 alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
             }
-
+    
             const responseATask3 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -270,12 +259,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_3'
                 })
             });
-
+    
             const resultATask3 = await responseATask3.json();
             if (!resultATask3.success) {
                 alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
             }
-
+    
             const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -287,12 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_3'
                 })
             });
-
+    
             const resultBTask3 = await responseBTask3.json();
             if (!resultBTask3.success) {
                 alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
             }
-
+    
             const responseStatus = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -304,12 +293,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'status'
                 })
             });
-
+    
             const resultStatus = await responseStatus.json();
             if (!resultStatus.success) {
                 alert('Error updating column "status": ' + resultStatus.message);
             }
-
+    
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
@@ -318,10 +307,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
             if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
-
+    
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
-
+    
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
