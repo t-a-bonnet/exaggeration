@@ -3,74 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
-    <title>CSV Text Viewer</title>
+    <title>CSV Editor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="main-wrapper">
         <div id="container">
-            <h1>Task 1</h1>
-            <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;b&gt;WORD&lt;/b&gt;.</p>
+            <h1>CSV Editor</h1>
+            <p>Edit the text below and use the buttons to format the text.</p>
+            
+            <!-- Task 1 Section -->
             <div class="text-pair">
                 <div class="text-box">
-                    <label for="text-display-a">Speaker A:</label>
+                    <h2>Task 1</h2>
+                    <p>Add <b>PHRASE</b> in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 1.</p>
+                    <div class="toolbar">
+                        <button id="bold-a" aria-label="Bold">Bold</button>
+                    </div>
                     <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
                 </div>
                 <div class="text-box">
-                    <label for="text-display-b">Speaker B:</label>
+                    <div class="toolbar">
+                        <button id="bold-b" aria-label="Bold">Bold</button>
+                    </div>
                     <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
                 </div>
             </div>
 
             <!-- Task 2 Section -->
-            <div class="task-2-section">
-                <h2>Task 2</h2>
-                <p>Fill the mask you made for Task 1 with a word that is all upper case and surrounded by &lt;b&gt; and &lt;/b&gt; tags. Try to change the agreement of the speakers.</p>
-                <div class="text-pair">
-                    <div class="text-box">
-                        <label for="text-display-a-task-2">Speaker A:</label>
-                        <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+            <div class="text-pair">
+                <div class="text-box">
+                    <h2>Task 2</h2>
+                    <p>Add <b>PHRASE</b> in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 2.</p>
+                    <div class="toolbar">
+                        <button id="bold-a-task-2" aria-label="Bold">Bold</button>
                     </div>
-                    <div class="text-box">
-                        <label for="text-display-b-task-2">Speaker B:</label>
-                        <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
+                    <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+                </div>
+                <div class="text-box">
+                    <div class="toolbar">
+                        <button id="bold-b-task-2" aria-label="Bold">Bold</button>
                     </div>
+                    <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
                 </div>
             </div>
 
             <!-- Task 3 Section -->
-            <div class="task-3-section">
-                <h2>Task 3</h2>
-                <p>Add &lt;b&gt;PHRASE&lt;/b&gt; in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 3.</p>
-                <div class="text-pair">
-                    <div class="text-box">
-                        <label for="text-display-a-task-3">Speaker A:</label>
-                        <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+            <div class="text-pair">
+                <div class="text-box">
+                    <h2>Task 3</h2>
+                    <p>Add <b>PHRASE</b> in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 3.</p>
+                    <div class="toolbar">
+                        <button id="bold-a-task-3" aria-label="Bold">Bold</button>
                     </div>
-                    <div class="text-box">
-                        <label for="text-display-b-task-3">Speaker B:</label>
-                        <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
+                    <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+                </div>
+                <div class="text-box">
+                    <div class="toolbar">
+                        <button id="bold-b-task-3" aria-label="Bold">Bold</button>
                     </div>
+                    <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
                 </div>
             </div>
 
-            <!-- Status and Controls moved to the bottom -->
+            <!-- Controls -->
             <div id="controls">
                 <div class="status-control">
-                    <label for="status-select">Status:</label>
-                    <select id="status-select" aria-label="Select status">
-                        <option value="Complete">Complete</option>
+                    <h2>Status</h2>
+                    <p>Select the status for the current row.</p>
+                    <select id="status-select">
                         <option value="Incomplete">Incomplete</option>
+                        <option value="Complete">Complete</option>
                     </select>
                 </div>
                 <div class="button-row">
-                    <button id="previous-button" aria-label="Show previous row">Previous</button>
-                    <button id="next-button" aria-label="Show next row">Next</button>
-                    <button id="go-button" aria-label="Go to specific row">Go to</button>
-                    <input type="number" id="row-input" aria-label="Enter row number" placeholder="row #" min="1">
-                    <button id="submit-button" aria-label="Submit changes">Submit</button>
+                    <button id="previous-button">Previous</button>
+                    <button id="next-button">Next</button>
                 </div>
+                <div class="button-row">
+                    <input type="number" id="row-input" min="1" placeholder="Row number">
+                    <button id="go-button">Go</button>
+                </div>
+                <button id="submit-button">Submit</button>
             </div>
         </div>
     </div>
