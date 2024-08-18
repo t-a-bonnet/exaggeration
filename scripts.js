@@ -28,13 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask3;
     let statusColumnIndex;
 
+    // Function to parse CSV text correctly, handling commas within quotes
+    function parseCSV(text) {
+        const rows = [];
+        const re = /"(?:[^"]|"")*"|[^,]+/g;
+        let matches;
+        
+        text.split('\n').forEach(line => {
+            const row = [];
+            while ((matches = re.exec(line)) !== null) {
+                row.push(matches[0].replace(/^"(.*)"$/, '$1').replace(/""/g, '"'));
+            }
+            rows.push(row);
+        });
+        
+        return rows;
+    }
+
     // Function to load the CSV data
     async function loadCSV() {
         try {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = text.trim().split('\n'); // Trim and split into rows
+            const rows = parseCSV(text); // Use the new parseCSV function
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
@@ -46,16 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const header = rows[0].split(','); // Extract the header row
-            columnIndexA = header.indexOf('speaker_a_task_1'); // Find the index of the 'speaker_a_task_1' column
-            columnIndexB = header.indexOf('speaker_b_task_1'); // Find the index of the 'speaker_b_task_1' column
-            columnIndexATask2 = header.indexOf('speaker_a_task_2'); // Find the index of the 'speaker_a_task_2' column
-            columnIndexBTask2 = header.indexOf('speaker_b_task_2'); // Find the index of the 'speaker_b_task_2' column
-            columnIndexATask3 = header.indexOf('speaker_a_task_3'); // Find the index of the 'speaker_a_task_3' column
-            columnIndexBTask3 = header.indexOf('speaker_b_task_3'); // Find the index of the 'speaker_b_task_3' column
-            statusColumnIndex = header.indexOf('status'); // Find the index of the 'status' column
+            const header = rows[0];
+            columnIndexA = header.indexOf('speaker_a_task_1');
+            columnIndexB = header.indexOf('speaker_b_task_1');
+            columnIndexATask2 = header.indexOf('speaker_a_task_2');
+            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
+            columnIndexATask3 = header.indexOf('speaker_a_task_3');
+            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
+            statusColumnIndex = header.indexOf('status');
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
+            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -66,47 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            dataA = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexA] || ''; // Use the columnIndexA to get the 'speaker_a_task_1' column value
-                });
+            dataA = rows.slice(1)
+                .map(row => row[columnIndexA] || '');
 
-            dataB = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexB] || ''; // Use the columnIndexB to get the 'speaker_b_task_1' column value
-                });
+            dataB = rows.slice(1)
+                .map(row => row[columnIndexB] || '');
 
-            dataATask2 = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexATask2] || ''; // Use the columnIndexATask2 to get the 'speaker_a_task_2' column value
-                });
+            dataATask2 = rows.slice(1)
+                .map(row => row[columnIndexATask2] || '');
 
-            dataBTask2 = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexBTask2] || ''; // Use the columnIndexBTask2 to get the 'speaker_b_task_2' column value
-                });
+            dataBTask2 = rows.slice(1)
+                .map(row => row[columnIndexBTask2] || '');
 
-            dataATask3 = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexATask3] || ''; // Use the columnIndexATask3 to get the 'speaker_a_task_3' column value
-                });
+            dataATask3 = rows.slice(1)
+                .map(row => row[columnIndexATask3] || '');
 
-            dataBTask3 = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[columnIndexBTask3] || ''; // Use the columnIndexBTask3 to get the 'speaker_b_task_3' column value
-                });
+            dataBTask3 = rows.slice(1)
+                .map(row => row[columnIndexBTask3] || '');
 
-            statusData = rows.slice(1) // Skip the header row
-                .map(row => {
-                    const columns = row.split(',');
-                    return columns[statusColumnIndex] || ''; // Use the statusColumnIndex to get the 'status' column value
-                });
+            statusData = rows.slice(1)
+                .map(row => row[statusColumnIndex] || '');
 
             if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0) {
                 showRow(currentRow);
@@ -133,15 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
-        textDisplayA.value = dataA[index] || ''; // Set textarea value instead of textContent
-        textDisplayB.value = dataB[index] || ''; // Set textarea value instead of textContent
-        textDisplayATask2.value = dataATask2[index] || ''; // Set textarea value instead of textContent
-        textDisplayBTask2.value = dataBTask2[index] || ''; // Set textarea value instead of textContent
-        textDisplayATask3.value = dataATask3[index] || ''; // Set textarea value instead of textContent
-        textDisplayBTask3.value = dataBTask3[index] || ''; // Set textarea value instead of textContent
-        statusSelect.value = statusData[index] || 'Incomplete'; // Set the status select value
-        previousButton.disabled = index === 0; // Disable previous button if at the first row
-        nextButton.disabled = index === dataA.length - 1; // Disable next button if at the last row
+        textDisplayA.value = dataA[index] || '';
+        textDisplayB.value = dataB[index] || '';
+        textDisplayATask2.value = dataATask2[index] || '';
+        textDisplayBTask2.value = dataBTask2[index] || '';
+        textDisplayATask3.value = dataATask3[index] || '';
+        textDisplayBTask3.value = dataBTask3[index] || '';
+        statusSelect.value = statusData[index] || 'Incomplete';
+        previousButton.disabled = index === 0;
+        nextButton.disabled = index === dataA.length - 1;
     }
 
     // Function to show the previous row
@@ -167,21 +163,20 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
             return;
         }
-        currentRow = rowNumber - 1; // Convert to zero-based index
+        currentRow = rowNumber - 1;
         showRow(currentRow);
     }
 
     // Function to submit changes
     async function submitChanges() {
-        const updatedTextA = textDisplayA.value; // Get value from textarea A
-        const updatedTextB = textDisplayB.value; // Get value from textarea B
-        const updatedTextATask2 = textDisplayATask2.value; // Get value from textarea A Task 2
-        const updatedTextBTask2 = textDisplayBTask2.value; // Get value from textarea B Task 2
-        const updatedTextATask3 = textDisplayATask3.value; // Get value from textarea A Task 3
-        const updatedTextBTask3 = textDisplayBTask3.value; // Get value from textarea B Task 3
-        const updatedStatus = statusSelect.value; // Get value from status select
+        const updatedTextA = textDisplayA.value;
+        const updatedTextB = textDisplayB.value;
+        const updatedTextATask2 = textDisplayATask2.value;
+        const updatedTextBTask2 = textDisplayBTask2.value;
+        const updatedTextATask3 = textDisplayATask3.value;
+        const updatedTextBTask3 = textDisplayBTask3.value;
+        const updatedStatus = statusSelect.value;
     
-        // Disable submit button to prevent multiple submissions
         submitButton.disabled = true;
     
         try {
@@ -191,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextA,
                     column: 'speaker_a_task_1'
                 })
@@ -208,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextB,
                     column: 'speaker_b_task_1'
                 })
@@ -225,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextATask2,
                     column: 'speaker_a_task_2'
                 })
@@ -242,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextBTask2,
                     column: 'speaker_b_task_2'
                 })
@@ -259,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextATask3,
                     column: 'speaker_a_task_3'
                 })
@@ -276,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedTextBTask3,
                     column: 'speaker_b_task_3'
                 })
@@ -293,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: currentRow, // Pass zero-based index
+                    id: currentRow,
                     text: updatedStatus,
                     column: 'status'
                 })
