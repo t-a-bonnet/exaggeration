@@ -148,10 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask2 = textDisplayATask2.value; // Get value from textarea A Task 2
         const updatedTextBTask2 = textDisplayBTask2.value; // Get value from textarea B Task 2
         const updatedStatus = statusSelect.value; // Get value from status select
-
+    
         // Disable submit button to prevent multiple submissions
         submitButton.disabled = true;
-
+    
         try {
             const responseA = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
@@ -164,12 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_1'
                 })
             });
-
+    
             const resultA = await responseA.json();
             if (!resultA.success) {
                 alert('Error updating column "speaker_a_task_1": ' + resultA.message);
             }
-
+    
             const responseB = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -181,12 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_1'
                 })
             });
-
+    
             const resultB = await responseB.json();
             if (!resultB.success) {
                 alert('Error updating column "speaker_b_task_1": ' + resultB.message);
             }
-
+    
             const responseATask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -198,12 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_2'
                 })
             });
-
+    
             const resultATask2 = await responseATask2.json();
             if (!resultATask2.success) {
                 alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
             }
-
+    
             const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -215,12 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_2'
                 })
             });
-
+    
             const resultBTask2 = await responseBTask2.json();
             if (!resultBTask2.success) {
                 alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
             }
-
+    
             const responseStatus = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -232,19 +232,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'status'
                 })
             });
-
+    
             const resultStatus = await responseStatus.json();
             if (!resultStatus.success) {
                 alert('Error updating column "status": ' + resultStatus.message);
             }
-
+    
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
             if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
             if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
-
+    
+            // Notify the user of successful submission
+            alert('Changes successfully submitted!');
+    
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
