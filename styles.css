@@ -14,7 +14,7 @@ body {
     border: 1px solid #ccc;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    max-width: 1000px; /* Adjusted for larger content */
     width: 100%;
 }
 
@@ -35,6 +35,7 @@ p {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 40px; /* Added space between tasks */
 }
 
 .text-box {
@@ -55,13 +56,21 @@ textarea {
     resize: vertical;
 }
 
-/* New styles for the status dropdown */
-.status-control {
+/* New styles for the Task 2 section */
+.task-2-section {
+    margin-top: 40px; /* Added space before Task 2 */
+}
+
+.task-2-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.task-2-section p {
+    font-size: 16px;
+    color: #666;
     margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
 }
 
 #status-select {
@@ -119,6 +128,10 @@ button:active {
     .text-pair {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .task-2-section {
+        margin-top: 20px; /* Adjusted for smaller screens */
     }
 
     .button-row {
