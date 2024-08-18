@@ -1,3 +1,4 @@
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -79,6 +80,32 @@ textarea {
     font-size: 16px;
     color: #666;
     margin-bottom: 20px;
+}
+
+/* New styles for the predictions section */
+.predictions {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.predictions-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.predictions-box h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.predictions-box p {
+    font-size: 16px;
+    color: #444;
+    margin: 0;
 }
 
 /* New styles for the Task 3 section */
@@ -170,5 +197,22 @@ button:active {
 
     input[type="number"] {
         width: 100%;
+    }
+    
+    /* Responsive adjustments for predictions section */
+    .predictions {
+        margin-top: 10px;
+    }
+    
+    .predictions-box {
+        padding: 8px;
+    }
+
+    .predictions-box h3 {
+        font-size: 16px;
+    }
+
+    .predictions-box p {
+        font-size: 14px;
     }
 }
