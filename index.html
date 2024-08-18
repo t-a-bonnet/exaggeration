@@ -6,159 +6,52 @@
     <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
     <title>CSV Text Viewer</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add some basic styles for the layout */
-        #container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        h1, h2 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .text-pair {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            flex-wrap: wrap;
-        }
-
-        .text-box {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 300px;
-            box-sizing: border-box;
-            padding: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            line-height: 1.6;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
-        }
-
-        #controls {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        button, input[type="number"] {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 5px;
-            border-radius: 4px;
-        }
-
-        input[type="number"] {
-            width: 100px;
-            padding: 10px;
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        button:hover, button:focus {
-            background-color: #0056b3;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            background-color: #004085;
-        }
-
-        /* Add media query for better responsiveness on smaller screens */
-        @media (max-width: 768px) {
-            .text-pair {
-                flex-direction: column;
-            }
-
-            textarea {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            #controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            input[type="number"], button {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div id="container">
-        <!-- Task 1 Section -->
-        <h1>Task 1</h1>
-        <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;b&gt;WORD&lt;/b&gt;.</p>
-        <div class="text-pair">
-            <div class="text-box">
-                <label for="text-display-a">Speaker A:</label>
-                <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+    <div id="main-wrapper">
+        <div id="container">
+            <h1>Task 1</h1>
+            <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;b&gt;WORD&lt;/b&gt;.</p>
+            <div class="text-pair">
+                <div class="text-box">
+                    <label for="text-display-a">Speaker A:</label>
+                    <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+                </div>
+                <div class="text-box">
+                    <label for="text-display-b">Speaker B:</label>
+                    <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+                </div>
             </div>
-            <div class="text-box">
-                <label for="text-display-b">Speaker B:</label>
-                <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+            <div class="status-control">
+                <label for="status-select">Status:</label>
+                <select id="status-select" aria-label="Select status">
+                    <option value="Complete">Complete</option>
+                    <option value="Incomplete">Incomplete</option>
+                </select>
             </div>
-        </div>
+            <div id="controls">
+                <button id="previous-button" aria-label="Show previous row">Previous</button>
+                <button id="next-button" aria-label="Show next row">Next</button>
+                <button id="go-button" aria-label="Go to specific row">Go to</button>
+                <input type="number" id="row-input" aria-label="Enter row number" placeholder="row number" min="1">
+                <button id="submit-button" aria-label="Submit changes">Submit</button>
+            </div>
 
-        <!-- Task 2 Section -->
-        <h2>Task 2</h2>
-        <p>Fill the mask you made for Task 1 with a word that is all upper case and surrounded by &lt;b&gt; and &lt;/b&gt; tags. Try to change the agreement of the speakers.</p>
-        <div class="text-pair">
-            <div class="text-box">
-                <label for="text-display-a-task-2">Speaker A (Task 2):</label>
-                <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+            <!-- Task 2 Section -->
+            <div class="task-2-section">
+                <h2>Task 2</h2>
+                <p>Fill the mask you made for Task 1 with a word that is all upper case and surrounded by &lt;b&gt; and &lt;/b&gt; tags. Try to change the agreement of the speakers.</p>
+                <div class="text-pair">
+                    <div class="text-box">
+                        <label for="text-display-a-task-2">Speaker A (Task 2):</label>
+                        <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+                    </div>
+                    <div class="text-box">
+                        <label for="text-display-b-task-2">Speaker B (Task 2):</label>
+                        <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="text-box">
-                <label for="text-display-b-task-2">Speaker B (Task 2):</label>
-                <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
-            </div>
-        </div>
-
-        <!-- Status and Control Buttons -->
-        <div class="status-control">
-            <label for="status-select">Status:</label>
-            <select id="status-select" aria-label="Select status">
-                <option value="Complete">Complete</option>
-                <option value="Incomplete">Incomplete</option>
-            </select>
-        </div>
-        <div id="controls">
-            <button id="previous-button" aria-label="Show previous row">Previous</button>
-            <button id="next-button" aria-label="Show next row">Next</button>
-            <button id="go-button" aria-label="Go to specific row">Go to</button>
-            <input type="number" id="row-input" aria-label="Enter row number" placeholder="row number" min="1">
-            <button id="submit-button" aria-label="Submit changes">Submit</button>
         </div>
     </div>
     <script src="scripts.js"></script>
