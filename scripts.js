@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const goButton = document.getElementById('go-button');
     const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
-    
-    // New elements for predictions
     const robertaPredsDisplay = document.getElementById('roberta-preds');
     const llamaPredsDisplay = document.getElementById('llama-preds');
     const gemmaPredsDisplay = document.getElementById('gemma-preds');
@@ -98,9 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayBTask2.value = 'Required columns not found.';
                 textDisplayATask3.value = 'Required columns not found.';
                 textDisplayBTask3.value = 'Required columns not found.';
-                robertaPredsDisplay.textContent = 'Required columns not found.';
-                llamaPredsDisplay.textContent = 'Required columns not found.';
-                gemmaPredsDisplay.textContent = 'Required columns not found.';
                 return;
             }
 
@@ -145,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || robertaPreds.length === 0 || llamaPreds.length === 0 || gemmaPreds.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -153,13 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
-        
-        // Display predictions
         robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
-
-        // Update button states
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
     }
@@ -200,70 +191,146 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
-
+    
         submitButton.disabled = true;
-
+    
         try {
-            // Submit updates for each column
-            const responses = await Promise.all([
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextA, column: 'speaker_a_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextB, column: 'speaker_b_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextATask2, column: 'speaker_a_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask2, column: 'speaker_b_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextATask3, column: 'speaker_a_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask3, column: 'speaker_b_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedStatus, column: 'status' })
+            const responseA = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextA,
+                    column: 'speaker_a_task_1'
                 })
-            ]);
-
-            const results = await Promise.all(responses.map(res => res.json()));
-            const success = results.every(result => result.success);
-
-            if (!success) {
-                alert('Error updating some columns.');
+            });
+    
+            const resultA = await responseA.json();
+            if (!resultA.success) {
+                alert('Error updating column "speaker_a_task_1": ' + resultA.message);
             }
-
-            // Update local data arrays
-            if (results[0].success) dataA[currentRow] = updatedTextA;
-            if (results[1].success) dataB[currentRow] = updatedTextB;
-            if (results[2].success) dataATask2[currentRow] = updatedTextATask2;
-            if (results[3].success) dataBTask2[currentRow] = updatedTextBTask2;
-            if (results[4].success) dataATask3[currentRow] = updatedTextATask3;
-            if (results[5].success) dataBTask3[currentRow] = updatedTextBTask3;
-            if (results[6].success) statusData[currentRow] = updatedStatus;
-
+    
+            const responseB = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextB,
+                    column: 'speaker_b_task_1'
+                })
+            });
+    
+            const resultB = await responseB.json();
+            if (!resultB.success) {
+                alert('Error updating column "speaker_b_task_1": ' + resultB.message);
+            }
+    
+            const responseATask2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextATask2,
+                    column: 'speaker_a_task_2'
+                })
+            });
+    
+            const resultATask2 = await responseATask2.json();
+            if (!resultATask2.success) {
+                alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
+            }
+    
+            const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextBTask2,
+                    column: 'speaker_b_task_2'
+                })
+            });
+    
+            const resultBTask2 = await responseBTask2.json();
+            if (!resultBTask2.success) {
+                alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
+            }
+    
+            const responseATask3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextATask3,
+                    column: 'speaker_a_task_3'
+                })
+            });
+    
+            const resultATask3 = await responseATask3.json();
+            if (!resultATask3.success) {
+                alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
+            }
+    
+            const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextBTask3,
+                    column: 'speaker_b_task_3'
+                })
+            });
+    
+            const resultBTask3 = await responseBTask3.json();
+            if (!resultBTask3.success) {
+                alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
+            }
+    
+            const responseStatus = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedStatus,
+                    column: 'status'
+                })
+            });
+    
+            const resultStatus = await responseStatus.json();
+            if (!resultStatus.success) {
+                alert('Error updating column "status": ' + resultStatus.message);
+            }
+    
+            // Update the local data arrays after successful submission
+            if (resultA.success) dataA[currentRow] = updatedTextA;
+            if (resultB.success) dataB[currentRow] = updatedTextB;
+            if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
+            if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
+            if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
+            if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
+            if (resultStatus.success) statusData[currentRow] = updatedStatus;
+    
+            // Notify the user of successful submission
             alert('Changes successfully submitted!');
+    
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
         } finally {
+            // Re-enable submit button after submission is complete
             submitButton.disabled = false;
         }
     }
