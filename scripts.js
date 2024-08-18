@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataATask3 = [];
     let dataBTask3 = [];
     let statusData = [];
-    let columnIndexA = -1;
-    let columnIndexB = -1;
-    let columnIndexATask2 = -1;
-    let columnIndexBTask2 = -1;
-    let columnIndexATask3 = -1;
-    let columnIndexBTask3 = -1;
-    let statusColumnIndex = -1;
+    let columnIndexA;
+    let columnIndexB;
+    let columnIndexATask2;
+    let columnIndexBTask2;
+    let columnIndexATask3;
+    let columnIndexBTask3;
+    let statusColumnIndex;
 
     // Function to load the CSV data
     async function loadCSV() {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexBTask3 = header.indexOf('speaker_b_task_3'); // Find the index of the 'speaker_b_task_3' column
             statusColumnIndex = header.indexOf('status'); // Find the index of the 'status' column
 
-            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1 || statusColumnIndex === -1) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
