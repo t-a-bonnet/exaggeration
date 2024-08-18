@@ -22,20 +22,6 @@
                     <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
                 </div>
             </div>
-            <div class="status-control">
-                <label for="status-select">Status:</label>
-                <select id="status-select" aria-label="Select status">
-                    <option value="Complete">Complete</option>
-                    <option value="Incomplete">Incomplete</option>
-                </select>
-            </div>
-            <div id="controls">
-                <button id="previous-button" aria-label="Show previous row">Previous</button>
-                <button id="next-button" aria-label="Show next row">Next</button>
-                <button id="go-button" aria-label="Go to specific row">Go to</button>
-                <input type="number" id="row-input" aria-label="Enter row number" placeholder="row number" min="1">
-                <button id="submit-button" aria-label="Submit changes">Submit</button>
-            </div>
 
             <!-- Task 2 Section -->
             <div class="task-2-section">
@@ -50,6 +36,24 @@
                         <label for="text-display-b-task-2">Speaker B (Task 2):</label>
                         <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
                     </div>
+                </div>
+            </div>
+
+            <!-- Status and Controls moved to the bottom -->
+            <div id="controls">
+                <div class="status-control">
+                    <label for="status-select">Status:</label>
+                    <select id="status-select" aria-label="Select status">
+                        <option value="Complete">Complete</option>
+                        <option value="Incomplete">Incomplete</option>
+                    </select>
+                </div>
+                <div class="button-row">
+                    <button id="previous-button" aria-label="Show previous row">Previous</button>
+                    <button id="next-button" aria-label="Show next row">Next</button>
+                    <button id="go-button" aria-label="Go to specific row">Go to</button>
+                    <input type="number" id="row-input" aria-label="Enter row number" placeholder="row number" min="1">
+                    <button id="submit-button" aria-label="Submit changes">Submit</button>
                 </div>
             </div>
         </div>
