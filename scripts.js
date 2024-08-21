@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataATask3 = [];
     let dataBTask3 = [];
     let statusData = [];
-    let caseData = []; // New array for case column
+    let caseData = [];
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexATask3;
     let columnIndexBTask3;
     let statusColumnIndex;
-    let caseColumnIndex; // New column index for case
+    let caseColumnIndex;
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
-        caseSelect.value = caseData[index] || 'modal'; // Default value if empty
+        caseSelect.value = caseData[index] || 'Select case';
         robertaPredsDisplay.textContent = robertaPreds[index] || '';
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
-        const updatedCase = caseSelect.value; // New case value
+        const updatedCase = caseSelect.value;
         const updatedMaskedWord = maskedWordDisplay.value;
 
         submitButton.disabled = true;
