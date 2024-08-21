@@ -119,6 +119,7 @@ textarea {
 .case-control select,
 .turn-masked-section select,
 .masked-word-box textarea {
+    width: 150px;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -134,7 +135,7 @@ textarea {
 }
 
 .masked-word-box textarea {
-    width: 80px; /* Adjust width to fit one word */
+    width: 150px; /* Adjust width to fit one word */
     height: auto; /* Adjust height based on content */
     padding: 5px;
     box-sizing: border-box;
