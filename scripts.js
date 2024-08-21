@@ -183,8 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
         maskedWordDisplay.value = maskedWords[index] || 'Enter masked word';
-        originalADisplay.textContent = llamaPreds[index] || '';
-        originalBDisplay.textContent = gemmaPreds[index] || '';
+        originalADisplay.textContent = originalDataA[index] || '';
+        originalBDisplay.textContent = originalDataB[index] || '';
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
