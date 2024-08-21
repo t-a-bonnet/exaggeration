@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const robertaPredsDisplay = document.getElementById('roberta-preds');
     const llamaPredsDisplay = document.getElementById('llama-preds');
     const gemmaPredsDisplay = document.getElementById('gemma-preds');
-    const maskedWordDisplay = document.getElementById('masked-word'); // New masked word display element
+    const maskedWordDisplay = document.getElementById('masked-word');
 
     let currentRow = 0;
     let dataA = [];
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
-    let maskedWords = []; // New array for masked words
+    let maskedWords = [];
 
     let columnIndexA;
     let columnIndexB;
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
-    let maskedWordColumnIndex; // New index for masked words
+    let maskedWordColumnIndex;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 robertaPredsDisplay.textContent = 'No data available.';
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
-                maskedWordDisplay.textContent = 'No data available.'; // Update if no data
+                maskedWordDisplay.value = 'No data available.';
                 return;
             }
 
@@ -114,23 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || ''); // New array population
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
 
-            if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0 && robertaPreds.length > 0 && llamaPreds.length > 0 && gemmaPreds.length > 0 && maskedWords.length > 0) {
+            try {
                 showRow(currentRow);
-            } else {
-                console.error('No data available.');
-                textDisplayA.value = 'No data available.';
-                textDisplayB.value = 'No data available.';
-                textDisplayATask2.value = 'No data available.';
-                textDisplayBTask2.value = 'No data available.';
-                textDisplayATask3.value = 'No data available.';
-                textDisplayBTask3.value = 'No data available.';
-                robertaPredsDisplay.textContent = 'No data available.';
-                llamaPredsDisplay.textContent = 'No data available.';
-                gemmaPredsDisplay.textContent = 'No data available.';
-                maskedWordDisplay.textContent = 'No data available.'; // Update if no data
+            } catch (err) {
+                throw new Error('Error displaying row: ' + err.message);
             }
+
         } catch (error) {
             console.error('Error loading CSV:', error);
             textDisplayA.value = 'Error loading CSV data.';
@@ -142,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsDisplay.textContent = 'Error loading CSV data.';
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
-            maskedWordDisplay.textContent = 'Error loading CSV data.'; // Update if error loading data
+            maskedWordDisplay.value = 'Error loading CSV data.';
         }
     }
 
@@ -159,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
-        maskedWordDisplay.textContent = maskedWords[index] || 'No data'; // Display the masked word
+        maskedWordDisplay.value = maskedWords[index] || 'No data'; // Display the masked word
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
@@ -201,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
-        const updatedMaskedWord = maskedWordDisplay.textContent; // Retrieve the updated masked word
+        const updatedMaskedWord = maskedWordDisplay.value;
 
         submitButton.disabled = true;
 
@@ -351,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
             if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
-            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord; // Update local masked words array
+            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
