@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select');
-    const turnMaskedSelect = document.getElementById('turn-masked-select');
+    const caseSelect = document.getElementById('case-select'); // New dropdown for case
+    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask3 = [];
     let statusData = [];
     let caseData = [];
-    let turnMaskedData = [];
+    let turnMaskedData = []; // New data array for turn_masked
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask3;
     let statusColumnIndex;
     let caseColumnIndex;
-    let turnMaskedColumnIndex;
+    let turnMaskedColumnIndex; // New column index for turn_masked
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
@@ -70,16 +70,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = parseCSV(text);
+            const rows = parseCSV(text); // Use the new parseCSV function
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                setDisplayNoData();
+                textDisplayA.value = 'No data available.';
+                textDisplayB.value = 'No data available.';
+                textDisplayATask2.value = 'No data available.';
+                textDisplayBTask2.value = 'No data available.';
+                textDisplayATask3.value = 'No data available.';
+                textDisplayBTask3.value = 'No data available.';
+                robertaPredsDisplay.textContent = 'No data available.';
+                llamaPredsDisplay.textContent = 'No data available.';
+                gemmaPredsDisplay.textContent = 'No data available.';
+                maskedWordDisplay.value = 'No data available.';
                 return;
             }
 
             const header = rows[0];
-            columnIndexOriginalA = header.indexOf('speaker_a_original');
-            columnIndexOriginalB = header.indexOf('speaker_b_original');
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
@@ -87,151 +94,330 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             statusColumnIndex = header.indexOf('status');
-            caseColumnIndex = header.indexOf('case');
-            turnMaskedColumnIndex = header.indexOf('turn_masked');
+            caseColumnIndex = header.indexOf('case'); // New column index for case
+            turnMaskedColumnIndex = header.indexOf('turn_masked'); // New column index for turn_masked
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word');
+            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
-            if ([columnIndexOriginalA, columnIndexOriginalB, columnIndexA, columnIndexB, columnIndexATask2, columnIndexBTask2, columnIndexATask3, columnIndexBTask3, statusColumnIndex, caseColumnIndex, turnMaskedColumnIndex, robertaPredsColumnIndex, llamaPredsColumnIndex, gemmaPredsColumnIndex, maskedWordColumnIndex].includes(-1)) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
-                setDisplayColumnNotFound();
+                textDisplayA.value = 'Required columns not found.';
+                textDisplayB.value = 'Required columns not found.';
+                textDisplayATask2.value = 'Required columns not found.';
+                textDisplayBTask2.value = 'Required columns not found.';
+                textDisplayATask3.value = 'Required columns not found.';
+                textDisplayBTask3.value = 'Required columns not found.';
+                robertaPredsDisplay.textContent = 'Required columns not found.';
+                llamaPredsDisplay.textContent = 'Required columns not found.';
+                gemmaPredsDisplay.textContent = 'Required columns not found.';
+                maskedWordDisplay.value = 'Required columns not found.';
                 return;
             }
 
-            originalA = rows.slice(1).map(row => row[columnIndexOriginalA] || '');
-            originalB = rows.slice(1).map(row => row[columnIndexOriginalB] || '');
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Incomplete');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn masked');
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'modal'); // Default to 'modal'
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'first'); // Default to 'first'
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'Enter masked word');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
 
-            showRow(currentRow);
+            try {
+                showRow(currentRow);
+            } catch (err) {
+                throw new Error('Error displaying row: ' + err.message);
+            }
 
         } catch (error) {
             console.error('Error loading CSV:', error);
-            setDisplayError();
+            textDisplayA.value = 'Error loading CSV data.';
+            textDisplayB.value = 'Error loading CSV data.';
+            textDisplayATask2.value = 'Error loading CSV data.';
+            textDisplayBTask2.value = 'Error loading CSV data.';
+            textDisplayATask3.value = 'Error loading CSV data.';
+            textDisplayBTask3.value = 'Error loading CSV data.';
+            robertaPredsDisplay.textContent = 'Error loading CSV data.';
+            llamaPredsDisplay.textContent = 'Error loading CSV data.';
+            gemmaPredsDisplay.textContent = 'Error loading CSV data.';
+            maskedWordDisplay.value = 'Error loading CSV data.';
         }
-    }
-
-    // Function to set display when no data is available
-    function setDisplayNoData() {
-        originalTextDisplayA.value = 'No data available.';
-        originalTextDisplayB.value = 'No data available.';
-        textDisplayA.value = 'No data available.';
-        textDisplayB.value = 'No data available.';
-        textDisplayATask2.value = 'No data available.';
-        textDisplayBTask2.value = 'No data available.';
-        textDisplayATask3.value = 'No data available.';
-        textDisplayBTask3.value = 'No data available.';
-        robertaPredsDisplay.textContent = 'No data available.';
-        llamaPredsDisplay.textContent = 'No data available.';
-        gemmaPredsDisplay.textContent = 'No data available.';
-        maskedWordDisplay.value = 'No data available.';
-    }
-
-    // Function to set display when required columns are not found
-    function setDisplayColumnNotFound() {
-        originalTextDisplayA.value = 'Required columns not found.';
-        originalTextDisplayB.value = 'Required columns not found.';
-        textDisplayA.value = 'Required columns not found.';
-        textDisplayB.value = 'Required columns not found.';
-        textDisplayATask2.value = 'Required columns not found.';
-        textDisplayBTask2.value = 'Required columns not found.';
-        textDisplayATask3.value = 'Required columns not found.';
-        textDisplayBTask3.value = 'Required columns not found.';
-        robertaPredsDisplay.textContent = 'Required columns not found.';
-        llamaPredsDisplay.textContent = 'Required columns not found.';
-        gemmaPredsDisplay.textContent = 'Required columns not found.';
-        maskedWordDisplay.value = 'Required columns not found.';
-    }
-
-    // Function to set display when there is an error loading the CSV
-    function setDisplayError() {
-        originalTextDisplayA.value = 'Error loading CSV data.';
-        originalTextDisplayB.value = 'Error loading CSV data.';
-        textDisplayA.value = 'Error loading CSV data.';
-        textDisplayB.value = 'Error loading CSV data.';
-        textDisplayATask2.value = 'Error loading CSV data.';
-        textDisplayBTask2.value = 'Error loading CSV data.';
-        textDisplayATask3.value = 'Error loading CSV data.';
-        textDisplayBTask3.value = 'Error loading CSV data.';
-        robertaPredsDisplay.textContent = 'Error loading CSV data.';
-        llamaPredsDisplay.textContent = 'Error loading CSV data.';
-        gemmaPredsDisplay.textContent = 'Error loading CSV data.';
-        maskedWordDisplay.value = 'Error loading CSV data.';
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (index < 0 || index >= originalA.length) {
-            console.error('Row index out of bounds.');
-            return;
-        }
-
-        originalTextDisplayA.value = originalA[index] || '';
-        originalTextDisplayB.value = originalB[index] || '';
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
         textDisplayBTask2.value = dataBTask2[index] || '';
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
+        statusSelect.value = statusData[index] || 'Incomplete';
+        caseSelect.value = caseData[index] || 'Select case';
+        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked'; // Set default value for turn_masked
         robertaPredsDisplay.textContent = robertaPreds[index] || '';
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
-        maskedWordDisplay.value = maskedWords[index] || '';
+        maskedWordDisplay.value = maskedWords[index] || 'Enter masked word';
 
-        statusSelect.value = statusData[index] || 'Incomplete';
-        caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
+        previousButton.disabled = index === 0;
+        nextButton.disabled = index === dataA.length - 1;
     }
 
-    // Event handlers for buttons and inputs
-    previousButton.addEventListener('click', () => {
+    // Function to show the previous row
+    function showPreviousRow() {
         if (currentRow > 0) {
-            currentRow--;
+            currentRow -= 1;
             showRow(currentRow);
         }
-    });
+    }
 
-    nextButton.addEventListener('click', () => {
-        if (currentRow < originalA.length - 1) {
-            currentRow++;
+    // Function to show the next row
+    function showNextRow() {
+        if (currentRow < dataA.length - 1) {
+            currentRow += 1;
             showRow(currentRow);
         }
-    });
+    }
 
-    goButton.addEventListener('click', () => {
-        const row = parseInt(rowInput.value, 10);
-        if (!isNaN(row) && row >= 0 && row < originalA.length) {
-            currentRow = row;
-            showRow(currentRow);
-        } else {
-            console.error('Invalid row number.');
+    // Function to jump to a specific row
+    function goToRow() {
+        const rowNumber = parseInt(rowInput.value, 10);
+        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > dataA.length) {
+            alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
+            return;
         }
-    });
+        currentRow = rowNumber - 1;
+        showRow(currentRow);
+    }
 
-    submitButton.addEventListener('click', () => {
-        if (currentRow >= 0 && currentRow < originalA.length) {
-            statusData[currentRow] = statusSelect.value;
-            caseData[currentRow] = caseSelect.value;
-            turnMaskedData[currentRow] = turnMaskedSelect.value;
-            maskedWords[currentRow] = maskedWordDisplay.value;
-            showRow(currentRow); // Update the display
+    // Function to submit changes
+    async function submitChanges() {
+        const updatedTextA = textDisplayA.value;
+        const updatedTextB = textDisplayB.value;
+        const updatedTextATask2 = textDisplayATask2.value;
+        const updatedTextBTask2 = textDisplayBTask2.value;
+        const updatedTextATask3 = textDisplayATask3.value;
+        const updatedTextBTask3 = textDisplayBTask3.value;
+        const updatedStatus = statusSelect.value;
+        const updatedCase = caseSelect.value;
+        const updatedTurnMasked = turnMaskedSelect.value; // Get value from turn_masked dropdown
+        const updatedMaskedWord = maskedWordDisplay.value;
+
+        submitButton.disabled = true;
+
+        try {
+            const responseA = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextA,
+                    column: 'speaker_a_task_1'
+                })
+            });
+
+            const resultA = await responseA.json();
+            if (!resultA.success) {
+                alert('Error updating column "speaker_a_task_1": ' + resultA.message);
+            }
+
+            const responseB = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextB,
+                    column: 'speaker_b_task_1'
+                })
+            });
+
+            const resultB = await responseB.json();
+            if (!resultB.success) {
+                alert('Error updating column "speaker_b_task_1": ' + resultB.message);
+            }
+
+            const responseATask2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextATask2,
+                    column: 'speaker_a_task_2'
+                })
+            });
+
+            const resultATask2 = await responseATask2.json();
+            if (!resultATask2.success) {
+                alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
+            }
+
+            const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextBTask2,
+                    column: 'speaker_b_task_2'
+                })
+            });
+
+            const resultBTask2 = await responseBTask2.json();
+            if (!resultBTask2.success) {
+                alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
+            }
+
+            const responseATask3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextATask3,
+                    column: 'speaker_a_task_3'
+                })
+            });
+
+            const resultATask3 = await responseATask3.json();
+            if (!resultATask3.success) {
+                alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
+            }
+
+            const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTextBTask3,
+                    column: 'speaker_b_task_3'
+                })
+            });
+
+            const resultBTask3 = await responseBTask3.json();
+            if (!resultBTask3.success) {
+                alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
+            }
+
+            const responseStatus = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedStatus,
+                    column: 'status'
+                })
+            });
+
+            const resultStatus = await responseStatus.json();
+            if (!resultStatus.success) {
+                alert('Error updating column "status": ' + resultStatus.message);
+            }
+
+            // Update the case column
+            const responseCase = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedCase,
+                    column: 'case'
+                })
+            });
+
+            const resultCase = await responseCase.json();
+            if (!resultCase.success) {
+                alert('Error updating column "case": ' + resultCase.message);
+            }
+
+            // Update the turn_masked column
+            const responseTurnMasked = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedTurnMasked,
+                    column: 'turn_masked'
+                })
+            });
+
+            const resultTurnMasked = await responseTurnMasked.json();
+            if (!resultTurnMasked.success) {
+                alert('Error updating column "turn_masked": ' + resultTurnMasked.message);
+            }
+
+            // Update the masked word column
+            const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedMaskedWord,
+                    column: 'masked_word'
+                })
+            });
+
+            const resultMaskedWord = await responseMaskedWord.json();
+            if (!resultMaskedWord.success) {
+                alert('Error updating column "masked_word": ' + resultMaskedWord.message);
+            }
+
+            // Update the local data arrays after successful submission
+            if (resultA.success) dataA[currentRow] = updatedTextA;
+            if (resultB.success) dataB[currentRow] = updatedTextB;
+            if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
+            if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
+            if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
+            if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
+            if (resultStatus.success) statusData[currentRow] = updatedStatus;
+            if (resultCase.success) caseData[currentRow] = updatedCase;
+            if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
+            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
+
+            // Notify the user of successful submission
+            alert('Changes successfully submitted!');
+
+        } catch (error) {
+            console.error('Error submitting changes:', error);
+            alert('Error submitting changes: ' + error.message);
+        } finally {
+            // Re-enable submit button after submission is complete
+            submitButton.disabled = false;
         }
-    });
+    }
 
-    // Load CSV data on page load
+    // Event listeners
+    previousButton.addEventListener('click', showPreviousRow);
+    nextButton.addEventListener('click', showNextRow);
+    goButton.addEventListener('click', goToRow);
+    submitButton.addEventListener('click', submitChanges);
+
+    // Load the CSV data on page load
     loadCSV();
 });

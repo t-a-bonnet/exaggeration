@@ -52,7 +52,6 @@ p {
     min-width: 300px;
 }
 
-/* Styles for the task text areas */
 textarea {
     width: 100%;
     height: 300px;
@@ -64,21 +63,6 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
-}
-
-/* Styles for the original text areas */
-#original-a, #original-b {
-    width: 100%;
-    height: 100px; /* Adjust height as needed */
-    box-sizing: border-box;
-    margin-bottom: 20px; /* Space between text areas */
-    font-size: 16px;
-    line-height: 1.6;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    overflow: auto; /* Ensure scroll if content exceeds height */
 }
 
 /* Styles for the Task 2 section */
@@ -98,7 +82,7 @@ textarea {
     margin-bottom: 20px;
 }
 
-/* Styles for the masked word section */
+/* New styles for the masked word section */
 .masked-word-section {
     margin-bottom: 40px; /* Similar spacing as other sections */
     text-align: left;    /* Aligns text to the left */
@@ -126,7 +110,7 @@ textarea {
     resize: vertical; /* Allow resizing only vertically */
 }
 
-/* Styles for the predictions section */
+/* New styles for the predictions section */
 .predictions {
     margin-top: 20px;
     text-align: left;
@@ -152,7 +136,7 @@ textarea {
     margin: 0;
 }
 
-/* Styles for the Task 3 section */
+/* New styles for the Task 3 section */
 .task-3-section {
     margin-bottom: 40px; /* Added space before controls */
 }
@@ -169,14 +153,16 @@ textarea {
     margin-bottom: 20px;
 }
 
-/* Styles for the case section */
-.case-control {
+/* New styles for the case section */
+.case-section {
     margin-bottom: 40px;
     text-align: left;
 }
 
-.case-control label {
-    font-size: 16px;
+.case-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .case-select {
@@ -188,14 +174,16 @@ textarea {
     margin-bottom: 20px;
 }
 
-/* Styles for the turn masked section */
+/* New styles for the turn masked section */
 .turn-masked-section {
     margin-bottom: 40px;
     text-align: left;
 }
 
-.turn-masked-section label {
-    font-size: 16px;
+.turn-masked-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .turn-masked-select {
@@ -269,7 +257,7 @@ button:active {
         gap: 10px;
     }
 
-    .task-2-section, .task-3-section, .case-control, .turn-masked-section {
+    .task-2-section, .task-3-section, .case-section, .turn-masked-section {
         margin-bottom: 20px; /* Adjusted for smaller screens */
     }
 
