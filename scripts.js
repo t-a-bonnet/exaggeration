@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select'); // New dropdown for case
-    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
+    const caseSelect = document.getElementById('case-select');
+    const turnMaskedSelect = document.getElementById('turn-masked-select');
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask3 = [];
     let statusData = [];
     let caseData = [];
-    let turnMaskedData = []; // New data array for turn_masked
+    let turnMaskedData = [];
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask3;
     let statusColumnIndex;
     let caseColumnIndex;
-    let turnMaskedColumnIndex; // New column index for turn_masked
+    let turnMaskedColumnIndex;
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            originalColumnIndexA = header.indexOf('speaker_a_original');
-            originalColumnIndexB = header.indexOf('speaker_b_original');
+            columnIndexOriginalA = header.indexOf('speaker_a_original');
+            columnIndexOriginalB = header.indexOf('speaker_b_original');
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
@@ -104,12 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             statusColumnIndex = header.indexOf('status');
-            caseColumnIndex = header.indexOf('case'); // New column index for case
-            turnMaskedColumnIndex = header.indexOf('turn_masked'); // New column index for turn_masked
+            caseColumnIndex = header.indexOf('case');
+            turnMaskedColumnIndex = header.indexOf('turn_masked');
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
+            maskedWordColumnIndex = header.indexOf('masked_word');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
         caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked'; // Set default value for turn_masked
+        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
         robertaPredsDisplay.textContent = robertaPreds[index] || '';
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
         const updatedCase = caseSelect.value;
-        const updatedTurnMasked = turnMaskedSelect.value; // Get value from turn_masked dropdown
+        const updatedTurnMasked = turnMaskedSelect.value;
         const updatedMaskedWord = maskedWordDisplay.value;
 
         submitButton.disabled = true;
