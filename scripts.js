@@ -128,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            originalA = rows.slice(1).map(row => row[columnIndexA] || '');
-            originalB = rows.slice(1).map(row => row[columnIndexA] || '');
+            originalA = rows.slice(1).map(row => row[columnIndexOriginalA] || '');
+            originalB = rows.slice(1).map(row => row[columnIndexOriginalB] || '');
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
