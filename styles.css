@@ -153,6 +153,28 @@ textarea {
     margin-bottom: 20px;
 }
 
+/* New styles for the case section */
+.case-section {
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.case-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.case-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+/* Styles for the status dropdown */
 #status-select {
     padding: 10px;
     font-size: 16px;
@@ -214,7 +236,7 @@ button:active {
         gap: 10px;
     }
 
-    .task-2-section, .task-3-section {
+    .task-2-section, .task-3-section, .case-section {
         margin-bottom: 20px; /* Adjusted for smaller screens */
     }
 

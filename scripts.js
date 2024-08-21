@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
+    const caseSelect = document.getElementById('case-select'); // New dropdown for case
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataATask3 = [];
     let dataBTask3 = [];
     let statusData = [];
+    let caseData = []; // New array for case column
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
@@ -36,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexATask3;
     let columnIndexBTask3;
     let statusColumnIndex;
+    let caseColumnIndex; // New column index for case
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
@@ -88,12 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             statusColumnIndex = header.indexOf('status');
+            caseColumnIndex = header.indexOf('case'); // New column index for case
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
             maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -101,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayBTask2.value = 'Required columns not found.';
                 textDisplayATask3.value = 'Required columns not found.';
                 textDisplayBTask3.value = 'Required columns not found.';
+                robertaPredsDisplay.textContent = 'Required columns not found.';
+                llamaPredsDisplay.textContent = 'Required columns not found.';
+                gemmaPredsDisplay.textContent = 'Required columns not found.';
+                maskedWordDisplay.value = 'Required columns not found.';
                 return;
             }
 
@@ -111,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'modal'); // Default to 'modal'
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
@@ -139,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -147,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
+        caseSelect.value = caseData[index] || 'modal'; // Default value if empty
         robertaPredsDisplay.textContent = robertaPreds[index] || '';
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
@@ -192,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
+        const updatedCase = caseSelect.value; // New case value
         const updatedMaskedWord = maskedWordDisplay.value;
 
         submitButton.disabled = true;
@@ -316,6 +327,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "status": ' + resultStatus.message);
             }
 
+            // Update the case column
+            const responseCase = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedCase,
+                    column: 'case'
+                })
+            });
+
+            const resultCase = await responseCase.json();
+            if (!resultCase.success) {
+                alert('Error updating column "case": ' + resultCase.message);
+            }
+
             // Update the masked word column
             const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
@@ -342,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
             if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
+            if (resultCase.success) caseData[currentRow] = updatedCase;
             if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
 
             // Notify the user of successful submission
