@@ -75,7 +75,7 @@ exports.handler = async (event) => {
         parsedRows[id][columnIndex] = text; // Update the specified column
 
         // Convert rows back to CSV format
-        const updatedContent = [header, ...parsedRows.map(row => row.map(cell => cell || '').join(','))].join('\n');
+        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {

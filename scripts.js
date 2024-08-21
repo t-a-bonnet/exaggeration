@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Get HTML elements
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -46,15 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const rows = [];
         const re = /"(?:[^"]|"")*"|[^,]+/g;
         let matches;
-
+        
         text.split('\n').forEach(line => {
             const row = [];
             while ((matches = re.exec(line)) !== null) {
-                row.push(matches[0].replace(/^"(.*)"$/, '$1').replace(/""/g, '') || '');
+                row.push(matches[0].replace(/^"(.*)"$/, '$1').replace(/""/g, '"'));
             }
             rows.push(row);
         });
-
+        
         return rows;
     }
 
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = parseCSV(text); // Use the new parseCSV function
+            const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
@@ -91,9 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
+            maskedWordColumnIndex = header.indexOf('masked_word');
 
-            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1) {
+            // Check if any required columns are missing
+            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1 || statusColumnIndex === -1 || robertaPredsColumnIndex === -1 || llamaPredsColumnIndex === -1 || gemmaPredsColumnIndex === -1 || maskedWordColumnIndex === -1) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Use empty strings for missing values
+            // Map data from rows to the data arrays, handling empty cells
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
@@ -117,11 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
 
-            try {
-                showRow(currentRow);
-            } catch (err) {
-                throw new Error('Error displaying row: ' + err.message);
-            }
+            // Show the first row
+            showRow(currentRow);
 
         } catch (error) {
             console.error('Error loading CSV:', error);
@@ -140,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
+        if (index < 0 || index >= dataA.length) return; // Ensure the index is valid
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -198,152 +197,44 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.disabled = true;
 
         try {
-            const responseA = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextA,
-                    column: 'speaker_a_task_1'
-                })
-            });
+            // Helper function to submit a single column
+            const submitColumn = async (column, text) => {
+                const response = await fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: currentRow,
+                        text: text,
+                        column: column
+                    })
+                });
+                const result = await response.json();
+                if (!result.success) {
+                    alert(`Error updating column "${column}": ` + result.message);
+                }
+            };
 
-            const resultA = await responseA.json();
-            if (!resultA.success) {
-                alert('Error updating column "speaker_a_task_1": ' + resultA.message);
-            }
-
-            const responseB = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextB,
-                    column: 'speaker_b_task_1'
-                })
-            });
-
-            const resultB = await responseB.json();
-            if (!resultB.success) {
-                alert('Error updating column "speaker_b_task_1": ' + resultB.message);
-            }
-
-            const responseATask2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextATask2,
-                    column: 'speaker_a_task_2'
-                })
-            });
-
-            const resultATask2 = await responseATask2.json();
-            if (!resultATask2.success) {
-                alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
-            }
-
-            const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask2,
-                    column: 'speaker_b_task_2'
-                })
-            });
-
-            const resultBTask2 = await responseBTask2.json();
-            if (!resultBTask2.success) {
-                alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
-            }
-
-            const responseATask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextATask3,
-                    column: 'speaker_a_task_3'
-                })
-            });
-
-            const resultATask3 = await responseATask3.json();
-            if (!resultATask3.success) {
-                alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
-            }
-
-            const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask3,
-                    column: 'speaker_b_task_3'
-                })
-            });
-
-            const resultBTask3 = await responseBTask3.json();
-            if (!resultBTask3.success) {
-                alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
-            }
-
-            const responseStatus = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedStatus,
-                    column: 'status'
-                })
-            });
-
-            const resultStatus = await responseStatus.json();
-            if (!resultStatus.success) {
-                alert('Error updating column "status": ' + resultStatus.message);
-            }
-
-            // Update the masked word column
-            const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedMaskedWord,
-                    column: 'masked_word'
-                })
-            });
-
-            const resultMaskedWord = await responseMaskedWord.json();
-            if (!resultMaskedWord.success) {
-                alert('Error updating column "masked_word": ' + resultMaskedWord.message);
-            }
+            // Submit updates for all columns
+            await submitColumn('speaker_a_task_1', updatedTextA);
+            await submitColumn('speaker_b_task_1', updatedTextB);
+            await submitColumn('speaker_a_task_2', updatedTextATask2);
+            await submitColumn('speaker_b_task_2', updatedTextBTask2);
+            await submitColumn('speaker_a_task_3', updatedTextATask3);
+            await submitColumn('speaker_b_task_3', updatedTextBTask3);
+            await submitColumn('status', updatedStatus);
+            await submitColumn('masked_word', updatedMaskedWord);
 
             // Update the local data arrays after successful submission
-            if (resultA.success) dataA[currentRow] = updatedTextA;
-            if (resultB.success) dataB[currentRow] = updatedTextB;
-            if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
-            if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
-            if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
-            if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
-            if (resultStatus.success) statusData[currentRow] = updatedStatus;
-            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            dataATask3[currentRow] = updatedTextATask3;
+            dataBTask3[currentRow] = updatedTextBTask3;
+            statusData[currentRow] = updatedStatus;
+            maskedWords[currentRow] = updatedMaskedWord;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
