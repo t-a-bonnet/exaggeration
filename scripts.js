@@ -201,9 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
-    
+        const updatedMaskedWord = maskedWordDisplay.textContent; // Retrieve the updated masked word
+
         submitButton.disabled = true;
-    
+
         try {
             const responseA = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
@@ -216,12 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_1'
                 })
             });
-    
+
             const resultA = await responseA.json();
             if (!resultA.success) {
                 alert('Error updating column "speaker_a_task_1": ' + resultA.message);
             }
-    
+
             const responseB = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -233,12 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_1'
                 })
             });
-    
+
             const resultB = await responseB.json();
             if (!resultB.success) {
                 alert('Error updating column "speaker_b_task_1": ' + resultB.message);
             }
-    
+
             const responseATask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -250,12 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_2'
                 })
             });
-    
+
             const resultATask2 = await responseATask2.json();
             if (!resultATask2.success) {
                 alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
             }
-    
+
             const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -267,12 +268,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_2'
                 })
             });
-    
+
             const resultBTask2 = await responseBTask2.json();
             if (!resultBTask2.success) {
                 alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
             }
-    
+
             const responseATask3 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -284,12 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_a_task_3'
                 })
             });
-    
+
             const resultATask3 = await responseATask3.json();
             if (!resultATask3.success) {
                 alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
             }
-    
+
             const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -301,12 +302,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'speaker_b_task_3'
                 })
             });
-    
+
             const resultBTask3 = await responseBTask3.json();
             if (!resultBTask3.success) {
                 alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
             }
-    
+
             const responseStatus = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -318,12 +319,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     column: 'status'
                 })
             });
-    
+
             const resultStatus = await responseStatus.json();
             if (!resultStatus.success) {
                 alert('Error updating column "status": ' + resultStatus.message);
             }
-    
+
+            // Update the masked word column
+            const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedMaskedWord,
+                    column: 'masked_word'
+                })
+            });
+
+            const resultMaskedWord = await responseMaskedWord.json();
+            if (!resultMaskedWord.success) {
+                alert('Error updating column "masked_word": ' + resultMaskedWord.message);
+            }
+
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
@@ -332,10 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
             if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
-    
+            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord; // Update local masked words array
+
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
-    
+
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
