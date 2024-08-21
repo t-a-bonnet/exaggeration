@@ -81,17 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            columnIndexA = header.indexOf('speaker_a_task_1');
-            columnIndexB = header.indexOf('speaker_b_task_1');
-            columnIndexATask2 = header.indexOf('speaker_a_task_2');
-            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
-            columnIndexATask3 = header.indexOf('speaker_a_task_3');
-            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
-            statusColumnIndex = header.indexOf('status');
-            robertaPredsColumnIndex = header.indexOf('roberta_preds');
-            llamaPredsColumnIndex = header.indexOf('llama_preds');
-            gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word');
+            columnIndexA = 6;
+            columnIndexB = 7;
+            columnIndexATask2 = 9;
+            columnIndexBTask2 = 10;
+            columnIndexATask3 = 11;
+            columnIndexBTask3 = 12;
+            statusColumnIndex = 13;
+            robertaPredsColumnIndex = 15;
+            llamaPredsColumnIndex = 16;
+            gemmaPredsColumnIndex = 17;
+            maskedWordColumnIndex = 8;
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
