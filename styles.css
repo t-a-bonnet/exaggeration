@@ -39,22 +39,6 @@ p {
     margin-bottom: 20px;
 }
 
-/* New styles for the original text pair */
-.original-text-pair {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 40px; /* Added space between tasks */
-}
-
-/* Styles for the text boxes in the original text pair */
-.original-text-pair .text-box {
-    flex: 1;
-    min-width: 300px;
-}
-
-/* Styles for the masked text pair */
 .text-pair {
     display: flex;
     gap: 20px;
@@ -79,6 +63,31 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
+}
+
+/* Styles for speaker_a_original and speaker_b_original */
+.speaker_a_original,
+.speaker_b_original {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd; /* Consistent border color */
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.speaker_a_original h3,
+.speaker_b_original h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.speaker_a_original p,
+.speaker_b_original p {
+    font-size: 16px;
+    color: #444;
+    margin: 0;
 }
 
 /* Styles for the Task 2 section */
@@ -170,18 +179,18 @@ textarea {
 }
 
 /* New styles for the case section */
-.case-control {
+.case-section {
     margin-bottom: 40px;
     text-align: left;
 }
 
-.case-control h2 {
+.case-section h2 {
     font-size: 22px;
     color: #333;
     margin-bottom: 10px;
 }
 
-#case-select {
+.case-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -202,7 +211,7 @@ textarea {
     margin-bottom: 10px;
 }
 
-#turn-masked-select {
+.turn-masked-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -268,12 +277,12 @@ button:active {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .original-text-pair, .text-pair {
+    .text-pair {
         flex-direction: column;
         gap: 10px;
     }
 
-    .task-2-section, .task-3-section, .case-control, .turn-masked-section {
+    .task-2-section, .task-3-section, .case-section, .turn-masked-section {
         margin-bottom: 20px; /* Adjusted for smaller screens */
     }
 
