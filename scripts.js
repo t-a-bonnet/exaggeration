@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word');
+            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
@@ -147,10 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
-        robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
-        llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
-        gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
-        maskedWordDisplay.value = maskedWords[index] || 'No data'; // Display the masked word
+        robertaPredsDisplay.textContent = robertaPreds[index] || '';
+        llamaPredsDisplay.textContent = llamaPreds[index] || '';
+        gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
+        maskedWordDisplay.value = maskedWords[index] || 'Enter masked word';
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
