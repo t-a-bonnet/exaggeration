@@ -46,15 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const rows = [];
         const re = /"(?:[^"]|"")*"|[^,]+/g;
         let matches;
-        
+
         text.split('\n').forEach(line => {
             const row = [];
             while ((matches = re.exec(line)) !== null) {
-                row.push(matches[0].replace(/^"(.*)"$/, '$1').replace(/""/g, '"'));
+                row.push(matches[0].replace(/^"(.*)"$/, '$1').replace(/""/g, '') || '');
             }
             rows.push(row);
         });
-        
+
         return rows;
     }
 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
             maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
+            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Use empty strings for missing values
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
