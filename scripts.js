@@ -17,10 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const llamaPredsDisplay = document.getElementById('llama-preds');
     const gemmaPredsDisplay = document.getElementById('gemma-preds');
     const maskedWordDisplay = document.getElementById('masked-word');
-
-    // New elements for original content
-    const speakerAOriginalDisplay = document.getElementById('speaker-a-original');
-    const speakerBOriginalDisplay = document.getElementById('speaker-b-original');
+    const originalADisplay = document.getElementById('original-a');
+    const originalBDisplay = document.getElementById('original-b');
 
     let currentRow = 0;
     let dataA = [];
@@ -36,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let llamaPreds = [];
     let gemmaPreds = [];
     let maskedWords = [];
-    let speakerAOriginal = []; // New array for speaker_a_original
-    let speakerBOriginal = []; // New array for speaker_b_original
+    let originalDataA = [];
+    let originalDataB = [];
 
     let columnIndexA;
     let columnIndexB;
@@ -52,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
     let maskedWordColumnIndex;
-    let speakerAOriginalColumnIndex; // New column index for speaker_a_original
-    let speakerBOriginalColumnIndex; // New column index for speaker_b_original
+    let originalAColumnIndex;
+    let originalBColumnIndex;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -91,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
                 maskedWordDisplay.value = 'No data available.';
-                speakerAOriginalDisplay.textContent = 'No data available.';
-                speakerBOriginalDisplay.textContent = 'No data available.';
+                originalADisplay.textContent = 'No data available.';
+                originalBDisplay.textContent = 'No data available.';
                 return;
             }
 
@@ -109,11 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
-            speakerAOriginalColumnIndex = header.indexOf('speaker_a_original'); // New column index for speaker_a_original
-            speakerBOriginalColumnIndex = header.indexOf('speaker_b_original'); // New column index for speaker_b_original
+            maskedWordColumnIndex = header.indexOf('masked_word');
+            originalAColumnIndex = header.indexOf('speaker_a_original');
+            originalBColumnIndex = header.indexOf('speaker_b_original');
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined || speakerAOriginalColumnIndex === undefined || speakerBOriginalColumnIndex === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -125,8 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 llamaPredsDisplay.textContent = 'Required columns not found.';
                 gemmaPredsDisplay.textContent = 'Required columns not found.';
                 maskedWordDisplay.value = 'Required columns not found.';
-                speakerAOriginalDisplay.textContent = 'Required columns not found.';
-                speakerBOriginalDisplay.textContent = 'Required columns not found.';
+                originalADisplay.textContent = 'Required columns not found.';
+                originalBDisplay.textContent = 'Required columns not found.';
                 return;
             }
 
@@ -143,8 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
-            speakerAOriginal = rows.slice(1).map(row => row[speakerAOriginalColumnIndex] || ''); // Load speaker_a_original
-            speakerBOriginal = rows.slice(1).map(row => row[speakerBOriginalColumnIndex] || ''); // Load speaker_b_original
+            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
+            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
 
             try {
                 showRow(currentRow);
@@ -164,14 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
             maskedWordDisplay.value = 'Error loading CSV data.';
-            speakerAOriginalDisplay.textContent = 'Error loading CSV data.';
-            speakerBOriginalDisplay.textContent = 'Error loading CSV data.';
+            originalADisplay.textContent = 'Error loading CSV data.';
+            originalBDisplay.textContent = 'Error loading CSV data.';
         }
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0 || speakerAOriginal.length === 0 || speakerBOriginal.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -185,8 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
         maskedWordDisplay.value = maskedWords[index] || 'Enter masked word';
-        speakerAOriginalDisplay.textContent = speakerAOriginal[index] || 'No original content';
-        speakerBOriginalDisplay.textContent = speakerBOriginal[index] || 'No original content';
+        originalADisplay.textContent = llamaPreds[index] || '';
+        originalBDisplay.textContent = gemmaPreds[index] || '';
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
