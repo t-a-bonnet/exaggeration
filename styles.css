@@ -151,13 +151,15 @@ textarea {
     margin-bottom: 20px;
 }
 
-#status-select {
+#status-select, #case-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
     cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #controls {
@@ -168,6 +170,7 @@ textarea {
     margin-bottom: 20px; /* Space between status and buttons */
 }
 
+/* Button row styles */
 .button-row {
     display: flex;
     gap: 10px;

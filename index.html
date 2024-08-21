@@ -24,10 +24,22 @@
             </div>
 
             <div class="masked-word-section">
-                <div class="masked-word-box">
-                    <h3>Masked Word:</h3>
-                    <p id="masked-word">Loading...</p>
-                </div>
+                <label for="masked-word">Masked Word:</label>
+                <p id="masked-word">Loading...</p>
+                
+                <label for="case-select">Case:</label>
+                <select id="case-select" aria-label="Select case">
+                    <option value="modal">Modal</option>
+                    <option value="speech_verb">Speech Verb</option>
+                    <option value="verb">Verb</option>
+                    <option value="noun">Noun</option>
+                    <option value="temporal">Temporal</option>
+                    <option value="connector">Connector</option>
+                    <option value="scalar_adjective">Scalar Adjective</option>
+                    <option value="quantifier">Quantifier</option>
+                    <option value="negation">Negation</option>
+                    <option value="anaphora">Anaphora</option>
+                </select>
             </div>
 
             <!-- Task 2 Section -->

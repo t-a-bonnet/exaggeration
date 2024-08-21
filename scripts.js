@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
+    const caseSelect = document.getElementById('case-select'); // New case select element
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let llamaPreds = [];
     let gemmaPreds = [];
     let maskedWords = []; // New array for masked words
+    let caseData = []; // New array for case data
 
     let columnIndexA;
     let columnIndexB;
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
     let maskedWordColumnIndex; // New index for masked words
+    let caseColumnIndex; // New index for case data
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -77,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
                 maskedWordDisplay.textContent = 'No data available.'; // Update if no data
+                caseSelect.innerHTML = ''; // Clear case select options
                 return;
             }
 
@@ -92,8 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
             maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
+            caseColumnIndex = header.indexOf('case'); // New column index for case data
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -102,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayATask3.value = 'Required columns not found.';
                 textDisplayBTask3.value = 'Required columns not found.';
                 maskedWordDisplay.textContent = 'Required columns not found.'; // Update if columns not found
+                caseSelect.innerHTML = ''; // Clear case select options
                 return;
             }
 
@@ -116,9 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || ''); // New array population
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || ''); // New array population
 
-            if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0 && robertaPreds.length > 0 && llamaPreds.length > 0 && gemmaPreds.length > 0 && maskedWords.length > 0) {
+            if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0 && robertaPreds.length > 0 && llamaPreds.length > 0 && gemmaPreds.length > 0 && maskedWords.length > 0 && caseData.length > 0) {
                 showRow(currentRow);
+                updateCaseSelect(); // Update case select options
             } else {
                 console.error('No data available.');
                 textDisplayA.value = 'No data available.';
@@ -131,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
                 maskedWordDisplay.textContent = 'No data available.'; // Update if no data
+                caseSelect.innerHTML = ''; // Clear case select options
             }
         } catch (error) {
             console.error('Error loading CSV:', error);
@@ -144,12 +153,26 @@ document.addEventListener('DOMContentLoaded', () => {
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
             maskedWordDisplay.textContent = 'Error loading CSV data.'; // Update if error loading data
+            caseSelect.innerHTML = ''; // Clear case select options
         }
+    }
+
+    // Function to update the case select dropdown with available cases
+    function updateCaseSelect() {
+        const uniqueCases = [...new Set(caseData)]; // Get unique case values
+        caseSelect.innerHTML = ''; // Clear existing options
+
+        uniqueCases.forEach(caseValue => {
+            const option = document.createElement('option');
+            option.value = caseValue;
+            option.textContent = caseValue;
+            caseSelect.appendChild(option);
+        });
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -157,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayATask3.value = dataATask3[index] || '';
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
+        caseSelect.value = caseData[index] || 'Unknown'; // Set case select to current case value
         robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
@@ -202,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextATask3 = textDisplayATask3.value;
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
+        const updatedCase = caseSelect.value; // Get selected case value
     
         submitButton.disabled = true;
     
@@ -325,6 +350,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "status": ' + resultStatus.message);
             }
     
+            const responseCase = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedCase,
+                    column: 'case'
+                })
+            });
+    
+            const resultCase = await responseCase.json();
+            if (!resultCase.success) {
+                alert('Error updating column "case": ' + resultCase.message);
+            }
+    
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
@@ -333,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
             if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
             if (resultStatus.success) statusData[currentRow] = updatedStatus;
+            if (resultCase.success) caseData[currentRow] = updatedCase; // Update case data array
     
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
