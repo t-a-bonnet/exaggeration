@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get HTML elements
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -30,17 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let gemmaPreds = [];
     let maskedWords = [];
 
-    let columnIndexA;
-    let columnIndexB;
-    let columnIndexATask2;
-    let columnIndexBTask2;
-    let columnIndexATask3;
-    let columnIndexBTask3;
-    let statusColumnIndex;
-    let robertaPredsColumnIndex;
-    let llamaPredsColumnIndex;
-    let gemmaPredsColumnIndex;
-    let maskedWordColumnIndex;
+    // Mapping object for headers
+    const expectedHeaders = [
+        'speaker_a_task_1',
+        'speaker_b_task_1',
+        'speaker_a_task_2',
+        'speaker_b_task_2',
+        'speaker_a_task_3',
+        'speaker_b_task_3',
+        'status',
+        'roberta_preds',
+        'llama_preds',
+        'gemma_preds',
+        'masked_word'
+    ];
+
+    let columnIndices = {};
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -59,13 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return rows;
     }
 
+    // Function to map header names to their indices
+    function getHeaderIndices(headerRow) {
+        const indices = {};
+        expectedHeaders.forEach(header => {
+            const index = headerRow.indexOf(header);
+            if (index !== -1) {
+                indices[header] = index;
+            } else {
+                console.warn(`Header "${header}" not found.`);
+            }
+        });
+        return indices;
+    }
+
     // Function to load the CSV data
     async function loadCSV() {
         try {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = parseCSV(text);
+            const rows = parseCSV(text); // Use the new parseCSV function
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
@@ -82,21 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            columnIndexA = header.indexOf('speaker_a_task_1');
-            columnIndexB = header.indexOf('speaker_b_task_1');
-            columnIndexATask2 = header.indexOf('speaker_a_task_2');
-            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
-            columnIndexATask3 = header.indexOf('speaker_a_task_3');
-            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
-            statusColumnIndex = header.indexOf('status');
-            robertaPredsColumnIndex = header.indexOf('roberta_preds');
-            llamaPredsColumnIndex = header.indexOf('llama_preds');
-            gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word');
+            console.log('Header:', header); // Debugging header
 
-            // Check if any required columns are missing
-            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1 || statusColumnIndex === -1 || robertaPredsColumnIndex === -1 || llamaPredsColumnIndex === -1 || gemmaPredsColumnIndex === -1 || maskedWordColumnIndex === -1) {
-                console.error('Required columns not found');
+            // Get column indices from header row
+            columnIndices = getHeaderIndices(header);
+
+            // Check for missing required columns
+            if (Object.keys(columnIndices).length < expectedHeaders.length) {
+                console.error('Not all required columns were found.');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
                 textDisplayATask2.value = 'Required columns not found.';
@@ -106,21 +117,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Map data from rows to the data arrays, handling empty cells
-            dataA = rows.slice(1).map(row => row[columnIndexA] || '');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || '');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
+            // Extract data based on column indices
+            dataA = rows.slice(1).map(row => row[columnIndices['speaker_a_task_1']] || '');
+            dataB = rows.slice(1).map(row => row[columnIndices['speaker_b_task_1']] || '');
+            dataATask2 = rows.slice(1).map(row => row[columnIndices['speaker_a_task_2']] || '');
+            dataBTask2 = rows.slice(1).map(row => row[columnIndices['speaker_b_task_2']] || '');
+            dataATask3 = rows.slice(1).map(row => row[columnIndices['speaker_a_task_3']] || '');
+            dataBTask3 = rows.slice(1).map(row => row[columnIndices['speaker_b_task_3']] || '');
+            statusData = rows.slice(1).map(row => row[columnIndices['status']] || '');
+            robertaPreds = rows.slice(1).map(row => row[columnIndices['roberta_preds']] || '');
+            llamaPreds = rows.slice(1).map(row => row[columnIndices['llama_preds']] || '');
+            gemmaPreds = rows.slice(1).map(row => row[columnIndices['gemma_preds']] || '');
+            maskedWords = rows.slice(1).map(row => row[columnIndices['masked_word']] || '');
 
-            // Show the first row
-            showRow(currentRow);
+            try {
+                showRow(currentRow);
+            } catch (err) {
+                throw new Error('Error displaying row: ' + err.message);
+            }
 
         } catch (error) {
             console.error('Error loading CSV:', error);
@@ -139,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display a specific row
     function showRow(index) {
-        if (index < 0 || index >= dataA.length) return; // Ensure the index is valid
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0) return;
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';
@@ -172,88 +186,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to jump to a specific row
+    // Function to go to a specific row based on input
     function goToRow() {
         const rowNumber = parseInt(rowInput.value, 10);
-        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > dataA.length) {
-            alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
-            return;
-        }
-        currentRow = rowNumber - 1;
-        showRow(currentRow);
-    }
-
-    // Function to submit changes
-    async function submitChanges() {
-        const updatedTextA = textDisplayA.value;
-        const updatedTextB = textDisplayB.value;
-        const updatedTextATask2 = textDisplayATask2.value;
-        const updatedTextBTask2 = textDisplayBTask2.value;
-        const updatedTextATask3 = textDisplayATask3.value;
-        const updatedTextBTask3 = textDisplayBTask3.value;
-        const updatedStatus = statusSelect.value;
-        const updatedMaskedWord = maskedWordDisplay.value;
-
-        submitButton.disabled = true;
-
-        try {
-            // Helper function to submit a single column
-            const submitColumn = async (column, text) => {
-                const response = await fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: currentRow,
-                        text: text,
-                        column: column
-                    })
-                });
-                const result = await response.json();
-                if (!result.success) {
-                    alert(`Error updating column "${column}": ` + result.message);
-                }
-            };
-
-            // Submit updates for all columns
-            await submitColumn('speaker_a_task_1', updatedTextA);
-            await submitColumn('speaker_b_task_1', updatedTextB);
-            await submitColumn('speaker_a_task_2', updatedTextATask2);
-            await submitColumn('speaker_b_task_2', updatedTextBTask2);
-            await submitColumn('speaker_a_task_3', updatedTextATask3);
-            await submitColumn('speaker_b_task_3', updatedTextBTask3);
-            await submitColumn('status', updatedStatus);
-            await submitColumn('masked_word', updatedMaskedWord);
-
-            // Update the local data arrays after successful submission
-            dataA[currentRow] = updatedTextA;
-            dataB[currentRow] = updatedTextB;
-            dataATask2[currentRow] = updatedTextATask2;
-            dataBTask2[currentRow] = updatedTextBTask2;
-            dataATask3[currentRow] = updatedTextATask3;
-            dataBTask3[currentRow] = updatedTextBTask3;
-            statusData[currentRow] = updatedStatus;
-            maskedWords[currentRow] = updatedMaskedWord;
-
-            // Notify the user of successful submission
-            alert('Changes successfully submitted!');
-
-        } catch (error) {
-            console.error('Error submitting changes:', error);
-            alert('Error submitting changes: ' + error.message);
-        } finally {
-            // Re-enable submit button after submission is complete
-            submitButton.disabled = false;
+        if (rowNumber >= 0 && rowNumber < dataA.length) {
+            currentRow = rowNumber;
+            showRow(currentRow);
+        } else {
+            alert('Row number out of range.');
         }
     }
 
-    // Event listeners
+    // Event listeners for buttons
     previousButton.addEventListener('click', showPreviousRow);
     nextButton.addEventListener('click', showNextRow);
     goButton.addEventListener('click', goToRow);
-    submitButton.addEventListener('click', submitChanges);
 
-    // Load the CSV data on page load
+    // Load CSV data when the document is ready
     loadCSV();
 });
