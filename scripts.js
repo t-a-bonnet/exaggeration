@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const robertaPredsDisplay = document.getElementById('roberta-preds');
     const llamaPredsDisplay = document.getElementById('llama-preds');
     const gemmaPredsDisplay = document.getElementById('gemma-preds');
+    const maskedWordDisplay = document.getElementById('masked-word'); // New masked word display element
 
     let currentRow = 0;
     let dataA = [];
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
+    let maskedWords = []; // New array for masked words
 
     let columnIndexA;
     let columnIndexB;
@@ -37,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
+    let maskedWordColumnIndex; // New index for masked words
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -73,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 robertaPredsDisplay.textContent = 'No data available.';
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
+                maskedWordDisplay.textContent = 'No data available.'; // Update if no data
                 return;
             }
 
@@ -87,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
+            maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
@@ -96,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayBTask2.value = 'Required columns not found.';
                 textDisplayATask3.value = 'Required columns not found.';
                 textDisplayBTask3.value = 'Required columns not found.';
+                maskedWordDisplay.textContent = 'Required columns not found.'; // Update if columns not found
                 return;
             }
 
@@ -109,8 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || ''); // New array population
 
-            if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0 && robertaPreds.length > 0 && llamaPreds.length > 0 && gemmaPreds.length > 0) {
+            if (dataA.length > 0 && dataB.length > 0 && dataATask2.length > 0 && dataBTask2.length > 0 && dataATask3.length > 0 && dataBTask3.length > 0 && statusData.length > 0 && robertaPreds.length > 0 && llamaPreds.length > 0 && gemmaPreds.length > 0 && maskedWords.length > 0) {
                 showRow(currentRow);
             } else {
                 console.error('No data available.');
@@ -123,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 robertaPredsDisplay.textContent = 'No data available.';
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
+                maskedWordDisplay.textContent = 'No data available.'; // Update if no data
             }
         } catch (error) {
             console.error('Error loading CSV:', error);
@@ -135,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             robertaPredsDisplay.textContent = 'Error loading CSV data.';
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
+            maskedWordDisplay.textContent = 'Error loading CSV data.'; // Update if error loading data
         }
     }
 
@@ -151,6 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
+        maskedWordDisplay.textContent = maskedWords[index] || 'No data'; // Display the masked word
+
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
     }

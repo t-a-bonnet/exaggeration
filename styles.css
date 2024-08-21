@@ -82,6 +82,32 @@ textarea {
     margin-bottom: 20px;
 }
 
+/* New styles for the masked word section */
+.masked-word-section {
+    margin-bottom: 40px; /* Similar spacing as other sections */
+    text-align: left;    /* Aligns text to the left */
+}
+
+.masked-word-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.masked-word-box h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.masked-word-box p {
+    font-size: 16px;
+    color: #444;
+    margin: 0;
+}
+
 /* New styles for the predictions section */
 .predictions {
     margin-top: 20px;
