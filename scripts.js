@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayBTask2.value = 'Required columns not found.';
                 textDisplayATask3.value = 'Required columns not found.';
                 textDisplayBTask3.value = 'Required columns not found.';
-                maskedWordDisplay.textContent = 'Required columns not found.'; // Update if columns not found
                 return;
             }
 
