@@ -39,6 +39,22 @@ p {
     margin-bottom: 20px;
 }
 
+/* New styles for the original text pair */
+.original-text-pair {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px; /* Added space between tasks */
+}
+
+/* Styles for the text boxes in the original text pair */
+.original-text-pair .text-box {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* Styles for the masked text pair */
 .text-pair {
     display: flex;
     gap: 20px;
@@ -154,18 +170,18 @@ textarea {
 }
 
 /* New styles for the case section */
-.case-section {
+.case-control {
     margin-bottom: 40px;
     text-align: left;
 }
 
-.case-section h2 {
+.case-control h2 {
     font-size: 22px;
     color: #333;
     margin-bottom: 10px;
 }
 
-.case-select {
+#case-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -186,7 +202,7 @@ textarea {
     margin-bottom: 10px;
 }
 
-.turn-masked-select {
+#turn-masked-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -252,12 +268,12 @@ button:active {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .text-pair {
+    .original-text-pair, .text-pair {
         flex-direction: column;
         gap: 10px;
     }
 
-    .task-2-section, .task-3-section, .case-section, .turn-masked-section {
+    .task-2-section, .task-3-section, .case-control, .turn-masked-section {
         margin-bottom: 20px; /* Adjusted for smaller screens */
     }
 

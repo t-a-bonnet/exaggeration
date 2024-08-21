@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,21 @@
         <div id="container">
             <h1>Task 1</h1>
             <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;WORD&gt;.</p>
-            <div class="text-pair">
+            
+            <!-- Original Text Displays -->
+            <div class="original-text-pair">
+                <div class="text-box">
+                    <label for="text-display-a-original">Speaker A (Original):</label>
+                    <textarea id="text-display-a-original" aria-label="Original text display for speaker A"></textarea>
+                </div>
+                <div class="text-box">
+                    <label for="text-display-b-original">Speaker B (Original):</label>
+                    <textarea id="text-display-b-original" aria-label="Original text display for speaker B"></textarea>
+                </div>
+            </div>
+            
+            <!-- Masked Text Displays -->
+            <div class="masked-text-pair">
                 <div class="text-box">
                     <label for="text-display-a">Speaker A:</label>
                     <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
