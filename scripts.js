@@ -81,17 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            columnIndexA = 6;
-            columnIndexB = 7;
-            columnIndexATask2 = 9;
-            columnIndexBTask2 = 10;
-            columnIndexATask3 = 11;
-            columnIndexBTask3 = 12;
-            statusColumnIndex = 13;
-            robertaPredsColumnIndex = 15;
-            llamaPredsColumnIndex = 16;
-            gemmaPredsColumnIndex = 17;
-            maskedWordColumnIndex = 8;
+            columnIndexA = header.indexOf('speaker_a_task_1');
+            columnIndexB = header.indexOf('speaker_b_task_1');
+            columnIndexATask2 = header.indexOf('speaker_a_task_2');
+            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
+            columnIndexATask3 = header.indexOf('speaker_a_task_3');
+            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
+            statusColumnIndex = header.indexOf('status');
+            robertaPredsColumnIndex = header.indexOf('roberta_preds');
+            llamaPredsColumnIndex = header.indexOf('llama_preds');
+            gemmaPredsColumnIndex = header.indexOf('gemma_preds');
+            maskedWordColumnIndex = header.indexOf('masked_word');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
                 console.error('Required columns not found');
@@ -104,17 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || 'No data found.');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || 'No data found.');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No data found.');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No data found.');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No data found.');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No data found.');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'No data found.');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No data found.');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No data found.');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No data found.');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No data found.');
+            dataA = rows.slice(1).map(row => row[columnIndexA] || '');
+            dataB = rows.slice(1).map(row => row[columnIndexB] || '');
+            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
+            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
+            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
+            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
+            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
+            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
+            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
 
             try {
                 showRow(currentRow);
