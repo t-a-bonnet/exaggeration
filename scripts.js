@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const originalTextDisplayA = document.getElementById('original-a');
+    const originalTextDisplayB = document.getElementById('original-b');
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -19,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const maskedWordDisplay = document.getElementById('masked-word');
 
     let currentRow = 0;
+    let originalA = [];
+    let originalB = [];
     let dataA = [];
     let dataB = [];
     let dataATask2 = [];
@@ -33,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let gemmaPreds = [];
     let maskedWords = [];
 
+    let columnIndexOriginalA;
+    let columnIndexOriginalB;
     let columnIndexA;
     let columnIndexB;
     let columnIndexATask2;
@@ -73,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const rows = parseCSV(text); // Use the new parseCSV function
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
+                originalTextDisplayA.value = 'No data available.';
+                originalTextDisplayB.value = 'No data available.';
                 textDisplayA.value = 'No data available.';
                 textDisplayB.value = 'No data available.';
                 textDisplayATask2.value = 'No data available.';
@@ -87,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
+            originalColumnIndexA = header.indexOf('speaker_a_original');
+            originalColumnIndexB = header.indexOf('speaker_b_original');
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
@@ -103,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
+                originalTextDisplayA.value = 'Required columns not found.';
+                originalTextDisplayB.value = 'Required columns not found.';
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
                 textDisplayATask2.value = 'Required columns not found.';
@@ -116,19 +128,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            originalA = rows.slice(1).map(row => row[columnIndexA] || '');
+            originalB = rows.slice(1).map(row => row[columnIndexA] || '');
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'modal'); // Default to 'modal'
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'first'); // Default to 'first'
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Incomplete');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn masked');
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'Enter masked word');
 
             try {
                 showRow(currentRow);
@@ -138,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error loading CSV:', error);
+            originalTextDisplayA.value = 'Error loading CSV data.';
+            originalTextDisplayB.value = 'Error loading CSV data.';
             textDisplayA.value = 'Error loading CSV data.';
             textDisplayB.value = 'Error loading CSV data.';
             textDisplayATask2.value = 'Error loading CSV data.';
@@ -154,6 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
+        originalTextDisplayA.value = originalA[index] || '';
+        originalTextDisplayB.value = originalB[index] || '';
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
         textDisplayATask2.value = dataATask2[index] || '';

@@ -65,6 +65,21 @@ textarea {
     resize: vertical;
 }
 
+/* New styles for the original text areas */
+.original-text {
+    width: 100%;
+    height: 100px; /* Adjust height as needed */
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Space between text areas */
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    resize: vertical; /* Allow vertical resizing */
+}
+
 /* Styles for the Task 2 section */
 .task-2-section {
     margin-bottom: 40px; /* Added space before Task 3 */
