@@ -1,140 +1,124 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
-    <title>CSV Text Viewer</title>
+    <title>Text Transfer Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="main-wrapper">
         <div id="container">
-            <h1>Task 1</h1>
-            <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;WORD&gt;.</p>
+            <h1>Text Transfer Tool</h1>
+            <p>Use this tool to transfer text between different tasks.</p>
+            
+            <!-- Task 1 Section -->
             <div class="text-pair">
                 <div class="text-box">
-                    <label for="text-display-a">Speaker A:</label>
-                    <textarea id="text-display-a" aria-label="Text display for speaker A task 1"></textarea>
+                    <textarea id="task1-textbox1" placeholder="Text box 1 for Task 1"></textarea>
                 </div>
                 <div class="text-box">
-                    <label for="text-display-b">Speaker B:</label>
-                    <textarea id="text-display-b" aria-label="Text display for speaker B task 1"></textarea>
+                    <textarea id="task1-textbox2" placeholder="Text box 2 for Task 1"></textarea>
                 </div>
             </div>
-
-            <div class="text-pair">
-                <div class="text-box">
-                    <label for="original-a">Original speaker A:</label>
-                    <p id="original-a">Loading...</p>
-                </div>
-                <div class="text-box">
-                    <label for="original-b">Original speaker B:</label>
-                    <p id="original-b">Loading...</p>
-                </div>
-            </div>
-
-            <!-- Case Section -->
-            <div class="case-control">
-                <label for="case-select">Case:</label>
-                <select id="case-select">
-                    <option value="modal">Modal</option>
-                    <option value="speech_verb">Speech Verb</option>
-                    <option value="verb">Verb</option>
-                    <option value="noun">Noun</option>
-                    <option value="temporal">Temporal</option>
-                    <option value="connector">Connector</option>
-                    <option value="scalar_adjective">Scalar Adjective</option>
-                    <option value="quantifier">Quantifier</option>
-                    <option value="negation">Negation</option>
-                    <option value="anaphora">Anaphora</option>
-                </select>
-            </div>
-
-            <!-- Turn Masked Section -->
-            <div class="turn-masked-section">
-                <label for="turn-masked-select">Turn Masked:</label>
-                <select id="turn-masked-select">
-                    <option value="first">First</option>
-                    <option value="second">Second</option>
-                </select>
-            </div>
-
-            <!-- Masked Word Section -->
-            <div class="masked-word-section">
-                <div class="masked-word-box">
-                    <label for="masked-word">Masked Word:</label>
-                    <textarea id="masked-word" aria-label="Editable masked word">Loading...</textarea>
-                </div>
-            </div>
-
+            
             <!-- Task 2 Section -->
             <div class="task-2-section">
                 <h2>Task 2</h2>
-                <p>Fill the mask you made for Task 1 with a word that is all upper case and in angled brackets &lt; &gt;. Try to change the agreement of the speakers.</p>
+                <p>Description for Task 2. You can modify the text here and then use the button below to copy text from Task 1.</p>
+                
                 <div class="text-pair">
                     <div class="text-box">
-                        <label for="text-display-a-task-2">Speaker A:</label>
-                        <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+                        <textarea id="task2-textbox1" placeholder="Text box 1 for Task 2"></textarea>
                     </div>
                     <div class="text-box">
-                        <label for="text-display-b-task-2">Speaker B:</label>
-                        <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
+                        <textarea id="task2-textbox2" placeholder="Text box 2 for Task 2"></textarea>
                     </div>
                 </div>
-                <!-- Display Predictions -->
-                <div class="predictions">
-                    <div class="predictions-box">
-                        <h3>Roberta predictions:</h3>
-                        <p id="roberta-preds">Loading...</p>
-                    </div>
-                    <div class="predictions-box">
-                        <h3>Llama suggests:</h3>
-                        <p id="llama-preds">Loading...</p>
-                    </div>
-                    <div class="predictions-box">
-                        <h3>Gemma suggests:</h3>
-                        <p id="gemma-preds">Loading...</p>
-                    </div>
-                </div>
+                
+                <!-- Button to copy text from Task 1 to Task 2 -->
+                <button id="copy-task1-to-task2">Copy from Task 1</button>
             </div>
-
+            
             <!-- Task 3 Section -->
             <div class="task-3-section">
                 <h2>Task 3</h2>
-                <p>Add &lt;PHRASE&gt; in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 3.</p>
+                <p>Description for Task 3. Use the controls below to interact with the task.</p>
                 <div class="text-pair">
                     <div class="text-box">
-                        <label for="text-display-a-task-3">Speaker A:</label>
-                        <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+                        <textarea id="task3-textbox1" placeholder="Text box 1 for Task 3"></textarea>
                     </div>
                     <div class="text-box">
-                        <label for="text-display-b-task-3">Speaker B:</label>
-                        <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
+                        <textarea id="task3-textbox2" placeholder="Text box 2 for Task 3"></textarea>
                     </div>
                 </div>
             </div>
-
-            <!-- Status and Controls moved to the bottom -->
+            
+            <!-- Case Section -->
+            <div class="case-section">
+                <h2>Case Selection</h2>
+                <p>Select a case from the dropdown below.</p>
+                <select class="case-select">
+                    <option value="case1">Case 1</option>
+                    <option value="case2">Case 2</option>
+                    <option value="case3">Case 3</option>
+                </select>
+            </div>
+            
+            <!-- Turn Masked Section -->
+            <div class="turn-masked-section">
+                <h2>Turn Masked Selection</h2>
+                <p>Select a turn masked option from the dropdown below.</p>
+                <select class="turn-masked-select">
+                    <option value="turn1">Turn 1</option>
+                    <option value="turn2">Turn 2</option>
+                    <option value="turn3">Turn 3</option>
+                </select>
+            </div>
+            
+            <!-- Predictions Section -->
+            <div class="predictions">
+                <h2>Predictions</h2>
+                <div class="predictions-box">
+                    <h3>Prediction 1</h3>
+                    <p>Details for prediction 1.</p>
+                </div>
+                <div class="predictions-box">
+                    <h3>Prediction 2</h3>
+                    <p>Details for prediction 2.</p>
+                </div>
+            </div>
+            
+            <!-- Controls Section -->
             <div id="controls">
                 <div class="status-control">
                     <label for="status-select">Status:</label>
-                    <select id="status-select" aria-label="Select status">
-                        <option value="Complete">Complete</option>
-                        <option value="Incomplete">Incomplete</option>
+                    <select id="status-select">
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
                     </select>
                 </div>
                 <div class="button-row">
-                    <button id="previous-button" aria-label="Show previous row">Previous</button>
-                    <button id="next-button" aria-label="Show next row">Next</button>
-                    <button id="go-button" aria-label="Go to specific row">Go to</button>
-                    <input type="number" id="row-input" aria-label="Enter row number" placeholder="row #" min="1">
-                    <button id="submit-button" aria-label="Submit changes">Submit</button>
+                    <input type="number" placeholder="Number">
+                    <button>Submit</button>
+                    <button>Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-    <script src="scripts.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('copy-task1-to-task2').addEventListener('click', function() {
+                // Get the text from Task 1 text boxes
+                var task1TextBox1 = document.querySelector('#task1-textbox1').value;
+                var task1TextBox2 = document.querySelector('#task1-textbox2').value;
+                
+                // Set the text to Task 2 text boxes
+                document.querySelector('#task2-textbox1').value = task1TextBox1;
+                document.querySelector('#task2-textbox2').value = task1TextBox2;
+            });
+        });
+    </script>
 </body>
 </html>
