@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask3 = [];
     let statusData = [];
     let caseData = [];
-    let turnMaskedData = []; // New data array for turn_masked
+    let turnMaskedData = [];
     let robertaPreds = [];
     let llamaPreds = [];
     let gemmaPreds = [];
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask3;
     let statusColumnIndex;
     let caseColumnIndex;
-    let turnMaskedColumnIndex; // New column index for turn_masked
+    let turnMaskedColumnIndex;
     let robertaPredsColumnIndex;
     let llamaPredsColumnIndex;
     let gemmaPredsColumnIndex;
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = parseCSV(text); // Use the new parseCSV function
+            const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             statusColumnIndex = header.indexOf('status');
-            caseColumnIndex = header.indexOf('case'); // New column index for case
-            turnMaskedColumnIndex = header.indexOf('turn_masked'); // New column index for turn_masked
+            caseColumnIndex = header.indexOf('case');
+            turnMaskedColumnIndex = header.indexOf('turn_masked');
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
             llamaPredsColumnIndex = header.indexOf('llama_preds');
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'modal'); // Default to 'modal'
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'first'); // Default to 'first'
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || '');
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || '');
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
