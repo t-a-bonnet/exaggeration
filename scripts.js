@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
             maskedWordColumnIndex = header.indexOf('masked_word'); // New column index for masked words
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined) {
+            if (columnIndexA === -1 || columnIndexB === -1 || columnIndexATask2 === -1 || columnIndexBTask2 === -1 || columnIndexATask3 === -1 || columnIndexBTask3 === -1) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -104,17 +104,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || '');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || '');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
+            dataA = [];
+            dataB = [];
+            dataATask2 = [];
+            dataBTask2 = [];
+            dataATask3 = [];
+            dataBTask3 = [];
+            statusData = [];
+            robertaPreds = [];
+            llamaPreds = [];
+            gemmaPreds = [];
+            maskedWords = [];
+
+            rows.slice(1).forEach(row => {
+                dataA.push(row[columnIndexA] || '');
+                dataB.push(row[columnIndexB] || '');
+                dataATask2.push(row[columnIndexATask2] || '');
+                dataBTask2.push(row[columnIndexBTask2] || '');
+                dataATask3.push(row[columnIndexATask3] || '');
+                dataBTask3.push(row[columnIndexBTask3] || '');
+                statusData.push(row[statusColumnIndex] || '');
+                robertaPreds.push(row[robertaPredsColumnIndex] || '');
+                llamaPreds.push(row[llamaPredsColumnIndex] || '');
+                gemmaPreds.push(row[gemmaPredsColumnIndex] || '');
+                maskedWords.push(row[maskedWordColumnIndex] || '');
+            });
 
             try {
                 showRow(currentRow);
