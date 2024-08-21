@@ -76,21 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
-            const rows = parseCSV(text); // Use the new parseCSV function
+            const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                originalTextDisplayA.value = 'No data available.';
-                originalTextDisplayB.value = 'No data available.';
-                textDisplayA.value = 'No data available.';
-                textDisplayB.value = 'No data available.';
-                textDisplayATask2.value = 'No data available.';
-                textDisplayBTask2.value = 'No data available.';
-                textDisplayATask3.value = 'No data available.';
-                textDisplayBTask3.value = 'No data available.';
-                robertaPredsDisplay.textContent = 'No data available.';
-                llamaPredsDisplay.textContent = 'No data available.';
-                gemmaPredsDisplay.textContent = 'No data available.';
-                maskedWordDisplay.value = 'No data available.';
+                setDisplayNoData();
                 return;
             }
 
@@ -111,20 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
             gemmaPredsColumnIndex = header.indexOf('gemma_preds');
             maskedWordColumnIndex = header.indexOf('masked_word');
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
+            if ([columnIndexOriginalA, columnIndexOriginalB, columnIndexA, columnIndexB, columnIndexATask2, columnIndexBTask2, columnIndexATask3, columnIndexBTask3, statusColumnIndex, caseColumnIndex, turnMaskedColumnIndex, robertaPredsColumnIndex, llamaPredsColumnIndex, gemmaPredsColumnIndex, maskedWordColumnIndex].includes(-1)) {
                 console.error('Required columns not found');
-                originalTextDisplayA.value = 'Required columns not found.';
-                originalTextDisplayB.value = 'Required columns not found.';
-                textDisplayA.value = 'Required columns not found.';
-                textDisplayB.value = 'Required columns not found.';
-                textDisplayATask2.value = 'Required columns not found.';
-                textDisplayBTask2.value = 'Required columns not found.';
-                textDisplayATask3.value = 'Required columns not found.';
-                textDisplayBTask3.value = 'Required columns not found.';
-                robertaPredsDisplay.textContent = 'Required columns not found.';
-                llamaPredsDisplay.textContent = 'Required columns not found.';
-                gemmaPredsDisplay.textContent = 'Required columns not found.';
-                maskedWordDisplay.value = 'Required columns not found.';
+                setDisplayColumnNotFound();
                 return;
             }
 
@@ -144,49 +122,65 @@ document.addEventListener('DOMContentLoaded', () => {
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'Enter masked word');
 
-            try {
-                showRow(currentRow);
-            } catch (err) {
-                throw new Error('Error displaying row: ' + err.message);
-            }
+            showRow(currentRow);
 
         } catch (error) {
             console.error('Error loading CSV:', error);
-            originalTextDisplayA.value = 'Error loading CSV data.';
-            originalTextDisplayB.value = 'Error loading CSV data.';
-            textDisplayA.value = 'Error loading CSV data.';
-            textDisplayB.value = 'Error loading CSV data.';
-            textDisplayATask2.value = 'Error loading CSV data.';
-            textDisplayBTask2.value = 'Error loading CSV data.';
-            textDisplayATask3.value = 'Error loading CSV data.';
-            textDisplayBTask3.value = 'Error loading CSV data.';
-            robertaPredsDisplay.textContent = 'Error loading CSV data.';
-            llamaPredsDisplay.textContent = 'Error loading CSV data.';
-            gemmaPredsDisplay.textContent = 'Error loading CSV data.';
-            maskedWordDisplay.value = 'Error loading CSV data.';
+            setDisplayError();
         }
+    }
+
+    // Function to set display when no data is available
+    function setDisplayNoData() {
+        originalTextDisplayA.value = 'No data available.';
+        originalTextDisplayB.value = 'No data available.';
+        textDisplayA.value = 'No data available.';
+        textDisplayB.value = 'No data available.';
+        textDisplayATask2.value = 'No data available.';
+        textDisplayBTask2.value = 'No data available.';
+        textDisplayATask3.value = 'No data available.';
+        textDisplayBTask3.value = 'No data available.';
+        robertaPredsDisplay.textContent = 'No data available.';
+        llamaPredsDisplay.textContent = 'No data available.';
+        gemmaPredsDisplay.textContent = 'No data available.';
+        maskedWordDisplay.value = 'No data available.';
+    }
+
+    // Function to set display when required columns are not found
+    function setDisplayColumnNotFound() {
+        originalTextDisplayA.value = 'Required columns not found.';
+        originalTextDisplayB.value = 'Required columns not found.';
+        textDisplayA.value = 'Required columns not found.';
+        textDisplayB.value = 'Required columns not found.';
+        textDisplayATask2.value = 'Required columns not found.';
+        textDisplayBTask2.value = 'Required columns not found.';
+        textDisplayATask3.value = 'Required columns not found.';
+        textDisplayBTask3.value = 'Required columns not found.';
+        robertaPredsDisplay.textContent = 'Required columns not found.';
+        llamaPredsDisplay.textContent = 'Required columns not found.';
+        gemmaPredsDisplay.textContent = 'Required columns not found.';
+        maskedWordDisplay.value = 'Required columns not found.';
+    }
+
+    // Function to set display when there is an error loading the CSV
+    function setDisplayError() {
+        originalTextDisplayA.value = 'Error loading CSV data.';
+        originalTextDisplayB.value = 'Error loading CSV data.';
+        textDisplayA.value = 'Error loading CSV data.';
+        textDisplayB.value = 'Error loading CSV data.';
+        textDisplayATask2.value = 'Error loading CSV data.';
+        textDisplayBTask2.value = 'Error loading CSV data.';
+        textDisplayATask3.value = 'Error loading CSV data.';
+        textDisplayBTask3.value = 'Error loading CSV data.';
+        robertaPredsDisplay.textContent = 'Error loading CSV data.';
+        llamaPredsDisplay.textContent = 'Error loading CSV data.';
+        gemmaPredsDisplay.textContent = 'Error loading CSV data.';
+        maskedWordDisplay.value = 'Error loading CSV data.';
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0) {
-            console.error('No data available for rows.');
-            originalTextDisplayA.value = 'No data available.';
-            originalTextDisplayB.value = 'No data available.';
-            textDisplayA.value = 'No data available.';
-            textDisplayB.value = 'No data available.';
-            textDisplayATask2.value = 'No data available.';
-            textDisplayBTask2.value = 'No data available.';
-            textDisplayATask3.value = 'No data available.';
-            textDisplayBTask3.value = 'No data available.';
-            robertaPredsDisplay.textContent = 'No data available.';
-            llamaPredsDisplay.textContent = 'No data available.';
-            gemmaPredsDisplay.textContent = 'No data available.';
-            maskedWordDisplay.value = 'No data available.';
-            return;
-        }
-
-        if (index < 0 || index >= dataA.length) {
+        if (index < 0 || index >= originalA.length) {
             console.error('Row index out of bounds.');
             return;
         }
@@ -218,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     nextButton.addEventListener('click', () => {
-        if (currentRow < dataA.length - 1) {
+        if (currentRow < originalA.length - 1) {
             currentRow++;
             showRow(currentRow);
         }
@@ -226,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     goButton.addEventListener('click', () => {
         const row = parseInt(rowInput.value, 10);
-        if (!isNaN(row) && row >= 0 && row < dataA.length) {
+        if (!isNaN(row) && row >= 0 && row < originalA.length) {
             currentRow = row;
             showRow(currentRow);
         } else {
@@ -235,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     submitButton.addEventListener('click', () => {
-        if (currentRow >= 0 && currentRow < dataA.length) {
+        if (currentRow >= 0 && currentRow < originalA.length) {
             statusData[currentRow] = statusSelect.value;
             caseData[currentRow] = caseSelect.value;
             turnMaskedData[currentRow] = turnMaskedSelect.value;
