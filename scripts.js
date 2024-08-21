@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const originalTextDisplayA = document.getElementById('original-a');
-    const originalTextDisplayB = document.getElementById('original-b');
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -21,8 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const maskedWordDisplay = document.getElementById('masked-word');
 
     let currentRow = 0;
-    let originalA = [];
-    let originalB = [];
     let dataA = [];
     let dataB = [];
     let dataATask2 = [];
@@ -37,8 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let gemmaPreds = [];
     let maskedWords = [];
 
-    let columnIndexOriginalA;
-    let columnIndexOriginalB;
     let columnIndexA;
     let columnIndexB;
     let columnIndexATask2;
