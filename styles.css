@@ -135,7 +135,6 @@ textarea {
 }
 
 .masked-word-box textarea {
-    width: 150px; /* Adjust width to fit one word */
     height: auto; /* Adjust height based on content */
     padding: 5px;
     box-sizing: border-box;
@@ -146,25 +145,6 @@ textarea {
 .predictions {
     margin-top: 20px;
     text-align: left;
-}
-
-.predictions-box {
-    background-color: #f9f9f9;
-    border: none; /* Removed border */
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-.predictions-box h3 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.predictions-box p {
-    font-size: 16px;
-    color: #444;
-    margin: 0;
 }
 
 /* New styles for the Task 3 section */

@@ -178,11 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayBTask3.value = dataBTask3[index] || '';
         statusSelect.value = statusData[index] || 'Incomplete';
         caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked'; // Set default value for turn_masked
+        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
         robertaPredsDisplay.textContent = robertaPreds[index] || '';
         llamaPredsDisplay.textContent = llamaPreds[index] || '';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
-        maskedWordDisplay.value = maskedWords[index] || 'Enter masked word';
+        maskedWordDisplay.value = maskedWords[index] || '';
         originalADisplay.textContent = originalDataA[index] || '';
         originalBDisplay.textContent = originalDataB[index] || '';
 
