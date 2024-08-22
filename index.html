@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +32,19 @@
                     <label for="original-b">Original speaker B:</label>
                     <p id="original-b">Loading...</p>
                 </div>
+            </div>
+
+            <!-- Coherence Task 1 Section -->
+            <div class="coherence-section">
+                <label>Characterize User B's response to User A along a scale from incoherent to coherent:</label>
+                <div class="coherence-rating">
+                    <button type="button" class="coherence-button" data-value="1">1 - Incoherent</button>
+                    <button type="button" class="coherence-button" data-value="2">2</button>
+                    <button type="button" class="coherence-button" data-value="3">3</button>
+                    <button type="button" class="coherence-button" data-value="4">4</button>
+                    <button type="button" class="coherence-button" data-value="5">5 - Coherent</button>
+                </div>
+                <input type="hidden" id="coherence-task-1" name="coherence_task_1" value="">
             </div>
 
             <!-- Case Section -->
@@ -72,7 +84,7 @@
             <!-- Task 2 Section -->
             <div class="task-2-section">
                 <h2>Task 2</h2>
-                <p>Fill the mask you made for Task 1 with a word that is all upper case and in angled brackets &lt; &gt;. Try to change the agreement of the speakers.</p>
+                <p>Fill the mask you made for Task 1 with a word that is all upper case and in angled brackets &lt; &gt; or &lt;STRIKE&gt;. Try to change the agreement of the speakers.</p>
                 <div class="text-pair">
                     <div class="text-box">
                         <label for="text-display-a-task-2">Speaker A:</label>
@@ -139,14 +151,29 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Existing Task 2 copy function
             document.getElementById('copy-task1-to-task2').addEventListener('click', function() {
-                // Get the text from Task 1 text boxes
                 var task1TextBoxA = document.getElementById('text-display-a').value;
                 var task1TextBoxB = document.getElementById('text-display-b').value;
-                
-                // Set the text to Task 2 text boxes
                 document.getElementById('text-display-a-task-2').value = task1TextBoxA;
                 document.getElementById('text-display-b-task-2').value = task1TextBoxB;
+            });
+
+            // Coherence rating button click event handler
+            const coherenceButtons = document.querySelectorAll('.coherence-button');
+            const coherenceInput = document.getElementById('coherence-task-1');
+
+            coherenceButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove 'selected' class from all buttons
+                    coherenceButtons.forEach(btn => btn.classList.remove('selected'));
+                    
+                    // Add 'selected' class to the clicked button
+                    this.classList.add('selected');
+
+                    // Set the value of the hidden input to the selected button's value
+                    coherenceInput.value = this.getAttribute('data-value');
+                });
             });
         });
     </script>
