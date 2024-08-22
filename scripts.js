@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select');
-    const turnMaskedSelect = document.getElementById('turn-masked-select');
+    const caseSelect = document.getElementById('case-select'); // New dropdown for case
+    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const maskedWordDisplay = document.getElementById('masked-word');
     const originalADisplay = document.getElementById('original-a');
     const originalBDisplay = document.getElementById('original-b');
-    const coherence1Display = document.getElementById('coherence-1');
 
     let currentRow = 0;
     let dataA = [];
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWords = [];
     let originalDataA = [];
     let originalDataB = [];
-    let coherence1Data = [];
 
     let columnIndexA;
     let columnIndexB;
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWordColumnIndex;
     let originalAColumnIndex;
     let originalBColumnIndex;
-    let coherence1ColumnIndex;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -113,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWordColumnIndex = header.indexOf('masked_word');
             originalAColumnIndex = header.indexOf('speaker_a_original');
             originalBColumnIndex = header.indexOf('speaker_b_original');
-            coherence1ColumnIndex = header.indexOf('coherence_task_1');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
@@ -147,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
             originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
             originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
-            coherence1Data = rows.slice(1).map(row => row[coherence1ColumnIndex] || '');
 
             try {
                 showRow(currentRow);
@@ -190,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
         maskedWordDisplay.value = maskedWords[index] || '';
         originalADisplay.textContent = originalDataA[index] || '';
         originalBDisplay.textContent = originalDataB[index] || '';
-        coherence1Display.value = coherence1Data[index] || '';
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
@@ -235,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value;
         const updatedTurnMasked = turnMaskedSelect.value; // Get value from turn_masked dropdown
         const updatedMaskedWord = maskedWordDisplay.value;
-        const updatedCoherence1 = document.getElementById('coherence-1').value;
 
         submitButton.disabled = true;
 
@@ -413,24 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "masked_word": ' + resultMaskedWord.message);
             }
 
-            // Update the coherence rating column
-            const responseCoherence1 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCoherence1,
-                    column: 'coherence_task_1'
-                })
-            });
-
-            const resultCoherence1 = await responseCoherence1.json();
-            if (!resultCoherence1.success) {
-                alert('Error updating column "coherence_task_1": ' + resultCoherence1.message);
-            }
-
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
@@ -442,7 +417,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultCase.success) caseData[currentRow] = updatedCase;
             if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
             if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
-            if (resultCoherence1.success) document.getElementById('coherence-1').value = updatedCoherence1;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
