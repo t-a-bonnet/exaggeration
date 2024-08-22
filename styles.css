@@ -44,7 +44,7 @@ p {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 40px; /* Added space between tasks */
 }
 
 .text-box {
@@ -63,6 +63,31 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
+}
+
+/* Styles for speaker_a_original and speaker_b_original */
+.speaker_a_original,
+.speaker_b_original {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd; /* Consistent border color */
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.speaker_a_original h3,
+.speaker_b_original h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.speaker_a_original p,
+.speaker_b_original p {
+    font-size: 16px;
+    color: #444;
+    margin: 0;
 }
 
 /* Styles for rating section */
@@ -87,13 +112,30 @@ textarea {
     color: #666;
 }
 
-/* Styles for the Case and Turn Masked sections */
+/* Styles for the Task 2 section */
+.task-2-section {
+    margin-bottom: 20px; /* Reduced space before Task 3 */
+}
+
+.task-2-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.task-2-section p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px; /* Reduced space below the description */
+}
+
+/* Styles for the case and turn masked sections */
 .case-control, .turn-masked-section, .masked-word-section {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Adjusted for spacing */
 }
 
 .case-control select,
@@ -105,7 +147,7 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    margin-bottom: 0;
+    margin-bottom: 0; /* Remove bottom margin to align with others */
 }
 
 .masked-word-box {
@@ -115,9 +157,10 @@ textarea {
 }
 
 .masked-word-box textarea {
-    height: auto;
+    height: auto; /* Adjust height based on content */
     padding: 5px;
     box-sizing: border-box;
+    border: 1px solid #ccc; /* Remove shaded border */
 }
 
 /* Remove borders from predictions section */
@@ -126,7 +169,24 @@ textarea {
     text-align: left;
 }
 
-/* Styles for status dropdown and controls */
+/* New styles for the Task 3 section */
+.task-3-section {
+    margin-bottom: 40px; /* Added space before controls */
+}
+
+.task-3-section h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.task-3-section p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Styles for the status dropdown */
 #status-select {
     padding: 10px;
     font-size: 16px;
@@ -137,18 +197,18 @@ textarea {
 }
 
 #controls {
-    margin-top: auto;
+    margin-top: auto; /* Pushes the controls to the bottom */
 }
 
 .status-control {
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Space between status and buttons */
 }
 
 .button-row {
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Adds space between the two rows */
 }
 
 input[type="number"] {
@@ -188,8 +248,8 @@ button:active {
         gap: 10px;
     }
 
-    .case-control, .turn-masked-section, .masked-word-section {
-        margin-bottom: 20px;
+    .task-2-section, .task-3-section, .case-control, .turn-masked-section {
+        margin-bottom: 20px; /* Adjusted for smaller screens */
     }
 
     .button-row {

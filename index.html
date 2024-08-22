@@ -25,24 +25,12 @@
 
             <div class="text-pair">
                 <div class="text-box">
-                    <label for="original-a">Original Speaker A:</label>
+                    <label for="original-a">Original speaker A:</label>
                     <p id="original-a">Loading...</p>
                 </div>
                 <div class="text-box">
-                    <label for="original-b">Original Speaker B:</label>
+                    <label for="original-b">Original speaker B:</label>
                     <p id="original-b">Loading...</p>
-                </div>
-            </div>
-
-            <!-- Ratings Scale Section -->
-            <div class="rating-section">
-                <p>Rate the coherence of Task 1:</p>
-                <div class="rating-options">
-                    <label><input type="radio" name="coherence" value="1"> 1 - Incoherent</label>
-                    <label><input type="radio" name="coherence" value="2"> 2</label>
-                    <label><input type="radio" name="coherence" value="3"> 3</label>
-                    <label><input type="radio" name="coherence" value="4"> 4</label>
-                    <label><input type="radio" name="coherence" value="5"> 5 - Coherent</label>
                 </div>
             </div>
 
@@ -50,7 +38,6 @@
             <div class="case-control">
                 <label for="case-select">Case:</label>
                 <select id="case-select">
-                    <option value="" disabled selected>Select a case</option>
                     <option value="modal">Modal</option>
                     <option value="speech_verb">Speech Verb</option>
                     <option value="verb">Verb</option>
@@ -68,7 +55,6 @@
             <div class="turn-masked-section">
                 <label for="turn-masked-select">Turn Masked:</label>
                 <select id="turn-masked-select">
-                    <option value="" disabled selected>Select turn masked</option>
                     <option value="first">First</option>
                     <option value="second">Second</option>
                 </select>
@@ -82,12 +68,72 @@
                 </div>
             </div>
 
-            <!-- Status and Controls -->
+            <!-- Ratings Scale Section -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from incoherent to coherent.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="coherence" value="1"> 1 - Incoherent</label>
+                    <label><input type="radio" name="coherence" value="2"> 2</label>
+                    <label><input type="radio" name="coherence" value="3"> 3</label>
+                    <label><input type="radio" name="coherence" value="4"> 4</label>
+                    <label><input type="radio" name="coherence" value="5"> 5 - Coherent</label>
+                </div>
+            </div>
+
+            <!-- Task 2 Section -->
+            <div class="task-2-section">
+                <h2>Task 2</h2>
+                <p>Fill the mask you made for Task 1 with a word that is all upper case and in angled brackets &lt; &gt;. Try to change the agreement of the speakers.</p>
+                <div class="text-pair">
+                    <div class="text-box">
+                        <label for="text-display-a-task-2">Speaker A:</label>
+                        <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+                    </div>
+                    <div class="text-box">
+                        <label for="text-display-b-task-2">Speaker B:</label>
+                        <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
+                    </div>
+                </div>
+                <!-- Button to copy text from Task 1 to Task 2 -->
+                <button id="copy-task1-to-task2">Paste Text from Task 1</button>
+                <!-- Display Predictions -->
+                <div class="predictions">
+                    <div class="predictions-box">
+                        <h3>Roberta predictions:</h3>
+                        <p id="roberta-preds">Loading...</p>
+                    </div>
+                    <div class="predictions-box">
+                        <h3>Llama suggests:</h3>
+                        <p id="llama-preds">Loading...</p>
+                    </div>
+                    <div class="predictions-box">
+                        <h3>Gemma suggests:</h3>
+                        <p id="gemma-preds">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task 3 Section -->
+            <div class="task-3-section">
+                <h2>Task 3</h2>
+                <p>Add &lt;PHRASE&gt; in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 3.</p>
+                <div class="text-pair">
+                    <div class="text-box">
+                        <label for="text-display-a-task-3">Speaker A:</label>
+                        <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+                    </div>
+                    <div class="text-box">
+                        <label for="text-display-b-task-3">Speaker B:</label>
+                        <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status and Controls moved to the bottom -->
             <div id="controls">
                 <div class="status-control">
                     <label for="status-select">Status:</label>
                     <select id="status-select" aria-label="Select status">
-                        <option value="" disabled selected>Select status</option>
                         <option value="Complete">Complete</option>
                         <option value="Incomplete">Incomplete</option>
                     </select>
@@ -102,6 +148,19 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('copy-task1-to-task2').addEventListener('click', function() {
+                // Get the text from Task 1 text boxes
+                var task1TextBoxA = document.getElementById('text-display-a').value;
+                var task1TextBoxB = document.getElementById('text-display-b').value;
+                
+                // Set the text to Task 2 text boxes
+                document.getElementById('text-display-a-task-2').value = task1TextBoxA;
+                document.getElementById('text-display-b-task-2').value = task1TextBoxB;
+            });
+        });
+    </script>
     <script src="scripts.js"></script>
 </body>
 </html>
