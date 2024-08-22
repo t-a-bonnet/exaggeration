@@ -236,9 +236,14 @@ button:active {
     display: flex;
     gap: 10px;
     justify-content: center; /* Center the buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on small screens */
 }
 
-.coherence-button {
+.coherence-rating input[type="radio"] {
+    display: none; /* Hide default radio button appearance */
+}
+
+.coherence-rating label {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -249,19 +254,19 @@ button:active {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.coherence-button:hover, .coherence-button:focus {
+.coherence-rating label:hover, .coherence-rating label:focus {
     background-color: #e2e6ea;
     outline: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
-.coherence-button.selected {
+.coherence-rating input[type="radio"]:checked + label {
     background-color: #007bff;
     color: #fff;
     border-color: #007bff;
 }
 
-.coherence-button:active {
+.coherence-rating label:active {
     background-color: #0056b3;
 }
 
