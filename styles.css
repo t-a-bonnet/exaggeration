@@ -44,7 +44,7 @@ p {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 40px; /* Added space between tasks */
+    margin-bottom: 40px;
 }
 
 .text-box {
@@ -93,7 +93,7 @@ textarea {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px; /* Adjusted for spacing */
+    margin-bottom: 20px;
 }
 
 .case-control select,
@@ -105,7 +105,7 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    margin-bottom: 0; /* Remove bottom margin to align with others */
+    margin-bottom: 0;
 }
 
 .masked-word-box {
@@ -115,10 +115,9 @@ textarea {
 }
 
 .masked-word-box textarea {
-    height: auto; /* Adjust height based on content */
+    height: auto;
     padding: 5px;
     box-sizing: border-box;
-    border: 1px solid #ccc; /* Remove shaded border */
 }
 
 /* Remove borders from predictions section */
@@ -138,18 +137,18 @@ textarea {
 }
 
 #controls {
-    margin-top: auto; /* Pushes the controls to the bottom */
+    margin-top: auto;
 }
 
 .status-control {
-    margin-bottom: 20px; /* Space between status and buttons */
+    margin-bottom: 20px;
 }
 
 .button-row {
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin-bottom: 10px; /* Adds space between the two rows */
+    margin-bottom: 10px;
 }
 
 input[type="number"] {
@@ -190,7 +189,7 @@ button:active {
     }
 
     .case-control, .turn-masked-section, .masked-word-section {
-        margin-bottom: 20px; /* Adjusted for smaller screens */
+        margin-bottom: 20px;
     }
 
     .button-row {

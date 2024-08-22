@@ -25,11 +25,11 @@
 
             <div class="text-pair">
                 <div class="text-box">
-                    <label for="original-a">Original speaker A:</label>
+                    <label for="original-a">Original Speaker A:</label>
                     <p id="original-a">Loading...</p>
                 </div>
                 <div class="text-box">
-                    <label for="original-b">Original speaker B:</label>
+                    <label for="original-b">Original Speaker B:</label>
                     <p id="original-b">Loading...</p>
                 </div>
             </div>
@@ -50,6 +50,7 @@
             <div class="case-control">
                 <label for="case-select">Case:</label>
                 <select id="case-select">
+                    <option value="" disabled selected>Select a case</option>
                     <option value="modal">Modal</option>
                     <option value="speech_verb">Speech Verb</option>
                     <option value="verb">Verb</option>
@@ -67,6 +68,7 @@
             <div class="turn-masked-section">
                 <label for="turn-masked-select">Turn Masked:</label>
                 <select id="turn-masked-select">
+                    <option value="" disabled selected>Select turn masked</option>
                     <option value="first">First</option>
                     <option value="second">Second</option>
                 </select>
@@ -85,6 +87,7 @@
                 <div class="status-control">
                     <label for="status-select">Status:</label>
                     <select id="status-select" aria-label="Select status">
+                        <option value="" disabled selected>Select status</option>
                         <option value="Complete">Complete</option>
                         <option value="Incomplete">Incomplete</option>
                     </select>
