@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select');
-    const turnMaskedSelect = document.getElementById('turn-masked-select');
+    const caseSelect = document.getElementById('case-select'); // New dropdown for case
+    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const maskedWordDisplay = document.getElementById('masked-word');
     const originalADisplay = document.getElementById('original-a');
     const originalBDisplay = document.getElementById('original-b');
-    const coherence1Display = document.getElementById('coherence-1');
+    const coherenceTask1Input = document.getElementById('coherence-task-1'); // New input for coherence rating
 
     let currentRow = 0;
     let dataA = [];
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWords = [];
     let originalDataA = [];
     let originalDataB = [];
-    let coherence1Data = [];
+    let coherenceRatings = []; // New array for coherence ratings
 
     let columnIndexA;
     let columnIndexB;
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWordColumnIndex;
     let originalAColumnIndex;
     let originalBColumnIndex;
-    let coherence1ColumnIndex;
+    let coherenceColumnIndex; // New index for coherence ratings
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -113,9 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWordColumnIndex = header.indexOf('masked_word');
             originalAColumnIndex = header.indexOf('speaker_a_original');
             originalBColumnIndex = header.indexOf('speaker_b_original');
-            coherence1ColumnIndex = header.indexOf('coherence_task_1');
+            coherenceColumnIndex = header.indexOf('coherence_task_1'); // Index for coherence ratings
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined || coherenceColumnIndex === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
             originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
             originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
-            coherence1Data = rows.slice(1).map(row => row[coherence1ColumnIndex] || '');
+            coherenceRatings = rows.slice(1).map(row => row[coherenceColumnIndex] || ''); // Load coherence ratings
 
             try {
                 showRow(currentRow);
@@ -171,59 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
             originalBDisplay.textContent = 'Error loading CSV data.';
         }
     }
-
-    // Function to display a specific row
-    function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
-        textDisplayA.value = dataA[index] || '';
-        textDisplayB.value = dataB[index] || '';
-        textDisplayATask2.value = dataATask2[index] || '';
-        textDisplayBTask2.value = dataBTask2[index] || '';
-        textDisplayATask3.value = dataATask3[index] || '';
-        textDisplayBTask3.value = dataBTask3[index] || '';
-        statusSelect.value = statusData[index] || 'Incomplete';
-        caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
-        robertaPredsDisplay.textContent = robertaPreds[index] || '';
-        llamaPredsDisplay.textContent = llamaPreds[index] || '';
-        gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
-        maskedWordDisplay.value = maskedWords[index] || '';
-        originalADisplay.textContent = originalDataA[index] || '';
-        originalBDisplay.textContent = originalDataB[index] || '';
-        coherence1Display.value = coherence1Data[index] || '';
-
-        previousButton.disabled = index === 0;
-        nextButton.disabled = index === dataA.length - 1;
-    }
-
-    // Function to show the previous row
-    function showPreviousRow() {
-        if (currentRow > 0) {
-            currentRow -= 1;
-            showRow(currentRow);
-        }
-    }
-
-    // Function to show the next row
-    function showNextRow() {
-        if (currentRow < dataA.length - 1) {
-            currentRow += 1;
-            showRow(currentRow);
-        }
-    }
-
-    // Function to jump to a specific row
-    function goToRow() {
-        const rowNumber = parseInt(rowInput.value, 10);
-        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > dataA.length) {
-            alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
-            return;
-        }
-        currentRow = rowNumber - 1;
-        showRow(currentRow);
-    }
-
-    // Function to submit changes
+    
+    // Function to submit changes with new coherence rating functionality
     async function submitChanges() {
         const updatedTextA = textDisplayA.value;
         const updatedTextB = textDisplayB.value;
@@ -233,13 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextBTask3 = textDisplayBTask3.value;
         const updatedStatus = statusSelect.value;
         const updatedCase = caseSelect.value;
-        const updatedTurnMasked = turnMaskedSelect.value; // Get value from turn_masked dropdown
+        const updatedTurnMasked = turnMaskedSelect.value;
         const updatedMaskedWord = maskedWordDisplay.value;
-        const updatedCoherence1 = document.getElementById('coherence-1').value;
+        const updatedCoherenceRating = document.getElementById('coherence-rating').value; // New coherence rating
 
         submitButton.disabled = true;
 
         try {
+            // Update columns as before
             const responseA = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -414,21 +364,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Update the coherence rating column
-            const responseCoherence1 = await fetch('/.netlify/functions/update-csv', {
+            const responseCoherenceRating = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     id: currentRow,
-                    text: updatedCoherence1,
-                    column: 'coherence_task_1'
+                    text: updatedCoherenceRating,
+                    column: 'coherence_rating'
                 })
             });
 
-            const resultCoherence1 = await responseCoherence1.json();
-            if (!resultCoherence1.success) {
-                alert('Error updating column "coherence_task_1": ' + resultCoherence1.message);
+            const resultCoherenceRating = await responseCoherenceRating.json();
+            if (!resultCoherenceRating.success) {
+                alert('Error updating column "coherence_rating": ' + resultCoherenceRating.message);
             }
 
             // Update the local data arrays after successful submission
@@ -442,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultCase.success) caseData[currentRow] = updatedCase;
             if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
             if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
-            if (resultCoherence1.success) document.getElementById('coherence-1').value = updatedCoherence1;
+            if (resultCoherenceRating.success) document.getElementById('coherence-rating').value = updatedCoherenceRating;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
