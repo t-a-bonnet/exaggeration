@@ -1,57 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
-    const textDisplayATask2 = document.getElementById('text-display-a-task-2');
-    const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
-    const textDisplayATask3 = document.getElementById('text-display-a-task-3');
-    const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select'); // New dropdown for case
-    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
     const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
-    const robertaPredsDisplay = document.getElementById('roberta-preds');
-    const llamaPredsDisplay = document.getElementById('llama-preds');
-    const gemmaPredsDisplay = document.getElementById('gemma-preds');
-    const maskedWordDisplay = document.getElementById('masked-word');
-    const originalADisplay = document.getElementById('original-a');
-    const originalBDisplay = document.getElementById('original-b');
+    const coherenceRadioButtons = document.querySelectorAll('input[name="coherence"]');
 
     let currentRow = 0;
     let dataA = [];
     let dataB = [];
-    let dataATask2 = [];
-    let dataBTask2 = [];
-    let dataATask3 = [];
-    let dataBTask3 = [];
-    let statusData = [];
-    let caseData = [];
-    let turnMaskedData = [];
-    let robertaPreds = [];
-    let llamaPreds = [];
-    let gemmaPreds = [];
-    let maskedWords = [];
-    let originalDataA = [];
-    let originalDataB = [];
-
-    let columnIndexA;
-    let columnIndexB;
-    let columnIndexATask2;
-    let columnIndexBTask2;
-    let columnIndexATask3;
-    let columnIndexBTask3;
-    let statusColumnIndex;
-    let caseColumnIndex;
-    let turnMaskedColumnIndex;
-    let robertaPredsColumnIndex;
-    let llamaPredsColumnIndex;
-    let gemmaPredsColumnIndex;
-    let maskedWordColumnIndex;
-    let originalAColumnIndex;
-    let originalBColumnIndex;
+    let coherenceRatings = [];
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -73,118 +34,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('Appen data 16.8.2024.csv');
+            const response = await fetch('data.csv');
             const text = await response.text();
 
             const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                textDisplayA.value = 'No data available.';
-                textDisplayB.value = 'No data available.';
-                textDisplayATask2.value = 'No data available.';
-                textDisplayBTask2.value = 'No data available.';
-                textDisplayATask3.value = 'No data available.';
-                textDisplayBTask3.value = 'No data available.';
-                robertaPredsDisplay.textContent = 'No data available.';
-                llamaPredsDisplay.textContent = 'No data available.';
-                gemmaPredsDisplay.textContent = 'No data available.';
-                maskedWordDisplay.value = 'No data available.';
-                originalADisplay.textContent = 'No data available.';
-                originalBDisplay.textContent = 'No data available.';
+                displayNoData();
                 return;
             }
 
             const header = rows[0];
-            columnIndexA = header.indexOf('speaker_a_task_1');
-            columnIndexB = header.indexOf('speaker_b_task_1');
-            columnIndexATask2 = header.indexOf('speaker_a_task_2');
-            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
-            columnIndexATask3 = header.indexOf('speaker_a_task_3');
-            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
-            statusColumnIndex = header.indexOf('status');
-            caseColumnIndex = header.indexOf('case');
-            turnMaskedColumnIndex = header.indexOf('turn_masked');
-            robertaPredsColumnIndex = header.indexOf('roberta_preds');
-            llamaPredsColumnIndex = header.indexOf('llama_preds');
-            gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-            maskedWordColumnIndex = header.indexOf('masked_word');
-            originalAColumnIndex = header.indexOf('speaker_a_original');
-            originalBColumnIndex = header.indexOf('speaker_b_original');
+            const columnIndexA = header.indexOf('speaker_a_task_1');
+            const columnIndexB = header.indexOf('speaker_b_task_1');
+            const columnIndexCoherence = header.indexOf('coherence_task_1');
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexCoherence === undefined) {
                 console.error('Required columns not found');
-                textDisplayA.value = 'Required columns not found.';
-                textDisplayB.value = 'Required columns not found.';
-                textDisplayATask2.value = 'Required columns not found.';
-                textDisplayBTask2.value = 'Required columns not found.';
-                textDisplayATask3.value = 'Required columns not found.';
-                textDisplayBTask3.value = 'Required columns not found.';
-                robertaPredsDisplay.textContent = 'Required columns not found.';
-                llamaPredsDisplay.textContent = 'Required columns not found.';
-                gemmaPredsDisplay.textContent = 'Required columns not found.';
-                maskedWordDisplay.value = 'Required columns not found.';
-                originalADisplay.textContent = 'Required columns not found.';
-                originalBDisplay.textContent = 'Required columns not found.';
+                displayNoData();
                 return;
             }
 
             dataA = rows.slice(1).map(row => row[columnIndexA] || '');
             dataB = rows.slice(1).map(row => row[columnIndexB] || '');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || '');
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || '');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
-            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
-            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
+            coherenceRatings = rows.slice(1).map(row => row[columnIndexCoherence] || '');
 
-            try {
-                showRow(currentRow);
-            } catch (err) {
-                throw new Error('Error displaying row: ' + err.message);
-            }
+            showRow(currentRow);
 
         } catch (error) {
             console.error('Error loading CSV:', error);
-            textDisplayA.value = 'Error loading CSV data.';
-            textDisplayB.value = 'Error loading CSV data.';
-            textDisplayATask2.value = 'Error loading CSV data.';
-            textDisplayBTask2.value = 'Error loading CSV data.';
-            textDisplayATask3.value = 'Error loading CSV data.';
-            textDisplayBTask3.value = 'Error loading CSV data.';
-            robertaPredsDisplay.textContent = 'Error loading CSV data.';
-            llamaPredsDisplay.textContent = 'Error loading CSV data.';
-            gemmaPredsDisplay.textContent = 'Error loading CSV data.';
-            maskedWordDisplay.value = 'Error loading CSV data.';
-            originalADisplay.textContent = 'Error loading CSV data.';
-            originalBDisplay.textContent = 'Error loading CSV data.';
+            displayNoData();
         }
     }
 
     // Function to display a specific row
     function showRow(index) {
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || coherenceRatings.length === 0) return;
+
         textDisplayA.value = dataA[index] || '';
         textDisplayB.value = dataB[index] || '';
-        textDisplayATask2.value = dataATask2[index] || '';
-        textDisplayBTask2.value = dataBTask2[index] || '';
-        textDisplayATask3.value = dataATask3[index] || '';
-        textDisplayBTask3.value = dataBTask3[index] || '';
-        statusSelect.value = statusData[index] || 'Incomplete';
-        caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
-        robertaPredsDisplay.textContent = robertaPreds[index] || '';
-        llamaPredsDisplay.textContent = llamaPreds[index] || '';
-        gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
-        maskedWordDisplay.value = maskedWords[index] || '';
-        originalADisplay.textContent = originalDataA[index] || '';
-        originalBDisplay.textContent = originalDataB[index] || '';
+        statusSelect.value = statusSelect.value || 'Incomplete';
+
+        const currentRating = coherenceRatings[index] || '';
+        coherenceRadioButtons.forEach(button => {
+            button.checked = button.value === currentRating;
+        });
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
@@ -221,18 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function submitChanges() {
         const updatedTextA = textDisplayA.value;
         const updatedTextB = textDisplayB.value;
-        const updatedTextATask2 = textDisplayATask2.value;
-        const updatedTextBTask2 = textDisplayBTask2.value;
-        const updatedTextATask3 = textDisplayATask3.value;
-        const updatedTextBTask3 = textDisplayBTask3.value;
-        const updatedStatus = statusSelect.value;
-        const updatedCase = caseSelect.value;
-        const updatedTurnMasked = turnMaskedSelect.value; // Get value from turn_masked dropdown
-        const updatedMaskedWord = maskedWordDisplay.value;
+        const updatedCoherence = document.querySelector('input[name="coherence"]:checked')?.value || '';
 
         submitButton.disabled = true;
 
         try {
+            // Submit updated text for Speaker A
             const responseA = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -250,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "speaker_a_task_1": ' + resultA.message);
             }
 
+            // Submit updated text for Speaker B
             const responseB = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -267,167 +156,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "speaker_b_task_1": ' + resultB.message);
             }
 
-            const responseATask2 = await fetch('/.netlify/functions/update-csv', {
+            // Submit updated coherence rating
+            const responseCoherence = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     id: currentRow,
-                    text: updatedTextATask2,
-                    column: 'speaker_a_task_2'
+                    text: updatedCoherence,
+                    column: 'coherence_task_1'
                 })
             });
 
-            const resultATask2 = await responseATask2.json();
-            if (!resultATask2.success) {
-                alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
+            const resultCoherence = await responseCoherence.json();
+            if (!resultCoherence.success) {
+                alert('Error updating column "coherence_task_1": ' + resultCoherence.message);
             }
 
-            const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask2,
-                    column: 'speaker_b_task_2'
-                })
-            });
-
-            const resultBTask2 = await responseBTask2.json();
-            if (!resultBTask2.success) {
-                alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
-            }
-
-            const responseATask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextATask3,
-                    column: 'speaker_a_task_3'
-                })
-            });
-
-            const resultATask3 = await responseATask3.json();
-            if (!resultATask3.success) {
-                alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
-            }
-
-            const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask3,
-                    column: 'speaker_b_task_3'
-                })
-            });
-
-            const resultBTask3 = await responseBTask3.json();
-            if (!resultBTask3.success) {
-                alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
-            }
-
-            const responseStatus = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedStatus,
-                    column: 'status'
-                })
-            });
-
-            const resultStatus = await responseStatus.json();
-            if (!resultStatus.success) {
-                alert('Error updating column "status": ' + resultStatus.message);
-            }
-
-            // Update the case column
-            const responseCase = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCase,
-                    column: 'case'
-                })
-            });
-
-            const resultCase = await responseCase.json();
-            if (!resultCase.success) {
-                alert('Error updating column "case": ' + resultCase.message);
-            }
-
-            // Update the turn_masked column
-            const responseTurnMasked = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTurnMasked,
-                    column: 'turn_masked'
-                })
-            });
-
-            const resultTurnMasked = await responseTurnMasked.json();
-            if (!resultTurnMasked.success) {
-                alert('Error updating column "turn_masked": ' + resultTurnMasked.message);
-            }
-
-            // Update the masked word column
-            const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedMaskedWord,
-                    column: 'masked_word'
-                })
-            });
-
-            const resultMaskedWord = await responseMaskedWord.json();
-            if (!resultMaskedWord.success) {
-                alert('Error updating column "masked_word": ' + resultMaskedWord.message);
-            }
-
-            // Update the local data arrays after successful submission
+            // Update local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
-            if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
-            if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
-            if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
-            if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
-            if (resultStatus.success) statusData[currentRow] = updatedStatus;
-            if (resultCase.success) caseData[currentRow] = updatedCase;
-            if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
-            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
+            if (resultCoherence.success) coherenceRatings[currentRow] = updatedCoherence;
 
-            // Notify the user of successful submission
             alert('Changes successfully submitted!');
 
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
         } finally {
-            // Re-enable submit button after submission is complete
             submitButton.disabled = false;
         }
+    }
+
+    // Display no data message
+    function displayNoData() {
+        textDisplayA.value = 'No data available.';
+        textDisplayB.value = 'No data available.';
+        coherenceRadioButtons.forEach(button => button.checked = false);
     }
 
     // Event listeners
