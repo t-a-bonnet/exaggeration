@@ -22,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const coherenceRadioButtons1 = document.querySelectorAll('input[name="coherence1"]');
     const coherenceRadioButtons2 = document.querySelectorAll('input[name="coherence2"]');
     const coherenceRadioButtons3 = document.querySelectorAll('input[name="coherence3"]');
+    const agreementRadioButtons1 = document.querySelectorAll('input[name="agreement1"]');
+    const agreementRadioButtons2 = document.querySelectorAll('input[name="agreement2"]');
+    const agreementRadioButtons3 = document.querySelectorAll('input[name="agreement3"]');
+    const informativenessRadioButtons1 = document.querySelectorAll('input[name="informativeness1"]');
+    const informativenessRadioButtons2 = document.querySelectorAll('input[name="informativeness2"]');
+    const informativenessRadioButtons3 = document.querySelectorAll('input[name="informativeness3"]');
 
     let currentRow = 0;
     let dataA = [];
@@ -42,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let coherenceRatings1 = [];
     let coherenceRatings2 = [];
     let coherenceRatings3 = [];
+    let agreementRatings1 = [];
+    let agreementRatings2 = [];
+    let agreementRatings3 = [];
+    let informativenessRatings1 = [];
+    let informativenessRatings2 = [];
+    let informativenessRatings3 = [];
 
     let columnIndexA;
     let columnIndexB;
@@ -61,6 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let coherenceColumnIndex1;
     let coherenceColumnIndex2;
     let coherenceColumnIndex3;
+    let agreementColumnIndex1;
+    let agreementColumnIndex2;
+    let agreementColumnIndex3;
+    let informativenessColumnIndex1;
+    let informativenessColumnIndex2;
+    let informativenessColumnIndex3;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -122,6 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
             coherenceColumnIndex1 = header.indexOf('coherence_task_1');
             coherenceColumnIndex2 = header.indexOf('coherence_task_2');
             coherenceColumnIndex3 = header.indexOf('coherence_task_3');
+            agreementColumnIndex1 = header.indexOf('agreement_task_1');
+            agreementColumnIndex2 = header.indexOf('agreement_task_2');
+            agreementColumnIndex3 = header.indexOf('agreement_task_3');
+            informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
+            informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
+            informativenessColumnIndex3 = header.indexOf('informativeness_task_3');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
@@ -158,6 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
             coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
             coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
             coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
+            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
+            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
+            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
+            coherenceRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
+            coherenceRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
+            coherenceRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
 
             try {
                 showRow(currentRow);
@@ -212,6 +242,30 @@ document.addEventListener('DOMContentLoaded', () => {
         coherenceRadioButtons3.forEach(button => {
             button.checked = button.value === currentCoherenceRating3;
         });
+        const currentAgreementRating1 = agreementRatings1[index] || '';
+        agreementRadioButtons1.forEach(button => {
+            button.checked = button.value === currentAgreementRating1;
+        });
+        const currentAgreementRating2 = agreementRatings2[index] || '';
+        agreementRadioButtons2.forEach(button => {
+            button.checked = button.value === currentAgreementRating2;
+        });
+        const currentAgreementRating3 = agreementRatings3[index] || '';
+        agreementRadioButtons3.forEach(button => {
+            button.checked = button.value === currentAgreementRating3;
+        });
+        const currentInformativenessRating1 = informativenessRatings1[index] || '';
+        informativenessRadioButtons1.forEach(button => {
+            button.checked = button.value === currentInformativenessRating1;
+        });
+        const currentInformativenessRating2 = informativenessRatings2[index] || '';
+        informativenessRadioButtons2.forEach(button => {
+            button.checked = button.value === currentInformativenessRating2;
+        });
+        const currentInformativenessRating3 = informativenessRatings3[index] || '';
+        informativenessRadioButtons3.forEach(button => {
+            button.checked = button.value === currentInformativenessRating3;
+        });
 
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
@@ -259,6 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
         const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || '';
         const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || '';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || '';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || '';
+        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || '';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || '';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || '';
+        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || '';
 
         submitButton.disabled = true;
 
@@ -490,6 +550,114 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error updating column "coherence_task_3": ' + resultCoherence3.message);
             }
 
+            // Submit updated agreement rating for task 1
+            const responseAgreement1 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedAgreement1,
+                    column: 'agreement_task_1'
+                })
+            });
+
+            const resultAgreement1 = await responseAgreement1.json();
+            if (!resultAgreement1.success) {
+                alert('Error updating column "agreement_task_1": ' + resultAgreement1.message);
+            }
+
+            // Submit updated agreement rating for task 2
+            const responseAgreement2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedAgreement2,
+                    column: 'agreement_task_2'
+                })
+            });
+            
+            const resultAgreement2 = await responseAgreement2.json();
+            if (!resultAgreement2.success) {
+                alert('Error updating column "agreement_task_2": ' + resultAgreement2.message);
+            }
+
+            // Submit updated agreement rating for task 3
+            const responseAgreement3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedAgreement3,
+                    column: 'agreement_task_3'
+                })
+            });
+
+            const resultAgreement3 = await responseAgreement3.json();
+            if (!resultAgreement3.success) {
+                alert('Error updating column "agreement_task_3": ' + resultAgreement3.message);
+            }
+
+            // Submit updated informativeness rating for task 1
+            const responseInformativeness1 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedInformativeness1,
+                    column: 'informativeness_task_1'
+                })
+            });
+
+            const resultInformativeness1 = await responseInformativeness1.json();
+            if (!resultInformativeness1.success) {
+                alert('Error updating column "informativeness_task_1": ' + resultInformativeness1.message);
+            }
+
+            // Submit updated informativeness rating for task 2
+            const responseInformativeness2 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedInformativeness2,
+                    column: 'informativeness_task_2'
+                })
+            });
+            
+            const resultInformativeness2 = await responseInformativeness2.json();
+            if (!resultInformativeness2.success) {
+                alert('Error updating column "informativeness_task_2": ' + resultInformativeness2.message);
+            }
+
+            // Submit updated informativeness rating for task 3
+            const responseInformativeness3 = await fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: currentRow,
+                    text: updatedInformativeness3,
+                    column: 'informativeness_task_3'
+                })
+            });
+
+            const resultInformativeness3 = await responseInformativeness3.json();
+            if (!resultInformativeness3.success) {
+                alert('Error updating column "informativeness_task_3": ' + resultInformativeness3.message);
+            }
+
             // Update the local data arrays after successful submission
             if (resultA.success) dataA[currentRow] = updatedTextA;
             if (resultB.success) dataB[currentRow] = updatedTextB;
@@ -504,6 +672,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1;
             if (resultCoherence2.success) coherenceRatings1[currentRow] = updatedCoherence2;
             if (resultCoherence3.success) coherenceRatings1[currentRow] = updatedCoherence3;
+            if (resultAgreement1.success) agreementRatings1[currentRow] = updatedAgreement1;
+            if (resultAgreement2.success) agreementRatings1[currentRow] = updatedAgreement2;
+            if (resultAgreement3.success) agreementRatings1[currentRow] = updatedAgreement3;
+            if (resultInformativeness1.success) informativenessRatings1[currentRow] = updatedInformativeness1;
+            if (resultInformativeness2.success) informativenessRatings1[currentRow] = updatedInformativeness2;
+            if (resultInformativeness3.success) informativenessRatings1[currentRow] = updatedInformativeness3;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
