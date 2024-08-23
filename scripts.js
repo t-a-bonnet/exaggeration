@@ -300,25 +300,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to submit changes
 async function submitChanges() {
-    const updatedTextA = textDisplayA.value;
-    const updatedTextB = textDisplayB.value;
-    const updatedTextATask2 = textDisplayATask2.value;
-    const updatedTextBTask2 = textDisplayBTask2.value;
-    const updatedTextATask3 = textDisplayATask3.value;
-    const updatedTextBTask3 = textDisplayBTask3.value;
-    const updatedStatus = statusSelect.value;
-    const updatedCase = caseSelect.value;
-    const updatedTurnMasked = turnMaskedSelect.value;
-    const updatedMaskedWord = maskedWordDisplay.value;
-    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
-    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || '';
-    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || '';
-    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || '';
-    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || '';
-    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || '';
-    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || '';
-    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || '';
-    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || '';
+    const updatedTextA = textDisplayA.value || 'No Data';
+    const updatedTextB = textDisplayB.value || 'No Data';
+    const updatedTextATask2 = textDisplayATask2.value || 'No Data';
+    const updatedTextBTask2 = textDisplayBTask2.value || 'No Data';
+    const updatedTextATask3 = textDisplayATask3.value || 'No Data';
+    const updatedTextBTask3 = textDisplayBTask3.value || 'No Data';
+    const updatedStatus = statusSelect.value || 'Select status';
+    const updatedCase = caseSelect.value || 'Select case';
+    const updatedTurnMasked = turnMaskedSelect.value || 'Select turn';
+    const updatedMaskedWord = maskedWordDisplay.value || 'No Data';
+    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
+    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
+    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
+    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
+    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
+    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
+    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
+    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
 
     submitButton.disabled = true;
 
