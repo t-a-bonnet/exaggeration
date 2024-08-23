@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -7,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select');
-    const turnMaskedSelect = document.getElementById('turn-masked-select');
+    const caseSelect = document.getElementById('case-select'); // New dropdown for case
+    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -26,14 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const agreementRadioButtons1 = document.querySelectorAll('input[name="agreement1"]');
     const agreementRadioButtons2 = document.querySelectorAll('input[name="agreement2"]');
     const agreementRadioButtons3 = document.querySelectorAll('input[name="agreement3"]');
-    const readabilityRadioButtons1 = document.querySelectorAll('input[name="readability1"]');
-    const readabilityRadioButtons2 = document.querySelectorAll('input[name="readability2"]');
-    const readabilityRadioButtons3 = document.querySelectorAll('input[name="readability3"]');
     const informativenessRadioButtons1 = document.querySelectorAll('input[name="informativeness1"]');
     const informativenessRadioButtons2 = document.querySelectorAll('input[name="informativeness2"]');
     const informativenessRadioButtons3 = document.querySelectorAll('input[name="informativeness3"]');
 
-    // Data Arrays
     let currentRow = 0;
     let dataA = [];
     let dataB = [];
@@ -56,24 +51,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let agreementRatings1 = [];
     let agreementRatings2 = [];
     let agreementRatings3 = [];
-    let readabilityRatings1 = [];
-    let readabilityRatings2 = [];
-    let readabilityRatings3 = [];
     let informativenessRatings1 = [];
     let informativenessRatings2 = [];
     let informativenessRatings3 = [];
 
-    // Column Indices
-    let columnIndexA, columnIndexB, columnIndexATask2, columnIndexBTask2;
-    let columnIndexATask3, columnIndexBTask3, statusColumnIndex, caseColumnIndex;
-    let turnMaskedColumnIndex, robertaPredsColumnIndex, llamaPredsColumnIndex;
-    let gemmaPredsColumnIndex, maskedWordColumnIndex, originalAColumnIndex;
-    let originalBColumnIndex, coherenceColumnIndex1, coherenceColumnIndex2;
-    let coherenceColumnIndex3, agreementColumnIndex1, agreementColumnIndex2;
-    let agreementColumnIndex3, readabilityColumnIndex1, readabilityColumnIndex2;
-    let readabilityColumnIndex3, informativenessColumnIndex1, informativenessColumnIndex2, informativenessColumnIndex3;
+    let columnIndexA;
+    let columnIndexB;
+    let columnIndexATask2;
+    let columnIndexBTask2;
+    let columnIndexATask3;
+    let columnIndexBTask3;
+    let statusColumnIndex;
+    let caseColumnIndex;
+    let turnMaskedColumnIndex;
+    let robertaPredsColumnIndex;
+    let llamaPredsColumnIndex;
+    let gemmaPredsColumnIndex;
+    let maskedWordColumnIndex;
+    let originalAColumnIndex;
+    let originalBColumnIndex;
+    let coherenceColumnIndex1;
+    let coherenceColumnIndex2;
+    let coherenceColumnIndex3;
+    let agreementColumnIndex1;
+    let agreementColumnIndex2;
+    let agreementColumnIndex3;
+    let informativenessColumnIndex1;
+    let informativenessColumnIndex2;
+    let informativenessColumnIndex3;
 
-    // Parse CSV
+    // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
         const rows = [];
         const re = /"(?:[^"]|"")*"|[^,]+/g;
@@ -90,121 +97,125 @@ document.addEventListener('DOMContentLoaded', () => {
         return rows;
     }
 
-    // Load CSV Data
+    // Function to load the CSV data
     async function loadCSV() {
         try {
             const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
-            const rows = parseCSV(text);
 
+            const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                displayNoData();
+                textDisplayA.value = 'No data available.';
+                textDisplayB.value = 'No data available.';
+                textDisplayATask2.value = 'No data available.';
+                textDisplayBTask2.value = 'No data available.';
+                textDisplayATask3.value = 'No data available.';
+                textDisplayBTask3.value = 'No data available.';
+                robertaPredsDisplay.textContent = 'No data available.';
+                llamaPredsDisplay.textContent = 'No data available.';
+                gemmaPredsDisplay.textContent = 'No data available.';
+                maskedWordDisplay.value = 'No data available.';
+                originalADisplay.textContent = 'No data available.';
+                originalBDisplay.textContent = 'No data available.';
                 return;
             }
 
             const header = rows[0];
-            setColumnIndices(header);
+            columnIndexA = header.indexOf('speaker_a_task_1');
+            columnIndexB = header.indexOf('speaker_b_task_1');
+            columnIndexATask2 = header.indexOf('speaker_a_task_2');
+            columnIndexBTask2 = header.indexOf('speaker_b_task_2');
+            columnIndexATask3 = header.indexOf('speaker_a_task_3');
+            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
+            statusColumnIndex = header.indexOf('status');
+            caseColumnIndex = header.indexOf('case');
+            turnMaskedColumnIndex = header.indexOf('turn_masked');
+            robertaPredsColumnIndex = header.indexOf('roberta_preds');
+            llamaPredsColumnIndex = header.indexOf('llama_preds');
+            gemmaPredsColumnIndex = header.indexOf('gemma_preds');
+            maskedWordColumnIndex = header.indexOf('masked_word');
+            originalAColumnIndex = header.indexOf('speaker_a_original');
+            originalBColumnIndex = header.indexOf('speaker_b_original');
+            coherenceColumnIndex1 = header.indexOf('coherence_task_1');
+            coherenceColumnIndex2 = header.indexOf('coherence_task_2');
+            coherenceColumnIndex3 = header.indexOf('coherence_task_3');
+            agreementColumnIndex1 = header.indexOf('agreement_task_1');
+            agreementColumnIndex2 = header.indexOf('agreement_task_2');
+            agreementColumnIndex3 = header.indexOf('agreement_task_3');
+            informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
+            informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
+            informativenessColumnIndex3 = header.indexOf('informativeness_task_3');
 
-            if (checkMissingColumns()) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
-                displayNoData('Required columns not found.');
+                textDisplayA.value = 'Required columns not found.';
+                textDisplayB.value = 'Required columns not found.';
+                textDisplayATask2.value = 'Required columns not found.';
+                textDisplayBTask2.value = 'Required columns not found.';
+                textDisplayATask3.value = 'Required columns not found.';
+                textDisplayBTask3.value = 'Required columns not found.';
+                robertaPredsDisplay.textContent = 'Required columns not found.';
+                llamaPredsDisplay.textContent = 'Required columns not found.';
+                gemmaPredsDisplay.textContent = 'Required columns not found.';
+                maskedWordDisplay.value = 'Required columns not found.';
+                originalADisplay.textContent = 'Required columns not found.';
+                originalBDisplay.textContent = 'Required columns not found.';
                 return;
             }
 
-            parseData(rows);
-            showRow(currentRow);
+            dataA = rows.slice(1).map(row => row[columnIndexA] || 'No Data');
+            dataB = rows.slice(1).map(row => row[columnIndexB] || 'No Data');
+            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No Data');
+            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
+            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
+            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
+            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No Data');
+            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No Data');
+            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No Data');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No Data');
+            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No Data');
+            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
+            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
+            coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
+            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
+            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
+            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
+            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
+            informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
+            informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
+            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
+
+            try {
+                showRow(currentRow);
+            } catch (err) {
+                throw new Error('Error displaying row: ' + err.message);
+            }
 
         } catch (error) {
             console.error('Error loading CSV:', error);
-            displayNoData('Error loading CSV data.');
+            textDisplayA.value = 'Error loading CSV data.';
+            textDisplayB.value = 'Error loading CSV data.';
+            textDisplayATask2.value = 'Error loading CSV data.';
+            textDisplayBTask2.value = 'Error loading CSV data.';
+            textDisplayATask3.value = 'Error loading CSV data.';
+            textDisplayBTask3.value = 'Error loading CSV data.';
+            robertaPredsDisplay.textContent = 'Error loading CSV data.';
+            llamaPredsDisplay.textContent = 'Error loading CSV data.';
+            gemmaPredsDisplay.textContent = 'Error loading CSV data.';
+            maskedWordDisplay.value = 'Error loading CSV data.';
+            originalADisplay.textContent = 'Error loading CSV data.';
+            originalBDisplay.textContent = 'Error loading CSV data.';
         }
-    }
-
-    // Set Column Indices
-    function setColumnIndices(header) {
-        columnIndexA = header.indexOf('speaker_a_task_1');
-        columnIndexB = header.indexOf('speaker_b_task_1');
-        columnIndexATask2 = header.indexOf('speaker_a_task_2');
-        columnIndexBTask2 = header.indexOf('speaker_b_task_2');
-        columnIndexATask3 = header.indexOf('speaker_a_task_3');
-        columnIndexBTask3 = header.indexOf('speaker_b_task_3');
-        statusColumnIndex = header.indexOf('status');
-        caseColumnIndex = header.indexOf('case');
-        turnMaskedColumnIndex = header.indexOf('turn_masked');
-        robertaPredsColumnIndex = header.indexOf('roberta_preds');
-        llamaPredsColumnIndex = header.indexOf('llama_preds');
-        gemmaPredsColumnIndex = header.indexOf('gemma_preds');
-        maskedWordColumnIndex = header.indexOf('masked_word');
-        originalAColumnIndex = header.indexOf('speaker_a_original');
-        originalBColumnIndex = header.indexOf('speaker_b_original');
-        coherenceColumnIndex1 = header.indexOf('coherence_task_1');
-        coherenceColumnIndex2 = header.indexOf('coherence_task_2');
-        coherenceColumnIndex3 = header.indexOf('coherence_task_3');
-        agreementColumnIndex1 = header.indexOf('agreement_task_1');
-        agreementColumnIndex2 = header.indexOf('agreement_task_2');
-        agreementColumnIndex3 = header.indexOf('agreement_task_3');
-        readabilityColumnIndex1 = header.indexOf('readability_task_1');
-        readabilityColumnIndex2 = header.indexOf('readability_task_2');
-        readabilityColumnIndex3 = header.indexOf('readability_task_3');
-        informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
-        informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
-        informativenessColumnIndex3 = header.indexOf('informativeness_task_3');
-    }
-
-    // Check for Missing Columns
-    function checkMissingColumns() {
-        return [columnIndexA, columnIndexB, columnIndexATask2, columnIndexBTask2,
-                columnIndexATask3, columnIndexBTask3, statusColumnIndex, caseColumnIndex,
-                turnMaskedColumnIndex, robertaPredsColumnIndex, llamaPredsColumnIndex,
-                gemmaPredsColumnIndex, maskedWordColumnIndex, originalAColumnIndex,
-                originalBColumnIndex, coherenceColumnIndex1, coherenceColumnIndex2,
-                coherenceColumnIndex3, agreementColumnIndex1, agreementColumnIndex2,
-                agreementColumnIndex3, readabilityColumnIndex1, readabilityColumnIndex2,
-                readabilityColumnIndex3, informativenessColumnIndex1, informativenessColumnIndex2,
-                informativenessColumnIndex3].some(index => index === -1);
-    }
-
-    // Parse Data
-    function parseData(rows) {
-        dataA = rows.slice(1).map(row => row[columnIndexA] || 'No Data');
-        dataB = rows.slice(1).map(row => row[columnIndexB] || 'No Data');
-        dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No Data');
-        dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
-        dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
-        dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
-        statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
-        caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
-        turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
-        robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No Data');
-        llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No Data');
-        gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No Data');
-        maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No Data');
-        originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No Data');
-        originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
-        coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
-        coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
-        coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
-        agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
-        agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
-        agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
-        readabilityRatings1 = rows.slice(1).map(row => row[readabilityColumnIndex1] || '');
-        readabilityRatings2 = rows.slice(1).map(row => row[readabilityColumnIndex2] || '');
-        readabilityRatings3 = rows.slice(1).map(row => row[readabilityColumnIndex3] || '');
-        informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
-        informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
-        informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
-
-        showRow(currentRow);
     }
 
     // Function to display a specific row
     function showRow(index) {
         // Check if the data arrays are not empty
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) {
-            displayNoData();
-            return;
-        }
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
 
         // Display text inputs, defaulting to 'No Data' if empty
         textDisplayA.value = dataA[index] || 'No Data';
@@ -257,22 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentAgreementRating3 = agreementRatings3[index] || '';
         agreementRadioButtons3.forEach(button => {
             button.checked = button.value === currentAgreementRating3;
-        });
-
-        // Handle readability ratings
-        const currentReadabilityRating1 = readabilityRatings1[index] || '';
-        readabilityRadioButtons1.forEach(button => {
-            button.checked = button.value === currentReadabilityRating1;
-        });
-
-        const currentReadabilityRating2 = readabilityRatings2[index] || '';
-        readabilityRadioButtons2.forEach(button => {
-            button.checked = button.value === currentReadabilityRating2;
-        });
-
-        const currentReadabilityRating3 = readabilityRatings3[index] || '';
-        readabilityRadioButtons3.forEach(button => {
-            button.checked = button.value === currentReadabilityRating3;
         });
 
         // Handle informativeness ratings
@@ -336,99 +331,114 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value.trim() || 'Select case';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
-        const updatedRobertaPreds = robertaPredsDisplay.textContent.trim() || 'No Data';
-        const updatedLlamaPreds = llamaPredsDisplay.textContent.trim() || 'No Data';
-        const updatedGemmaPreds = gemmaPredsDisplay.textContent.trim() || 'No Data';
-        const updatedOriginalA = originalADisplay.textContent.trim() || 'No Data';
-        const updatedOriginalB = originalBDisplay.textContent.trim() || 'No Data';
 
-        // Gather ratings
-        const updatedCoherenceRating1 = Array.from(coherenceRadioButtons1).find(button => button.checked)?.value || '';
-        const updatedCoherenceRating2 = Array.from(coherenceRadioButtons2).find(button => button.checked)?.value || '';
-        const updatedCoherenceRating3 = Array.from(coherenceRadioButtons3).find(button => button.checked)?.value || '';
-        const updatedAgreementRating1 = Array.from(agreementRadioButtons1).find(button => button.checked)?.value || '';
-        const updatedAgreementRating2 = Array.from(agreementRadioButtons2).find(button => button.checked)?.value || '';
-        const updatedAgreementRating3 = Array.from(agreementRadioButtons3).find(button => button.checked)?.value || '';
-        const updatedReadabilityRating1 = Array.from(readabilityRadioButtons1).find(button => button.checked)?.value || '';
-        const updatedReadabilityRating2 = Array.from(readabilityRadioButtons2).find(button => button.checked)?.value || '';
-        const updatedReadabilityRating3 = Array.from(readabilityRadioButtons3).find(button => button.checked)?.value || '';
-        const updatedInformativenessRating1 = Array.from(informativenessRadioButtons1).find(button => button.checked)?.value || '';
-        const updatedInformativenessRating2 = Array.from(informativenessRadioButtons2).find(button => button.checked)?.value || '';
-        const updatedInformativenessRating3 = Array.from(informativenessRadioButtons3).find(button => button.checked)?.value || '';
+        // Get selected values for ratings, defaulting to empty string if not selected
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
+        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
+        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
 
-        // Prepare data to be sent to the server
-        const updatedRowData = {
-            textA: updatedTextA,
-            textB: updatedTextB,
-            textATask2: updatedTextATask2,
-            textBTask2: updatedTextBTask2,
-            textATask3: updatedTextATask3,
-            textBTask3: updatedTextBTask3,
-            status: updatedStatus,
-            case: updatedCase,
-            turnMasked: updatedTurnMasked,
-            maskedWord: updatedMaskedWord,
-            robertaPreds: updatedRobertaPreds,
-            llamaPreds: updatedLlamaPreds,
-            gemmaPreds: updatedGemmaPreds,
-            originalA: updatedOriginalA,
-            originalB: updatedOriginalB,
-            coherenceRatings: {
-                rating1: updatedCoherenceRating1,
-                rating2: updatedCoherenceRating2,
-                rating3: updatedCoherenceRating3
-            },
-            agreementRatings: {
-                rating1: updatedAgreementRating1,
-                rating2: updatedAgreementRating2,
-                rating3: updatedAgreementRating3
-            },
-            readabilityRatings: {
-                rating1: updatedReadabilityRating1,
-                rating2: updatedReadabilityRating2,
-                rating3: updatedReadabilityRating3
-            },
-            informativenessRatings: {
-                rating1: updatedInformativenessRating1,
-                rating2: updatedInformativenessRating2,
-                rating3: updatedInformativenessRating3
+        submitButton.disabled = true;
+
+        // Helper function to update a column
+        async function updateColumn(columnName, updatedValue) {
+            try {
+                const response = await fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: currentRow,
+                        text: updatedValue,
+                        column: columnName
+                    })
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+                return result;
+            } catch (error) {
+                alert(`Error updating column "${columnName}": ${error.message}`);
+                throw error; // Rethrow to handle in the outer try/catch
             }
-        };
+        }
 
+        // Array of columns and their values to be updated
+        const updates = [
+            { columnName: 'speaker_a_task_1', value: updatedTextA },
+            { columnName: 'speaker_b_task_1', value: updatedTextB },
+            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
+            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
+            { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
+            { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
+            { columnName: 'status', value: updatedStatus },
+            { columnName: 'case', value: updatedCase },
+            { columnName: 'turn_masked', value: updatedTurnMasked },
+            { columnName: 'masked_word', value: updatedMaskedWord },
+            { columnName: 'coherence_task_1', value: updatedCoherence1 },
+            { columnName: 'coherence_task_2', value: updatedCoherence2 },
+            { columnName: 'coherence_task_3', value: updatedCoherence3 },
+            { columnName: 'agreement_task_1', value: updatedAgreement1 },
+            { columnName: 'agreement_task_2', value: updatedAgreement2 },
+            { columnName: 'agreement_task_3', value: updatedAgreement3 },
+            { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
+            { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
+            { columnName: 'informativeness_task_3', value: updatedInformativeness3 }
+        ];
+
+        // Update columns sequentially
         try {
-            // Send data to the server (example endpoint and method)
-            const response = await fetch('/update-row', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ rowIndex: currentRow, ...updatedRowData })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update row');
+            for (const { columnName, value } of updates) {
+                await updateColumn(columnName, value);
             }
 
-            // Success message or confirmation
-            alert('Changes saved successfully!');
+            // Update local data arrays after successful submission
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            dataATask3[currentRow] = updatedTextATask3;
+            dataBTask3[currentRow] = updatedTextBTask3;
+            statusData[currentRow] = updatedStatus;
+            caseData[currentRow] = updatedCase;
+            turnMaskedData[currentRow] = updatedTurnMasked;
+            maskedWords[currentRow] = updatedMaskedWord;
+            coherenceRatings1[currentRow] = updatedCoherence1;
+            coherenceRatings2[currentRow] = updatedCoherence2;
+            coherenceRatings3[currentRow] = updatedCoherence3;
+            agreementRatings1[currentRow] = updatedAgreement1;
+            agreementRatings2[currentRow] = updatedAgreement2;
+            agreementRatings3[currentRow] = updatedAgreement3;
+            informativenessRatings1[currentRow] = updatedInformativeness1;
+            informativenessRatings2[currentRow] = updatedInformativeness2;
+            informativenessRatings3[currentRow] = updatedInformativeness3;
+
+            // Notify the user of successful submission
+            alert('Changes successfully submitted!');
+
         } catch (error) {
-            console.error('Error updating row:', error);
-            alert('An error occurred while saving changes.');
+            console.error('Error submitting changes:', error);
+            alert('Error submitting changes: ' + error.message);
+        } finally {
+            // Re-enable submit button after submission is complete
+            submitButton.disabled = false;
         }
     }
 
-    // Add event listeners
-    previousButton.addEventListener('click', showPreviousRow);
-    nextButton.addEventListener('click', showNextRow);
-    goToButton.addEventListener('click', goToRow);
-    submitButton.addEventListener('click', submitChanges);
+        // Event listeners
+        previousButton.addEventListener('click', showPreviousRow);
+        nextButton.addEventListener('click', showNextRow);
+        goButton.addEventListener('click', goToRow);
+        submitButton.addEventListener('click', submitChanges);
 
-    // Initialize the interface
-    function initialize() {
-        // Check for stored data or defaults
-        showRow(currentRow);
-    }
-
-    initialize();
-});
-   
+        // Load the CSV data on page load
+        loadCSV();
+    });
