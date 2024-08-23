@@ -298,395 +298,151 @@ document.addEventListener('DOMContentLoaded', () => {
         showRow(currentRow);
     }
 
-    // Function to submit changes
     async function submitChanges() {
-        const updatedTextA = textDisplayA.value;
-        const updatedTextB = textDisplayB.value;
-        const updatedTextATask2 = textDisplayATask2.value;
-        const updatedTextBTask2 = textDisplayBTask2.value;
-        const updatedTextATask3 = textDisplayATask3.value;
-        const updatedTextBTask3 = textDisplayBTask3.value;
-        const updatedStatus = statusSelect.value;
-        const updatedCase = caseSelect.value;
-        const updatedTurnMasked = turnMaskedSelect.value;
-        const updatedMaskedWord = maskedWordDisplay.value;
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
-        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || '';
-        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || '';
-        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || '';
-        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || '';
-        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || '';
-        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || '';
-        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || '';
-        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || '';
-
         submitButton.disabled = true;
-
+    
         try {
-            const responseA = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextA,
-                    column: 'speaker_a_task_1'
+            // Create an array of fetch promises for all updates
+            const updatePromises = [
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextA, column: 'speaker_a_task_1' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextB, column: 'speaker_b_task_1' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextATask2, column: 'speaker_a_task_2' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask2, column: 'speaker_b_task_2' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextATask3, column: 'speaker_a_task_3' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask3, column: 'speaker_b_task_3' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedStatus, column: 'status' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedCase, column: 'case' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedTurnMasked, column: 'turn_masked' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedMaskedWord, column: 'masked_word' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedCoherence1, column: 'coherence_task_1' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedCoherence2, column: 'coherence_task_2' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedCoherence3, column: 'coherence_task_3' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedAgreement1, column: 'agreement_task_1' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedAgreement2, column: 'agreement_task_2' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedAgreement3, column: 'agreement_task_3' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness1, column: 'informativeness_task_1' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness2, column: 'informativeness_task_2' })
+                }),
+                fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness3, column: 'informativeness_task_3' })
                 })
-            });
-
-            const resultA = await responseA.json();
-            if (!resultA.success) {
-                alert('Error updating column "speaker_a_task_1": ' + resultA.message);
+            ];
+    
+            // Execute all fetch promises in parallel
+            const results = await Promise.all(updatePromises);
+    
+            // Process the results
+            let allSuccessful = true;
+            for (let i = 0; i < results.length; i++) {
+                const result = await results[i].json();
+                if (!result.success) {
+                    allSuccessful = false;
+                    alert(`Error updating column ${updatePromises[i].body.column}: ${result.message}`);
+                }
             }
-
-            const responseB = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextB,
-                    column: 'speaker_b_task_1'
-                })
-            });
-
-            const resultB = await responseB.json();
-            if (!resultB.success) {
-                alert('Error updating column "speaker_b_task_1": ' + resultB.message);
+    
+            if (allSuccessful) {
+                // Update local data arrays
+                dataA[currentRow] = updatedTextA;
+                dataB[currentRow] = updatedTextB;
+                dataATask2[currentRow] = updatedTextATask2;
+                dataBTask2[currentRow] = updatedTextBTask2;
+                dataATask3[currentRow] = updatedTextATask3;
+                dataBTask3[currentRow] = updatedTextBTask3;
+                statusData[currentRow] = updatedStatus;
+                caseData[currentRow] = updatedCase;
+                turnMaskedData[currentRow] = updatedTurnMasked;
+                maskedWords[currentRow] = updatedMaskedWord;
+                coherenceRatings1[currentRow] = updatedCoherence1;
+                coherenceRatings2[currentRow] = updatedCoherence2;
+                coherenceRatings3[currentRow] = updatedCoherence3;
+                agreementRatings1[currentRow] = updatedAgreement1;
+                agreementRatings2[currentRow] = updatedAgreement2;
+                agreementRatings3[currentRow] = updatedAgreement3;
+                informativenessRatings1[currentRow] = updatedInformativeness1;
+                informativenessRatings2[currentRow] = updatedInformativeness2;
+                informativenessRatings3[currentRow] = updatedInformativeness3;
+    
+                alert('Changes successfully submitted!');
             }
-
-            const responseATask2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextATask2,
-                    column: 'speaker_a_task_2'
-                })
-            });
-
-            const resultATask2 = await responseATask2.json();
-            if (!resultATask2.success) {
-                alert('Error updating column "speaker_a_task_2": ' + resultATask2.message);
-            }
-
-            const responseBTask2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask2,
-                    column: 'speaker_b_task_2'
-                })
-            });
-
-            const resultBTask2 = await responseBTask2.json();
-            if (!resultBTask2.success) {
-                alert('Error updating column "speaker_b_task_2": ' + resultBTask2.message);
-            }
-
-            const responseATask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextATask3,
-                    column: 'speaker_a_task_3'
-                })
-            });
-
-            const resultATask3 = await responseATask3.json();
-            if (!resultATask3.success) {
-                alert('Error updating column "speaker_a_task_3": ' + resultATask3.message);
-            }
-
-            const responseBTask3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTextBTask3,
-                    column: 'speaker_b_task_3'
-                })
-            });
-
-            const resultBTask3 = await responseBTask3.json();
-            if (!resultBTask3.success) {
-                alert('Error updating column "speaker_b_task_3": ' + resultBTask3.message);
-            }
-
-            const responseStatus = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedStatus,
-                    column: 'status'
-                })
-            });
-
-            const resultStatus = await responseStatus.json();
-            if (!resultStatus.success) {
-                alert('Error updating column "status": ' + resultStatus.message);
-            }
-
-            // Update the case column
-            const responseCase = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCase,
-                    column: 'case'
-                })
-            });
-
-            const resultCase = await responseCase.json();
-            if (!resultCase.success) {
-                alert('Error updating column "case": ' + resultCase.message);
-            }
-
-            // Update the turn_masked column
-            const responseTurnMasked = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedTurnMasked,
-                    column: 'turn_masked'
-                })
-            });
-
-            const resultTurnMasked = await responseTurnMasked.json();
-            if (!resultTurnMasked.success) {
-                alert('Error updating column "turn_masked": ' + resultTurnMasked.message);
-            }
-
-            // Update the masked word column
-            const responseMaskedWord = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedMaskedWord,
-                    column: 'masked_word'
-                })
-            });
-
-            const resultMaskedWord = await responseMaskedWord.json();
-            if (!resultMaskedWord.success) {
-                alert('Error updating column "masked_word": ' + resultMaskedWord.message);
-            }
-
-            // Submit updated coherence rating for task 1
-            const responseCoherence1 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCoherence1,
-                    column: 'coherence_task_1'
-                })
-            });
-
-            const resultCoherence1 = await responseCoherence1.json();
-            if (!resultCoherence1.success) {
-                alert('Error updating column "coherence_task_1": ' + resultCoherence1.message);
-            }
-
-            // Submit updated coherence rating for task 2
-            const responseCoherence2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCoherence2,
-                    column: 'coherence_task_2'
-                })
-            });
-            
-            const resultCoherence2 = await responseCoherence2.json();
-            if (!resultCoherence2.success) {
-                alert('Error updating column "coherence_task_2": ' + resultCoherence2.message);
-            }
-
-            // Submit updated coherence rating for task 3
-            const responseCoherence3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedCoherence3,
-                    column: 'coherence_task_3'
-                })
-            });
-
-            const resultCoherence3 = await responseCoherence3.json();
-            if (!resultCoherence3.success) {
-                alert('Error updating column "coherence_task_3": ' + resultCoherence3.message);
-            }
-
-            // Submit updated agreement rating for task 1
-            const responseAgreement1 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedAgreement1,
-                    column: 'agreement_task_1'
-                })
-            });
-
-            const resultAgreement1 = await responseAgreement1.json();
-            if (!resultAgreement1.success) {
-                alert('Error updating column "agreement_task_1": ' + resultAgreement1.message);
-            }
-
-            // Submit updated agreement rating for task 2
-            const responseAgreement2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedAgreement2,
-                    column: 'agreement_task_2'
-                })
-            });
-            
-            const resultAgreement2 = await responseAgreement2.json();
-            if (!resultAgreement2.success) {
-                alert('Error updating column "agreement_task_2": ' + resultAgreement2.message);
-            }
-
-            // Submit updated agreement rating for task 3
-            const responseAgreement3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedAgreement3,
-                    column: 'agreement_task_3'
-                })
-            });
-
-            const resultAgreement3 = await responseAgreement3.json();
-            if (!resultAgreement3.success) {
-                alert('Error updating column "agreement_task_3": ' + resultAgreement3.message);
-            }
-
-            // Submit updated informativeness rating for task 1
-            const responseInformativeness1 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedInformativeness1,
-                    column: 'informativeness_task_1'
-                })
-            });
-
-            const resultInformativeness1 = await responseInformativeness1.json();
-            if (!resultInformativeness1.success) {
-                alert('Error updating column "informativeness_task_1": ' + resultInformativeness1.message);
-            }
-
-            // Submit updated informativeness rating for task 2
-            const responseInformativeness2 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedInformativeness2,
-                    column: 'informativeness_task_2'
-                })
-            });
-            
-            const resultInformativeness2 = await responseInformativeness2.json();
-            if (!resultInformativeness2.success) {
-                alert('Error updating column "informativeness_task_2": ' + resultInformativeness2.message);
-            }
-
-            // Submit updated informativeness rating for task 3
-            const responseInformativeness3 = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    text: updatedInformativeness3,
-                    column: 'informativeness_task_3'
-                })
-            });
-
-            const resultInformativeness3 = await responseInformativeness3.json();
-            if (!resultInformativeness3.success) {
-                alert('Error updating column "informativeness_task_3": ' + resultInformativeness3.message);
-            }
-
-            // Update the local data arrays after successful submission
-            if (resultA.success) dataA[currentRow] = updatedTextA;
-            if (resultB.success) dataB[currentRow] = updatedTextB;
-            if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
-            if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
-            if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
-            if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
-            if (resultStatus.success) statusData[currentRow] = updatedStatus;
-            if (resultCase.success) caseData[currentRow] = updatedCase;
-            if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
-            if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
-            if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1;
-            if (resultCoherence2.success) coherenceRatings1[currentRow] = updatedCoherence2;
-            if (resultCoherence3.success) coherenceRatings1[currentRow] = updatedCoherence3;
-            if (resultAgreement1.success) agreementRatings1[currentRow] = updatedAgreement1;
-            if (resultAgreement2.success) agreementRatings1[currentRow] = updatedAgreement2;
-            if (resultAgreement3.success) agreementRatings1[currentRow] = updatedAgreement3;
-            if (resultInformativeness1.success) informativenessRatings1[currentRow] = updatedInformativeness1;
-            if (resultInformativeness2.success) informativenessRatings1[currentRow] = updatedInformativeness2;
-            if (resultInformativeness3.success) informativenessRatings1[currentRow] = updatedInformativeness3;
-
-            // Notify the user of successful submission
-            alert('Changes successfully submitted!');
-
+    
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
         } finally {
-            // Re-enable submit button after submission is complete
             submitButton.disabled = false;
         }
     }
