@@ -214,59 +214,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display a specific row
     function showRow(index) {
+        // Check if the data arrays are not empty
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
+
+        // Display text inputs, defaulting to 'No Data' if empty
         textDisplayA.value = dataA[index] || 'No Data';
         textDisplayB.value = dataB[index] || 'No Data';
         textDisplayATask2.value = dataATask2[index] || 'No Data';
         textDisplayBTask2.value = dataBTask2[index] || 'No Data';
         textDisplayATask3.value = dataATask3[index] || 'No Data';
         textDisplayBTask3.value = dataBTask3[index] || 'No Data';
+
+        // Display selects, defaulting to 'Select status', 'Select case', or 'Select turn' if empty
         statusSelect.value = statusData[index] || 'Select status';
         caseSelect.value = caseData[index] || 'Select case';
         turnMaskedSelect.value = turnMaskedData[index] || 'Select turn';
+
+        // Display other text areas, defaulting to 'No Data' if empty
         robertaPredsDisplay.textContent = robertaPreds[index] || 'No Data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'No Data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No Data';
         maskedWordDisplay.value = maskedWords[index] || 'No Data';
         originalADisplay.textContent = originalDataA[index] || 'No Data';
         originalBDisplay.textContent = originalDataB[index] || 'No Data';
-        const currentCoherenceRating1 = coherenceRatings1[index] || 'No Data';
+
+        // Handle coherence ratings
+        const currentCoherenceRating1 = coherenceRatings1[index] || '';
         coherenceRadioButtons1.forEach(button => {
             button.checked = button.value === currentCoherenceRating1;
         });
+
         const currentCoherenceRating2 = coherenceRatings2[index] || '';
         coherenceRadioButtons2.forEach(button => {
             button.checked = button.value === currentCoherenceRating2;
         });
+
         const currentCoherenceRating3 = coherenceRatings3[index] || '';
         coherenceRadioButtons3.forEach(button => {
             button.checked = button.value === currentCoherenceRating3;
         });
+
+        // Handle agreement ratings
         const currentAgreementRating1 = agreementRatings1[index] || '';
         agreementRadioButtons1.forEach(button => {
             button.checked = button.value === currentAgreementRating1;
         });
+
         const currentAgreementRating2 = agreementRatings2[index] || '';
         agreementRadioButtons2.forEach(button => {
             button.checked = button.value === currentAgreementRating2;
         });
+
         const currentAgreementRating3 = agreementRatings3[index] || '';
         agreementRadioButtons3.forEach(button => {
             button.checked = button.value === currentAgreementRating3;
         });
+
+        // Handle informativeness ratings
         const currentInformativenessRating1 = informativenessRatings1[index] || '';
         informativenessRadioButtons1.forEach(button => {
             button.checked = button.value === currentInformativenessRating1;
         });
+
         const currentInformativenessRating2 = informativenessRatings2[index] || '';
         informativenessRadioButtons2.forEach(button => {
             button.checked = button.value === currentInformativenessRating2;
         });
+
         const currentInformativenessRating3 = informativenessRatings3[index] || '';
         informativenessRadioButtons3.forEach(button => {
             button.checked = button.value === currentInformativenessRating3;
         });
 
+        // Disable/Enable navigation buttons
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
     }
@@ -300,27 +320,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to submit changes
 async function submitChanges() {
+    // Retrieve and sanitize input values
     const updatedTextA = textDisplayA.value.trim() || 'No Data';
     const updatedTextB = textDisplayB.value.trim() || 'No Data';
     const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
     const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
     const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
     const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
-    const updatedStatus = statusSelect.value || 'Select status';
-    const updatedCase = caseSelect.value || 'Select case';
-    const updatedTurnMasked = turnMaskedSelect.value || 'Select turn';
+    const updatedStatus = statusSelect.value.trim() || 'Select status';
+    const updatedCase = caseSelect.value.trim() || 'Select case';
+    const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
     const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
-    
+
     // Get selected values for ratings, defaulting to empty string if not selected
-    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
-    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || '';
-    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || '';
-    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || '';
-    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || '';
-    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || '';
-    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || '';
-    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || '';
-    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || '';
+    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
+    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
+    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
+    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
+    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
+    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
+    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
+    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
 
     submitButton.disabled = true;
 
@@ -350,35 +371,55 @@ async function submitChanges() {
         }
     }
 
-    // Update columns in sequence
-    try {
-        // Define all columns and their corresponding values
-        const updates = [
-            { columnName: 'speaker_a_task_1', value: updatedTextA },
-            { columnName: 'speaker_b_task_1', value: updatedTextB },
-            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
-            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
-            { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
-            { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
-            { columnName: 'status', value: updatedStatus },
-            { columnName: 'case', value: updatedCase },
-            { columnName: 'turn_masked', value: updatedTurnMasked },
-            { columnName: 'masked_word', value: updatedMaskedWord },
-            { columnName: 'coherence_task_1', value: updatedCoherence1 || 'Enter coherence' },
-            { columnName: 'coherence_task_2', value: updatedCoherence2 || 'Enter coherence' },
-            { columnName: 'coherence_task_3', value: updatedCoherence3 || 'Enter coherence' },
-            { columnName: 'agreement_task_1', value: updatedAgreement1 || 'Enter agreement' },
-            { columnName: 'agreement_task_2', value: updatedAgreement2 || 'Enter agreement' },
-            { columnName: 'agreement_task_3', value: updatedAgreement3 || 'Enter agreement' },
-            { columnName: 'informativeness_task_1', value: updatedInformativeness1 || 'Enter informativeness' },
-            { columnName: 'informativeness_task_2', value: updatedInformativeness2 || 'Enter informativeness' },
-            { columnName: 'informativeness_task_3', value: updatedInformativeness3 || 'Enter informativeness' }
-        ];
+    // Array of columns and their values to be updated
+    const updates = [
+        { columnName: 'speaker_a_task_1', value: updatedTextA },
+        { columnName: 'speaker_b_task_1', value: updatedTextB },
+        { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
+        { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
+        { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
+        { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
+        { columnName: 'status', value: updatedStatus },
+        { columnName: 'case', value: updatedCase },
+        { columnName: 'turn_masked', value: updatedTurnMasked },
+        { columnName: 'masked_word', value: updatedMaskedWord },
+        { columnName: 'coherence_task_1', value: updatedCoherence1 },
+        { columnName: 'coherence_task_2', value: updatedCoherence2 },
+        { columnName: 'coherence_task_3', value: updatedCoherence3 },
+        { columnName: 'agreement_task_1', value: updatedAgreement1 },
+        { columnName: 'agreement_task_2', value: updatedAgreement2 },
+        { columnName: 'agreement_task_3', value: updatedAgreement3 },
+        { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
+        { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
+        { columnName: 'informativeness_task_3', value: updatedInformativeness3 }
+    ];
 
-        // Perform all updates sequentially
+    // Update columns sequentially
+    try {
         for (const { columnName, value } of updates) {
             await updateColumn(columnName, value);
         }
+
+        // Update local data arrays after successful submission
+        dataA[currentRow] = updatedTextA;
+        dataB[currentRow] = updatedTextB;
+        dataATask2[currentRow] = updatedTextATask2;
+        dataBTask2[currentRow] = updatedTextBTask2;
+        dataATask3[currentRow] = updatedTextATask3;
+        dataBTask3[currentRow] = updatedTextBTask3;
+        statusData[currentRow] = updatedStatus;
+        caseData[currentRow] = updatedCase;
+        turnMaskedData[currentRow] = updatedTurnMasked;
+        maskedWords[currentRow] = updatedMaskedWord;
+        coherenceRatings1[currentRow] = updatedCoherence1;
+        coherenceRatings2[currentRow] = updatedCoherence2;
+        coherenceRatings3[currentRow] = updatedCoherence3;
+        agreementRatings1[currentRow] = updatedAgreement1;
+        agreementRatings2[currentRow] = updatedAgreement2;
+        agreementRatings3[currentRow] = updatedAgreement3;
+        informativenessRatings1[currentRow] = updatedInformativeness1;
+        informativenessRatings2[currentRow] = updatedInformativeness2;
+        informativenessRatings3[currentRow] = updatedInformativeness3;
 
         // Notify the user of successful submission
         alert('Changes successfully submitted!');
