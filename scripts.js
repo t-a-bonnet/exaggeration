@@ -300,25 +300,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to submit changes
 async function submitChanges() {
-    const updatedTextA = textDisplayA.value || 'No Data';
-    const updatedTextB = textDisplayB.value || 'No Data';
-    const updatedTextATask2 = textDisplayATask2.value || 'No Data';
-    const updatedTextBTask2 = textDisplayBTask2.value || 'No Data';
-    const updatedTextATask3 = textDisplayATask3.value || 'No Data';
-    const updatedTextBTask3 = textDisplayBTask3.value || 'No Data';
+    const updatedTextA = textDisplayA.value.trim() || 'No Data';
+    const updatedTextB = textDisplayB.value.trim() || 'No Data';
+    const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
+    const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
+    const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
+    const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
     const updatedStatus = statusSelect.value || 'Select status';
     const updatedCase = caseSelect.value || 'Select case';
     const updatedTurnMasked = turnMaskedSelect.value || 'Select turn';
-    const updatedMaskedWord = maskedWordDisplay.value || 'No Data';
-    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
-    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
-    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
-    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
-    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
-    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
-    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
+    const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+    
+    // Get selected values for ratings, defaulting to empty string if not selected
+    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
+    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || '';
+    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || '';
+    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || '';
+    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || '';
+    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || '';
+    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || '';
+    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || '';
+    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || '';
 
     submitButton.disabled = true;
 
@@ -350,46 +352,33 @@ async function submitChanges() {
 
     // Update columns in sequence
     try {
-        const resultA = await updateColumn('speaker_a_task_1', updatedTextA);
-        const resultB = await updateColumn('speaker_b_task_1', updatedTextB);
-        const resultATask2 = await updateColumn('speaker_a_task_2', updatedTextATask2);
-        const resultBTask2 = await updateColumn('speaker_b_task_2', updatedTextBTask2);
-        const resultATask3 = await updateColumn('speaker_a_task_3', updatedTextATask3);
-        const resultBTask3 = await updateColumn('speaker_b_task_3', updatedTextBTask3);
-        const resultStatus = await updateColumn('status', updatedStatus);
-        const resultCase = await updateColumn('case', updatedCase);
-        const resultTurnMasked = await updateColumn('turn_masked', updatedTurnMasked);
-        const resultMaskedWord = await updateColumn('masked_word', updatedMaskedWord);
-        const resultCoherence1 = await updateColumn('coherence_task_1', updatedCoherence1);
-        const resultCoherence2 = await updateColumn('coherence_task_2', updatedCoherence2);
-        const resultCoherence3 = await updateColumn('coherence_task_3', updatedCoherence3);
-        const resultAgreement1 = await updateColumn('agreement_task_1', updatedAgreement1);
-        const resultAgreement2 = await updateColumn('agreement_task_2', updatedAgreement2);
-        const resultAgreement3 = await updateColumn('agreement_task_3', updatedAgreement3);
-        const resultInformativeness1 = await updateColumn('informativeness_task_1', updatedInformativeness1);
-        const resultInformativeness2 = await updateColumn('informativeness_task_2', updatedInformativeness2);
-        const resultInformativeness3 = await updateColumn('informativeness_task_3', updatedInformativeness3);
+        // Define all columns and their corresponding values
+        const updates = [
+            { columnName: 'speaker_a_task_1', value: updatedTextA },
+            { columnName: 'speaker_b_task_1', value: updatedTextB },
+            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
+            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
+            { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
+            { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
+            { columnName: 'status', value: updatedStatus },
+            { columnName: 'case', value: updatedCase },
+            { columnName: 'turn_masked', value: updatedTurnMasked },
+            { columnName: 'masked_word', value: updatedMaskedWord },
+            { columnName: 'coherence_task_1', value: updatedCoherence1 || 'Enter coherence' },
+            { columnName: 'coherence_task_2', value: updatedCoherence2 || 'Enter coherence' },
+            { columnName: 'coherence_task_3', value: updatedCoherence3 || 'Enter coherence' },
+            { columnName: 'agreement_task_1', value: updatedAgreement1 || 'Enter agreement' },
+            { columnName: 'agreement_task_2', value: updatedAgreement2 || 'Enter agreement' },
+            { columnName: 'agreement_task_3', value: updatedAgreement3 || 'Enter agreement' },
+            { columnName: 'informativeness_task_1', value: updatedInformativeness1 || 'Enter informativeness' },
+            { columnName: 'informativeness_task_2', value: updatedInformativeness2 || 'Enter informativeness' },
+            { columnName: 'informativeness_task_3', value: updatedInformativeness3 || 'Enter informativeness' }
+        ];
 
-        // Update local data arrays after successful submission
-        if (resultA.success) dataA[currentRow] = updatedTextA || 'No Data';
-        if (resultB.success) dataB[currentRow] = updatedTextB || 'No Data';
-        if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2 || 'No Data';
-        if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2 || 'No Data';
-        if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3 || 'No Data';
-        if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3 || 'No Data';
-        if (resultStatus.success) statusData[currentRow] = updatedStatus || 'Select status';
-        if (resultCase.success) caseData[currentRow] = updatedCase || 'Select case';
-        if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked || 'Select turn';
-        if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord || 'No Data';
-        if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1 || 'Enter coherence';
-        if (resultCoherence2.success) coherenceRatings2[currentRow] = updatedCoherence2 || 'Enter coherence';
-        if (resultCoherence3.success) coherenceRatings3[currentRow] = updatedCoherence3 || 'Enter coherence';
-        if (resultAgreement1.success) agreementRatings1[currentRow] = updatedAgreement1 || 'Enter agreement';
-        if (resultAgreement2.success) agreementRatings2[currentRow] = updatedAgreement2 || 'Enter agreement';
-        if (resultAgreement3.success) agreementRatings3[currentRow] = updatedAgreement3 || 'Enter agreement';
-        if (resultInformativeness1.success) informativenessRatings1[currentRow] = updatedInformativeness1 || 'Enter informativeness';
-        if (resultInformativeness2.success) informativenessRatings2[currentRow] = updatedInformativeness2 || 'Enter informativeness';
-        if (resultInformativeness3.success) informativenessRatings3[currentRow] = updatedInformativeness3 || 'Enter informativeness';
+        // Perform all updates sequentially
+        for (const { columnName, value } of updates) {
+            await updateColumn(columnName, value);
+        }
 
         // Notify the user of successful submission
         alert('Changes successfully submitted!');
