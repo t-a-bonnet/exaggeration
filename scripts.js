@@ -300,6 +300,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function submitChanges() {
         submitButton.disabled = true;
+
+        // Retrieve values from input fields
+        const updatedTextA = textDisplayA.value;
+        const updatedTextB = textDisplayB.value;
+        const updatedTextATask2 = textDisplayATask2.value;
+        const updatedTextBTask2 = textDisplayBTask2.value;
+        const updatedTextATask3 = textDisplayATask3.value;
+        const updatedTextBTask3 = textDisplayBTask3.value;
+        const updatedStatus = statusSelect.value;
+        const updatedCase = caseSelect.value;
+        const updatedTurnMasked = turnMaskedSelect.value;
+        const updatedMaskedWord = maskedWordDisplay.value;
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked').value;
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked').value;
+        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked').value;
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked').value;
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked').value;
+        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked').value;
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked').value;
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked').value;
+        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked').value;
     
         try {
             // Create an array of fetch promises for all updates
