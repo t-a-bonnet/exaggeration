@@ -320,28 +320,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to submit changes
 async function submitChanges() {
+    // Helper function to escape or quote text for CSV
+    function escapeCSV(value) {
+        if (typeof value === 'string') {
+            // Escape double quotes by doubling them
+            value = value.replace(/"/g, '""');
+            // Quote the value if it contains commas, double quotes, or newlines
+            if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                value = `"${value}"`;
+            }
+        }
+        return value;
+    }
+
     // Retrieve and sanitize input values
-    const updatedTextA = textDisplayA.value.trim() || 'No Data';
-    const updatedTextB = textDisplayB.value.trim() || 'No Data';
-    const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
-    const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
-    const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
-    const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
-    const updatedStatus = statusSelect.value.trim() || 'Select status';
-    const updatedCase = caseSelect.value.trim() || 'Select case';
-    const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
-    const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+    const updatedTextA = escapeCSV(textDisplayA.value.trim() || 'No Data');
+    const updatedTextB = escapeCSV(textDisplayB.value.trim() || 'No Data');
+    const updatedTextATask2 = escapeCSV(textDisplayATask2.value.trim() || 'No Data');
+    const updatedTextBTask2 = escapeCSV(textDisplayBTask2.value.trim() || 'No Data');
+    const updatedTextATask3 = escapeCSV(textDisplayATask3.value.trim() || 'No Data');
+    const updatedTextBTask3 = escapeCSV(textDisplayBTask3.value.trim() || 'No Data');
+    const updatedStatus = escapeCSV(statusSelect.value.trim() || 'Select status');
+    const updatedCase = escapeCSV(caseSelect.value.trim() || 'Select case');
+    const updatedTurnMasked = escapeCSV(turnMaskedSelect.value.trim() || 'Select turn');
+    const updatedMaskedWord = escapeCSV(maskedWordDisplay.value.trim() || 'No Data');
 
     // Get selected values for ratings, defaulting to empty string if not selected
-    const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
-    const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-    const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
-    const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
-    const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-    const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
-    const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
-    const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
-    const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
+    const updatedCoherence1 = escapeCSV(document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence');
+    const updatedCoherence2 = escapeCSV(document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence');
+    const updatedCoherence3 = escapeCSV(document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence');
+    const updatedAgreement1 = escapeCSV(document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement');
+    const updatedAgreement2 = escapeCSV(document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement');
+    const updatedAgreement3 = escapeCSV(document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement');
+    const updatedInformativeness1 = escapeCSV(document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness');
+    const updatedInformativeness2 = escapeCSV(document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness');
+    const updatedInformativeness3 = escapeCSV(document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness');
 
     submitButton.disabled = true;
 
