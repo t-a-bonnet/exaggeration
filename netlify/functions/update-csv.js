@@ -7,6 +7,15 @@ const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'Appen data 16.8.2024.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
+// Helper function to escape CSV values
+function escapeCSV(value) {
+    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+        // Escape double quotes by doubling them and enclose in quotes
+        return `"${value.replace(/"/g, '""')}"`;
+    }
+    return value;
+}
+
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return {
@@ -63,6 +72,7 @@ exports.handler = async (event) => {
 
         const dataRows = rows.slice(1); // Skip the header row
         const parsedRows = dataRows.map(row => row.split(','));
+
         console.log('Parsed Rows:', parsedRows); // Log the parsed rows
 
         if (id < 0 || id >= parsedRows.length) {
@@ -72,7 +82,7 @@ exports.handler = async (event) => {
             };
         }
 
-        parsedRows[id][columnIndex] = text; // Update the specified column
+        parsedRows[id][columnIndex] = escapeCSV(text); // Update the specified column with escaped text
 
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
