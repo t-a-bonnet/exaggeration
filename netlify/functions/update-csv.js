@@ -25,7 +25,7 @@ exports.handler = async (event) => {
             };
         }
 
-        // Step 1: Fetch the file metadata to get the SHA
+        // Fetch file metadata to get the SHA
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
@@ -33,11 +33,11 @@ exports.handler = async (event) => {
             }
         });
 
-        // Step 2: Fetch the raw content of the file using the download URL
+        // Fetch the raw content of the file using the download URL
         const fileContentResponse = await axios.get(fileData.download_url);
         const fileContent = fileContentResponse.data;
 
-        console.log('File Content:', fileContent); // Log the entire file content
+        console.log('File Content (first 500 characters):', fileContent.slice(0, 500)); // Log the first 500 characters for review
 
         const rows = fileContent.trim().split('\n'); // Split into rows
         if (rows.length < 2) {
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
 
         const dataRows = rows.slice(1); // Skip the header row
         const parsedRows = dataRows.map(row => row.split(','));
-        console.log('Parsed Rows:', parsedRows); // Log the parsed rows
+        console.log('Parsed Rows (first 2 rows):', parsedRows.slice(0, 2)); // Log first 2 rows for review
 
         if (id < 0 || id >= parsedRows.length) {
             return {
@@ -77,7 +77,7 @@ exports.handler = async (event) => {
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
-        // Step 3: Update the file on GitHub
+        // Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
@@ -95,7 +95,7 @@ exports.handler = async (event) => {
         };
 
     } catch (error) {
-        console.error('Error:', error.response ? error.response.data : error.message);
+        console.error('Error occurred:', error.response ? error.response.data : error.message);
         return {
             statusCode: 500,
             body: JSON.stringify({ success: false, message: 'Internal Server Error', error: error.message })
