@@ -39,7 +39,8 @@ exports.handler = async (event) => {
 
         console.log('File Content:', fileContent); // Log the entire file content
 
-        const rows = fileContent.trim().split('\n'); // Split into rows
+        // Split content into rows, taking care of CSV quoting
+        const rows = parseCSV(fileContent);
         if (rows.length < 2) {
             console.error('Not enough rows in CSV file.');
             return {
@@ -48,7 +49,7 @@ exports.handler = async (event) => {
             };
         }
 
-        const header = rows[0].split(','); // Extract the header row
+        const header = rows[0]; // Extract the header row
         const columnIndex = header.indexOf(column); // Find the index of the specified column
 
         console.log('Header:', header); // Log the header row
@@ -62,10 +63,8 @@ exports.handler = async (event) => {
         }
 
         const dataRows = rows.slice(1); // Skip the header row
-        const parsedRows = dataRows.map(row => row.split(','));
-        console.log('Parsed Rows:', parsedRows); // Log the parsed rows
 
-        if (id < 0 || id >= parsedRows.length) {
+        if (id < 0 || id >= dataRows.length) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
@@ -73,10 +72,10 @@ exports.handler = async (event) => {
         }
 
         // Update the specified column with quoted text to handle commas
-        parsedRows[id][columnIndex] = `"${text.replace(/"/g, '""')}"`;
+        dataRows[id][columnIndex] = `"${text.replace(/"/g, '""')}"`;
 
         // Convert rows back to CSV format
-        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
+        const updatedContent = [header, ...dataRows].map(row => row.join(',')).join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
@@ -103,3 +102,20 @@ exports.handler = async (event) => {
         };
     }
 };
+
+// Helper function to parse CSV content considering quoted fields
+function parseCSV(csvContent) {
+    const rows = [];
+    const regex = /(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g;
+    const lines = csvContent.split('\n');
+
+    for (let line of lines) {
+        const matches = [];
+        let match;
+        while ((match = regex.exec(line)) !== null) {
+            matches.push(match[0].replace(/^"|"$/g, ''));
+        }
+        rows.push(matches);
+    }
+    return rows;
+}
