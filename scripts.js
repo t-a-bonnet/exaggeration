@@ -179,15 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No Data');
             originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No Data');
             originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
-            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || 'Enter coherence');
-            coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || 'Enter coherence');
-            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || 'Enter coherence');
-            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || 'Enter agreement');
-            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || 'Enter agreement');
-            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || 'Enter agreement');
-            informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || 'Enter informativeness');
-            informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || 'Enter informativeness');
-            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || 'Enter informativeness');
+            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
+            coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
+            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
+            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
+            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
+            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
+            informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
+            informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
+            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
 
             try {
                 showRow(currentRow);
@@ -371,25 +371,25 @@ async function submitChanges() {
         const resultInformativeness3 = await updateColumn('informativeness_task_3', updatedInformativeness3);
 
         // Update local data arrays after successful submission
-        if (resultA.success) dataA[currentRow] = updatedTextA;
-        if (resultB.success) dataB[currentRow] = updatedTextB;
-        if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2;
-        if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2;
-        if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3;
-        if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3;
-        if (resultStatus.success) statusData[currentRow] = updatedStatus;
-        if (resultCase.success) caseData[currentRow] = updatedCase;
-        if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
-        if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
-        if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1;
-        if (resultCoherence2.success) coherenceRatings2[currentRow] = updatedCoherence2;
-        if (resultCoherence3.success) coherenceRatings3[currentRow] = updatedCoherence3;
-        if (resultAgreement1.success) agreementRatings1[currentRow] = updatedAgreement1;
-        if (resultAgreement2.success) agreementRatings2[currentRow] = updatedAgreement2;
-        if (resultAgreement3.success) agreementRatings3[currentRow] = updatedAgreement3;
-        if (resultInformativeness1.success) informativenessRatings1[currentRow] = updatedInformativeness1;
-        if (resultInformativeness2.success) informativenessRatings2[currentRow] = updatedInformativeness2;
-        if (resultInformativeness3.success) informativenessRatings3[currentRow] = updatedInformativeness3;
+        if (resultA.success) dataA[currentRow] = updatedTextA || 'No Data';
+        if (resultB.success) dataB[currentRow] = updatedTextB || 'No Data';
+        if (resultATask2.success) dataATask2[currentRow] = updatedTextATask2 || 'No Data';
+        if (resultBTask2.success) dataBTask2[currentRow] = updatedTextBTask2 || 'No Data';
+        if (resultATask3.success) dataATask3[currentRow] = updatedTextATask3 || 'No Data';
+        if (resultBTask3.success) dataBTask3[currentRow] = updatedTextBTask3 || 'No Data';
+        if (resultStatus.success) statusData[currentRow] = updatedStatus || 'Select status';
+        if (resultCase.success) caseData[currentRow] = updatedCase || 'Select case';
+        if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked || 'Select turn';
+        if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord || 'No Data';
+        if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1 || 'Enter coherence';
+        if (resultCoherence2.success) coherenceRatings2[currentRow] = updatedCoherence2 || 'Enter coherence';
+        if (resultCoherence3.success) coherenceRatings3[currentRow] = updatedCoherence3 || 'Enter coherence';
+        if (resultAgreement1.success) agreementRatings1[currentRow] = updatedAgreement1 || 'Enter agreement';
+        if (resultAgreement2.success) agreementRatings2[currentRow] = updatedAgreement2 || 'Enter agreement';
+        if (resultAgreement3.success) agreementRatings3[currentRow] = updatedAgreement3 || 'Enter agreement';
+        if (resultInformativeness1.success) informativenessRatings1[currentRow] = updatedInformativeness1 || 'Enter informativeness';
+        if (resultInformativeness2.success) informativenessRatings2[currentRow] = updatedInformativeness2 || 'Enter informativeness';
+        if (resultInformativeness3.success) informativenessRatings3[currentRow] = updatedInformativeness3 || 'Enter informativeness';
 
         // Notify the user of successful submission
         alert('Changes successfully submitted!');
