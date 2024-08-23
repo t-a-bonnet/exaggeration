@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function submitChanges() {
         submitButton.disabled = true;
-
+    
         // Retrieve values from input fields
         const updatedTextA = textDisplayA.value;
         const updatedTextB = textDisplayB.value;
@@ -322,116 +322,123 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked').value;
         const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked').value;
     
-        try {
-            // Create an array of fetch promises for all updates
-            const updatePromises = [
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextA, column: 'speaker_a_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextB, column: 'speaker_b_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextATask2, column: 'speaker_a_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask2, column: 'speaker_b_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextATask3, column: 'speaker_a_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTextBTask3, column: 'speaker_b_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedStatus, column: 'status' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedCase, column: 'case' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedTurnMasked, column: 'turn_masked' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedMaskedWord, column: 'masked_word' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedCoherence1, column: 'coherence_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedCoherence2, column: 'coherence_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedCoherence3, column: 'coherence_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedAgreement1, column: 'agreement_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedAgreement2, column: 'agreement_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedAgreement3, column: 'agreement_task_3' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness1, column: 'informativeness_task_1' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness2, column: 'informativeness_task_2' })
-                }),
-                fetch('/.netlify/functions/update-csv', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: currentRow, text: updatedInformativeness3, column: 'informativeness_task_3' })
-                })
-            ];
+        // Array of fetch requests
+        const updatePromises = [
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextA, column: 'speaker_a_task_1' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextB, column: 'speaker_b_task_1' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextATask2, column: 'speaker_a_task_2' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextBTask2, column: 'speaker_b_task_2' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextATask3, column: 'speaker_a_task_3' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTextBTask3, column: 'speaker_b_task_3' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedStatus, column: 'status' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedCase, column: 'case' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedTurnMasked, column: 'turn_masked' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedMaskedWord, column: 'masked_word' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedCoherence1, column: 'coherence_task_1' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedCoherence2, column: 'coherence_task_2' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedCoherence3, column: 'coherence_task_3' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedAgreement1, column: 'agreement_task_1' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedAgreement2, column: 'agreement_task_2' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedAgreement3, column: 'agreement_task_3' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedInformativeness1, column: 'informativeness_task_1' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedInformativeness2, column: 'informativeness_task_2' })
+            }),
+            fetch('/.netlify/functions/update-csv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: currentRow, text: updatedInformativeness3, column: 'informativeness_task_3' })
+            })
+        ];
     
-            // Execute all fetch promises in parallel
+        // Parallel array to store column names
+        const columns = [
+            'speaker_a_task_1', 'speaker_b_task_1', 'speaker_a_task_2', 'speaker_b_task_2',
+            'speaker_a_task_3', 'speaker_b_task_3', 'status', 'case',
+            'turn_masked', 'masked_word', 'coherence_task_1', 'coherence_task_2', 'coherence_task_3',
+            'agreement_task_1', 'agreement_task_2', 'agreement_task_3',
+            'informativeness_task_1', 'informativeness_task_2', 'informativeness_task_3'
+        ];
+    
+        try {
             const results = await Promise.all(updatePromises);
     
-            // Process the results
             let allSuccessful = true;
             for (let i = 0; i < results.length; i++) {
                 const result = await results[i].json();
                 if (!result.success) {
                     allSuccessful = false;
-                    alert(`Error updating column ${updatePromises[i].body.column}: ${result.message}`);
+                    alert(`Error updating column ${columns[i]}: ${result.message}`);
                 }
             }
     
@@ -457,12 +464,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 informativenessRatings2[currentRow] = updatedInformativeness2;
                 informativenessRatings3[currentRow] = updatedInformativeness3;
     
-                alert('Changes successfully submitted!');
+                alert("Data successfully updated.");
             }
-    
         } catch (error) {
             console.error('Error submitting changes:', error);
-            alert('Error submitting changes: ' + error.message);
+            alert('Error submitting changes. Please try again later.');
         } finally {
             submitButton.disabled = false;
         }
