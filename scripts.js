@@ -348,8 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper function to update a column
         async function updateColumn(columnName, updatedValue) {
             try {
-                // Escape the value for CSV or ensure proper encoding
-                const escapedValue = updatedValue.replace(/"/g, '""'); // Escape double quotes for CSV
                 const response = await fetch('/.netlify/functions/update-csv', {
                     method: 'POST',
                     headers: {
@@ -357,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         id: currentRow,
-                        text: escapedValue,
+                        text: updatedValue,
                         column: columnName
                     })
                 });
@@ -381,7 +379,19 @@ document.addEventListener('DOMContentLoaded', () => {
             { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
             { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
             { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
-            { columnName: 'masked_word', value: updatedMaskedWord }
+            { columnName: 'status', value: updatedStatus },
+            { columnName: 'case', value: updatedCase },
+            { columnName: 'turn_masked', value: updatedTurnMasked },
+            { columnName: 'masked_word', value: updatedMaskedWord },
+            { columnName: 'coherence_task_1', value: updatedCoherence1 },
+            { columnName: 'coherence_task_2', value: updatedCoherence2 },
+            { columnName: 'coherence_task_3', value: updatedCoherence3 },
+            { columnName: 'agreement_task_1', value: updatedAgreement1 },
+            { columnName: 'agreement_task_2', value: updatedAgreement2 },
+            { columnName: 'agreement_task_3', value: updatedAgreement3 },
+            { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
+            { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
+            { columnName: 'informativeness_task_3', value: updatedInformativeness3 }
         ];
 
         // Update columns sequentially
@@ -391,13 +401,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Update local data arrays after successful submission
-            dataA[currentRow] = updatedTextA;
-            dataB[currentRow] = updatedTextB;
-            dataATask2[currentRow] = updatedTextATask2;
-            dataBTask2[currentRow] = updatedTextBTask2;
-            dataATask3[currentRow] = updatedTextATask3;
-            dataBTask3[currentRow] = updatedTextBTask3;
-            maskedWords[currentRow] = updatedMaskedWord;
+            dataA[currentRow] = `"${updatedTextA}"`;
+            dataB[currentRow] = `"${updatedTextB}"`;
+            dataATask2[currentRow] = `"${updatedTextATask2}"`;
+            dataBTask2[currentRow] = `"${updatedTextBTask2}"`;
+            dataATask3[currentRow] = `"${updatedTextATask3}"`;
+            dataBTask3[currentRow] = `"${updatedTextBTask3}"`;
+            statusData[currentRow] = updatedStatus;
+            caseData[currentRow] = updatedCase;
+            turnMaskedData[currentRow] = updatedTurnMasked;
+            maskedWords[currentRow] = `"${updatedMaskedWord}"`;
+            coherenceRatings1[currentRow] = updatedCoherence1;
+            coherenceRatings2[currentRow] = updatedCoherence2;
+            coherenceRatings3[currentRow] = updatedCoherence3;
+            agreementRatings1[currentRow] = updatedAgreement1;
+            agreementRatings2[currentRow] = updatedAgreement2;
+            agreementRatings3[currentRow] = updatedAgreement3;
+            informativenessRatings1[currentRow] = updatedInformativeness1;
+            informativenessRatings2[currentRow] = updatedInformativeness2;
+            informativenessRatings3[currentRow] = updatedInformativeness3;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
