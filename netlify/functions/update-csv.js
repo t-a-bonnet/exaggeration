@@ -72,14 +72,17 @@ exports.handler = async (event) => {
             };
         }
 
-        parsedRows[id][columnIndex] = text; // Update the specified column
+        // Enclose text in double quotes if it contains a comma
+        const encloseIfNeeded = str => str.includes(',') ? `"${str.replace(/"/g, '""')}"` : str;
+
+        parsedRows[id][columnIndex] = encloseIfNeeded(text); // Update the specified column
 
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-            message: 'Update Appen data 16.8.2024.csv',
+            message: 'Update CSV file',
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha // Required SHA for the update
         }, {
