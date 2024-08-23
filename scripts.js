@@ -320,28 +320,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to submit changes
     async function submitChanges() {
-        // Retrieve and sanitize input values
-        const updatedTextA = textDisplayA.value.trim() || 'No Data';
-        const updatedTextB = textDisplayB.value.trim() || 'No Data';
-        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
-        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
-        const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
-        const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
-        const updatedStatus = statusSelect.value.trim() || 'Select status';
-        const updatedCase = caseSelect.value.trim() || 'Select case';
-        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
-        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+        // Helper function to escape commas in text
+        function escapeCommas(text) {
+            return text.replace(/,/g, '\\,');
+        }
+
+        // Retrieve and sanitize input values, escape commas
+        const updatedTextA = escapeCommas(textDisplayA.value.trim()) || 'No Data';
+        const updatedTextB = escapeCommas(textDisplayB.value.trim()) || 'No Data';
+        const updatedTextATask2 = escapeCommas(textDisplayATask2.value.trim()) || 'No Data';
+        const updatedTextBTask2 = escapeCommas(textDisplayBTask2.value.trim()) || 'No Data';
+        const updatedTextATask3 = escapeCommas(textDisplayATask3.value.trim()) || 'No Data';
+        const updatedTextBTask3 = escapeCommas(textDisplayBTask3.value.trim()) || 'No Data';
+        const updatedStatus = escapeCommas(statusSelect.value.trim()) || 'Select status';
+        const updatedCase = escapeCommas(caseSelect.value.trim()) || 'Select case';
+        const updatedTurnMasked = escapeCommas(turnMaskedSelect.value.trim()) || 'Select turn';
+        const updatedMaskedWord = escapeCommas(maskedWordDisplay.value.trim()) || 'No Data';
 
         // Get selected values for ratings, defaulting to empty string if not selected
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
-        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
-        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
-        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
-        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
-        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
-        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
+        const updatedCoherence1 = escapeCommas(document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence');
+        const updatedCoherence2 = escapeCommas(document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence');
+        const updatedCoherence3 = escapeCommas(document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence');
+        const updatedAgreement1 = escapeCommas(document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement');
+        const updatedAgreement2 = escapeCommas(document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement');
+        const updatedAgreement3 = escapeCommas(document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement');
+        const updatedInformativeness1 = escapeCommas(document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness');
+        const updatedInformativeness2 = escapeCommas(document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness');
+        const updatedInformativeness3 = escapeCommas(document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness');
 
         submitButton.disabled = true;
 
@@ -432,7 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.disabled = false;
         }
     }
-
         // Event listeners
         previousButton.addEventListener('click', showPreviousRow);
         nextButton.addEventListener('click', showNextRow);
