@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const maskedWordDisplay = document.getElementById('masked-word');
     const originalADisplay = document.getElementById('original-a');
     const originalBDisplay = document.getElementById('original-b');
-    const coherenceRadioButtons = document.querySelectorAll('input[name="coherence"]');
+    const coherenceRadioButtons1 = document.querySelectorAll('input[name="coherence1"]');
 
     let currentRow = 0;
     let dataA = [];
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWords = [];
     let originalDataA = [];
     let originalDataB = [];
-    let coherenceRatings = [];
+    let coherenceRatings1 = [];
 
     let columnIndexA;
     let columnIndexB;
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let maskedWordColumnIndex;
     let originalAColumnIndex;
     let originalBColumnIndex;
-    let coherenceColumnIndex;
+    let coherenceColumnIndex1;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWordColumnIndex = header.indexOf('masked_word');
             originalAColumnIndex = header.indexOf('speaker_a_original');
             originalBColumnIndex = header.indexOf('speaker_b_original');
-            coherenceColumnIndex = header.indexOf('coherence_task_1');
+            coherenceColumnIndex1 = header.indexOf('coherence_task_1');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
             originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
             originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
-            coherenceRatings = rows.slice(1).map(row => row[coherenceColumnIndex] || '');
+            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
 
             try {
                 showRow(currentRow);
@@ -190,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
         maskedWordDisplay.value = maskedWords[index] || '';
         originalADisplay.textContent = originalDataA[index] || '';
         originalBDisplay.textContent = originalDataB[index] || '';
-        const currentRating = coherenceRatings[index] || '';
-        coherenceRadioButtons.forEach(button => {
-            button.checked = button.value === currentRating;
+        const currentCoherenceRating1 = coherenceRatings1[index] || '';
+        coherenceRadioButtons1.forEach(button => {
+            button.checked = button.value === currentCoherenceRating1;
         });
 
         previousButton.disabled = index === 0;
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value;
         const updatedTurnMasked = turnMaskedSelect.value;
         const updatedMaskedWord = maskedWordDisplay.value;
-        const updatedCoherence = document.querySelector('input[name="coherence"]:checked')?.value || '';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || '';
 
         submitButton.disabled = true;
 
@@ -417,21 +417,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Submit updated coherence rating
-            const responseCoherence = await fetch('/.netlify/functions/update-csv', {
+            const responseCoherence1 = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     id: currentRow,
-                    text: updatedCoherence,
+                    text: updatedCoherence1,
                     column: 'coherence_task_1'
                 })
             });
 
-            const resultCoherence = await responseCoherence.json();
-            if (!resultCoherence.success) {
-                alert('Error updating column "coherence_task_1": ' + resultCoherence.message);
+            const resultCoherence1 = await responseCoherence1.json();
+            if (!resultCoherence1.success) {
+                alert('Error updating column "coherence_task_1": ' + resultCoherence1.message);
             }
 
             // Update the local data arrays after successful submission
@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resultCase.success) caseData[currentRow] = updatedCase;
             if (resultTurnMasked.success) turnMaskedData[currentRow] = updatedTurnMasked;
             if (resultMaskedWord.success) maskedWords[currentRow] = updatedMaskedWord;
-            if (resultCoherence.success) coherenceRatings[currentRow] = updatedCoherence;
+            if (resultCoherence1.success) coherenceRatings1[currentRow] = updatedCoherence1;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
