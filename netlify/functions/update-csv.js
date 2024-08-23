@@ -1,11 +1,9 @@
 const axios = require('axios');
-const { Buffer } = require('buffer');
-
 const GITHUB_API_URL = 'https://api.github.com';
-const REPO_OWNER = 't-a-bonnet';
-const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'Appen data 16.8.2024.csv';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const REPO_OWNER = 'your-repo-owner';
+const REPO_NAME = 'your-repo-name';
+const FILE_PATH = 'path/to/your/file.csv';
+const GITHUB_TOKEN = 'your-github-token';
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -62,7 +60,14 @@ exports.handler = async (event) => {
         }
 
         const dataRows = rows.slice(1); // Skip the header row
-        const parsedRows = dataRows.map(row => row.split(','));
+        const parsedRows = dataRows.map(row => {
+            const cells = row.split(','); // Split each row into cells
+            if (id >= 0 && id < cells.length) {
+                // Enclose text in double quotes if it contains a comma
+                cells[id] = cells[id].includes(',') ? `"${cells[id].replace(/"/g, '""')}"` : cells[id];
+            }
+            return cells;
+        });
         console.log('Parsed Rows:', parsedRows); // Log the parsed rows
 
         if (id < 0 || id >= parsedRows.length) {
@@ -72,13 +77,11 @@ exports.handler = async (event) => {
             };
         }
 
-        // Enclose text in double quotes if it contains a comma
-        const encloseIfNeeded = str => str.includes(',') ? `"${str.replace(/"/g, '""')}"` : str;
-
-        parsedRows[id][columnIndex] = encloseIfNeeded(text); // Update the specified column
+        // Update the specified column with text enclosed in quotes if needed
+        parsedRows[id][columnIndex] = text.includes(',') ? `"${text.replace(/"/g, '""')}"` : text;
 
         // Convert rows back to CSV format
-        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
+        const updatedContent = [header, ...parsedRows.map(row => row.join(','))].join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
