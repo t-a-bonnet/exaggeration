@@ -321,16 +321,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve and sanitize input values
-        const updatedTextA = `"${textDisplayA.value}"` || 'No Data';
-        const updatedTextB = `"${textDisplayB.value}"` || 'No Data';
-        const updatedTextATask2 = `"${textDisplayATask2.value}"` || 'No Data';
-        const updatedTextBTask2 = `"${textDisplayBTask2.value}"` || 'No Data';
-        const updatedTextATask3 = `"${textDisplayATask3.value}"` || 'No Data';
-        const updatedTextBTask3 = `"${textDisplayBTask3.value}"` || 'No Data';
+        let updatedTextA = textDisplayA.value || 'No Data';
+        updatedTextA = `"${updatedTextA}"`
+        let updatedTextB = textDisplayB.value || 'No Data';
+        updatedTextB = `"${updatedTextB}"`
+        let updatedTextATask2 = textDisplayATask2.value || 'No Data';
+        updatedTextATask2 = `"${updatedTextATask2}"`
+        let updatedTextBTask2 = textDisplayBTask2.value || 'No Data';
+        updatedTextBTask2 = `"${updatedTextBTask2}"`
+        let updatedTextATask3 = textDisplayATask3.value || 'No Data';
+        updatedTextATask3 = `"${updatedTextATask3}"`
+        let updatedTextBTask3 = textDisplayBTask3.value || 'No Data';
+        updatedTextBTask3 = `"${updatedTextBTask3}"`
         const updatedStatus = statusSelect.value || 'Select status';
         const updatedCase = caseSelect.value || 'Select case';
         const updatedTurnMasked = turnMaskedSelect.value || 'Select turn';
-        const updatedMaskedWord = `"${maskedWordDisplay.value}"` || 'No Data';
+        let updatedMaskedWord = maskedWordDisplay.value || 'No Data';
+        updatedMaskedWord = `"${updatedMaskedWord }"`
 
         // Get selected values for ratings, defaulting to empty string if not selected
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
