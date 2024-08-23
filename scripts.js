@@ -164,30 +164,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || '');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || '');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || '');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || '');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || '');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || '');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || '');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || '');
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || '');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || '');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || '');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || '');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || '');
-            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || '');
-            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || '');
-            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
-            coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
-            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
-            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
-            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
-            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
-            informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
-            informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
-            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
+            dataA = rows.slice(1).map(row => row[columnIndexA] || 'No Data');
+            dataB = rows.slice(1).map(row => row[columnIndexB] || 'No Data');
+            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No Data');
+            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
+            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
+            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
+            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No Data');
+            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No Data');
+            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No Data');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No Data');
+            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No Data');
+            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
+            coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || 'Enter coherence');
+            coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || 'Enter coherence');
+            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || 'Enter coherence');
+            agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || 'Enter agreement');
+            agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || 'Enter agreement');
+            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || 'Enter agreement');
+            informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || 'Enter informativeness');
+            informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || 'Enter informativeness');
+            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || 'Enter informativeness');
 
             try {
                 showRow(currentRow);
@@ -215,22 +215,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
-        textDisplayA.value = dataA[index] || '';
-        textDisplayB.value = dataB[index] || '';
-        textDisplayATask2.value = dataATask2[index] || '';
-        textDisplayBTask2.value = dataBTask2[index] || '';
-        textDisplayATask3.value = dataATask3[index] || '';
-        textDisplayBTask3.value = dataBTask3[index] || '';
-        statusSelect.value = statusData[index] || 'Incomplete';
+        textDisplayA.value = dataA[index] || 'No Data';
+        textDisplayB.value = dataB[index] || 'No Data';
+        textDisplayATask2.value = dataATask2[index] || 'No Data';
+        textDisplayBTask2.value = dataBTask2[index] || 'No Data';
+        textDisplayATask3.value = dataATask3[index] || 'No Data';
+        textDisplayBTask3.value = dataBTask3[index] || 'No Data';
+        statusSelect.value = statusData[index] || 'Select status';
         caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn masked';
-        robertaPredsDisplay.textContent = robertaPreds[index] || '';
-        llamaPredsDisplay.textContent = llamaPreds[index] || '';
-        gemmaPredsDisplay.textContent = gemmaPreds[index] || '';
-        maskedWordDisplay.value = maskedWords[index] || '';
-        originalADisplay.textContent = originalDataA[index] || '';
-        originalBDisplay.textContent = originalDataB[index] || '';
-        const currentCoherenceRating1 = coherenceRatings1[index] || '';
+        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn';
+        robertaPredsDisplay.textContent = robertaPreds[index] || 'No Data';
+        llamaPredsDisplay.textContent = llamaPreds[index] || 'No Data';
+        gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No Data';
+        maskedWordDisplay.value = maskedWords[index] || 'No Data';
+        originalADisplay.textContent = originalDataA[index] || 'No Data';
+        originalBDisplay.textContent = originalDataB[index] || 'No Data';
+        const currentCoherenceRating1 = coherenceRatings1[index] || 'No Data';
         coherenceRadioButtons1.forEach(button => {
             button.checked = button.value === currentCoherenceRating1;
         });
