@@ -106,16 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                textDisplayA.value = 'No data available.';
-                textDisplayB.value = 'No data available.';
-                textDisplayATask2.value = 'No data available.';
-                textDisplayBTask2.value = 'No data available.';
-                textDisplayATask3.value = 'No data available.';
-                textDisplayBTask3.value = 'No data available.';
+                textDisplayA.textContent = 'No data available.';
+                textDisplayB.textContent = 'No data available.';
+                textDisplayATask2.textContent = 'No data available.';
+                textDisplayBTask2.textContent = 'No data available.';
+                textDisplayATask3.textContent = 'No data available.';
+                textDisplayBTask3.textContent = 'No data available.';
                 robertaPredsDisplay.textContent = 'No data available.';
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
-                maskedWordDisplay.value = 'No data available.';
+                maskedWordDisplay.textContent = 'No data available.';
                 originalADisplay.textContent = 'No data available.';
                 originalBDisplay.textContent = 'No data available.';
                 return;
@@ -149,16 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
-                textDisplayA.value = 'Required columns not found.';
-                textDisplayB.value = 'Required columns not found.';
-                textDisplayATask2.value = 'Required columns not found.';
-                textDisplayBTask2.value = 'Required columns not found.';
-                textDisplayATask3.value = 'Required columns not found.';
-                textDisplayBTask3.value = 'Required columns not found.';
+                textDisplayA.textContent = 'Required columns not found.';
+                textDisplayB.textContent = 'Required columns not found.';
+                textDisplayATask2.textContent = 'Required columns not found.';
+                textDisplayBTask2.textContent = 'Required columns not found.';
+                textDisplayATask3.textContent = 'Required columns not found.';
+                textDisplayBTask3.textContent = 'Required columns not found.';
                 robertaPredsDisplay.textContent = 'Required columns not found.';
                 llamaPredsDisplay.textContent = 'Required columns not found.';
                 gemmaPredsDisplay.textContent = 'Required columns not found.';
-                maskedWordDisplay.value = 'Required columns not found.';
+                maskedWordDisplay.textContent = 'Required columns not found.';
                 originalADisplay.textContent = 'Required columns not found.';
                 originalBDisplay.textContent = 'Required columns not found.';
                 return;
@@ -197,16 +197,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error loading CSV:', error);
-            textDisplayA.value = 'Error loading CSV data.';
-            textDisplayB.value = 'Error loading CSV data.';
-            textDisplayATask2.value = 'Error loading CSV data.';
-            textDisplayBTask2.value = 'Error loading CSV data.';
-            textDisplayATask3.value = 'Error loading CSV data.';
-            textDisplayBTask3.value = 'Error loading CSV data.';
+            textDisplayA.textContent = 'Error loading CSV data.';
+            textDisplayB.textContent = 'Error loading CSV data.';
+            textDisplayATask2.textContent = 'Error loading CSV data.';
+            textDisplayBTask2.textContent = 'Error loading CSV data.';
+            textDisplayATask3.textContent = 'Error loading CSV data.';
+            textDisplayBTask3.textContent = 'Error loading CSV data.';
             robertaPredsDisplay.textContent = 'Error loading CSV data.';
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
-            maskedWordDisplay.value = 'Error loading CSV data.';
+            maskedWordDisplay.textContent = 'Error loading CSV data.';
             originalADisplay.textContent = 'Error loading CSV data.';
             originalBDisplay.textContent = 'Error loading CSV data.';
         }
@@ -218,12 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
 
         // Display text inputs, defaulting to 'No Data' if empty
-        textDisplayA.value = dataA[index] || 'No Data';
-        textDisplayB.value = dataB[index] || 'No Data';
-        textDisplayATask2.value = dataATask2[index] || 'No Data';
-        textDisplayBTask2.value = dataBTask2[index] || 'No Data';
-        textDisplayATask3.value = dataATask3[index] || 'No Data';
-        textDisplayBTask3.value = dataBTask3[index] || 'No Data';
+        textDisplayA.textContent = dataA[index] || 'No Data';
+        textDisplayB.textContent = dataB[index] || 'No Data';
+        textDisplayATask2.textContent = dataATask2[index] || 'No Data';
+        textDisplayBTask2.textContent = dataBTask2[index] || 'No Data';
+        textDisplayATask3.textContent = dataATask3[index] || 'No Data';
+        textDisplayBTask3.textContent = dataBTask3[index] || 'No Data';
 
         // Display selects, defaulting to 'Select status', 'Select case', or 'Select turn' if empty
         statusSelect.value = statusData[index] || 'Select status';
@@ -321,16 +321,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve and sanitize input values
-        const updatedTextA = textDisplayA.value.trim() || 'No Data';
-        const updatedTextB = textDisplayB.value.trim() || 'No Data';
-        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
-        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
-        const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
-        const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
-        const updatedStatus = statusSelect.value.trim() || 'Select status';
-        const updatedCase = caseSelect.value.trim() || 'Select case';
-        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
-        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+        const updatedTextA = textDisplayA.textContent|| 'No Data';
+        const updatedTextB = textDisplayB.textContent || 'No Data';
+        const updatedTextATask2 = textDisplayATask2.textContent || 'No Data';
+        const updatedTextBTask2 = textDisplayBTask2.textContent || 'No Data';
+        const updatedTextATask3 = textDisplayATask3.textContent || 'No Data';
+        const updatedTextBTask3 = textDisplayBTask3.textContent || 'No Data';
+        const updatedStatus = statusSelect.value || 'Select status';
+        const updatedCase = caseSelect.value || 'Select case';
+        const updatedTurnMasked = turnMaskedSelect.value || 'Select turn';
+        const updatedMaskedWord = maskedWordDisplay.textContent || 'No Data';
 
         // Get selected values for ratings, defaulting to empty string if not selected
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
@@ -401,16 +401,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Update local data arrays after successful submission
-            dataA[currentRow] = `"${updatedTextA}"`;
-            dataB[currentRow] = `"${updatedTextB}"`;
-            dataATask2[currentRow] = `"${updatedTextATask2}"`;
-            dataBTask2[currentRow] = `"${updatedTextBTask2}"`;
-            dataATask3[currentRow] = `"${updatedTextATask3}"`;
-            dataBTask3[currentRow] = `"${updatedTextBTask3}"`;
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            dataATask3[currentRow] = updatedTextATask3;
+            dataBTask3[currentRow] = updatedTextBTask3;
             statusData[currentRow] = updatedStatus;
             caseData[currentRow] = updatedCase;
             turnMaskedData[currentRow] = updatedTurnMasked;
-            maskedWords[currentRow] = `"${updatedMaskedWord}"`;
+            maskedWords[currentRow] = updatedMaskedWord;
             coherenceRatings1[currentRow] = updatedCoherence1;
             coherenceRatings2[currentRow] = updatedCoherence2;
             coherenceRatings3[currentRow] = updatedCoherence3;

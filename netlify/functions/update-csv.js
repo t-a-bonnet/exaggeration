@@ -1,9 +1,11 @@
 const axios = require('axios');
+const { Buffer } = require('buffer');
+
 const GITHUB_API_URL = 'https://api.github.com';
-const REPO_OWNER = 'your-repo-owner';
-const REPO_NAME = 'your-repo-name';
-const FILE_PATH = 'path/to/your/file.csv';
-const GITHUB_TOKEN = 'your-github-token';
+const REPO_OWNER = 't-a-bonnet';
+const REPO_NAME = 'exaggeration';
+const FILE_PATH = 'Appen data 16.8.2024.csv';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -60,14 +62,7 @@ exports.handler = async (event) => {
         }
 
         const dataRows = rows.slice(1); // Skip the header row
-        const parsedRows = dataRows.map(row => {
-            const cells = row.split(','); // Split each row into cells
-            if (id >= 0 && id < cells.length) {
-                // Enclose text in double quotes if it contains a comma
-                cells[id] = cells[id].includes(',') ? `"${cells[id].replace(/"/g, '""')}"` : cells[id];
-            }
-            return cells;
-        });
+        const parsedRows = dataRows.map(row => row.split(','));
         console.log('Parsed Rows:', parsedRows); // Log the parsed rows
 
         if (id < 0 || id >= parsedRows.length) {
@@ -77,15 +72,14 @@ exports.handler = async (event) => {
             };
         }
 
-        // Update the specified column with text enclosed in quotes if needed
-        parsedRows[id][columnIndex] = text.includes(',') ? `"${text.replace(/"/g, '""')}"` : text;
+        parsedRows[id][columnIndex] = text; // Update the specified column
 
         // Convert rows back to CSV format
-        const updatedContent = [header, ...parsedRows.map(row => row.join(','))].join('\n');
+        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-            message: 'Update CSV file',
+            message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha // Required SHA for the update
         }, {
