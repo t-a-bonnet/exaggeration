@@ -72,7 +72,8 @@ exports.handler = async (event) => {
             };
         }
 
-        parsedRows[id][columnIndex] = text; // Update the specified column
+        // Update the specified column with quoted text to handle commas
+        parsedRows[id][columnIndex] = `"${text.replace(/"/g, '""')}"`;
 
         // Convert rows back to CSV format
         const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
