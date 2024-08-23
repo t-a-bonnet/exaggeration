@@ -320,25 +320,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to submit changes
     async function submitChanges() {
-        // Helper function to escape commas in text
-        function escapeCommas(text) {
-            if (text.includes(',')) {
-                text = `"${text}"`;
+        // Helper function to prepare text for CSV submission
+        function escapeCSVText(text) {
+            // If the text contains commas or quotes, wrap it in quotes and escape any quotes within the text
+            if (/[,"]/.test(text)) {
+                return `"${text.replace(/"/g, '""')}"`;
             }
             return text;
         }
 
-        // Retrieve and sanitize input values, escaping commas for text columns
-        const updatedTextA = escapeCommas(textDisplayA.value.trim()) || 'No Data';
-        const updatedTextB = escapeCommas(textDisplayB.value.trim()) || 'No Data';
-        const updatedTextATask2 = escapeCommas(textDisplayATask2.value.trim()) || 'No Data';
-        const updatedTextBTask2 = escapeCommas(textDisplayBTask2.value.trim()) || 'No Data';
-        const updatedTextATask3 = escapeCommas(textDisplayATask3.value.trim()) || 'No Data';
-        const updatedTextBTask3 = escapeCommas(textDisplayBTask3.value.trim()) || 'No Data';
+        // Retrieve and sanitize input values, preparing text for CSV submission
+        const updatedTextA = escapeCSVText(textDisplayA.value.trim() || 'No Data');
+        const updatedTextB = escapeCSVText(textDisplayB.value.trim() || 'No Data');
+        const updatedTextATask2 = escapeCSVText(textDisplayATask2.value.trim() || 'No Data');
+        const updatedTextBTask2 = escapeCSVText(textDisplayBTask2.value.trim() || 'No Data');
+        const updatedTextATask3 = escapeCSVText(textDisplayATask3.value.trim() || 'No Data');
+        const updatedTextBTask3 = escapeCSVText(textDisplayBTask3.value.trim() || 'No Data');
         const updatedStatus = statusSelect.value.trim() || 'Select status';
         const updatedCase = caseSelect.value.trim() || 'Select case';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
-        const updatedMaskedWord = escapeCommas(maskedWordDisplay.value.trim()) || 'No Data';
+        const updatedMaskedWord = escapeCSVText(maskedWordDisplay.value.trim() || 'No Data');
 
         // Get selected values for ratings, defaulting to empty string if not selected
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
