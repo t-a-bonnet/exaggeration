@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask2 = [];
     let dataATask3 = [];
     let dataBTask3 = [];
+    let agreeDisagreeData = [];
     let statusData = [];
     let caseData = [];
     let turnMaskedData = [];
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask2;
     let columnIndexATask3;
     let columnIndexBTask3;
+    let agreeDisagreeColumnIndex;
     let statusColumnIndex;
     let caseColumnIndex;
     let turnMaskedColumnIndex;
@@ -145,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
             columnIndexBTask3 = header.indexOf('speaker_b_task_3');
+            agreeDisagreeColumnIndex = header.indexOf('agree_disagree');
             statusColumnIndex = header.indexOf('status');
             caseColumnIndex = header.indexOf('case');
             turnMaskedColumnIndex = header.indexOf('turn_masked');
@@ -187,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
+            agreeDisagreeData = rows.slice(1).map(row => row[agreeDisagreeColumnIndex] || 'No Data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
@@ -209,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate and display distributions
             displayDistribution('case-distribution', calculateDistribution(rows.slice(1), caseColumnIndex));
             displayDistribution('turn-masked-distribution', calculateDistribution(rows.slice(1), turnMaskedColumnIndex));
-            displayDistribution('agree-disagree-distribution', calculateDistribution(rows.slice(1), header.indexOf('agree_disagree')));
+            displayDistribution('agree-disagree-distribution', calculateDistribution(rows.slice(1), agreeDisagreeColumnIndex));
         
             try {
                 showRow(currentRow);
