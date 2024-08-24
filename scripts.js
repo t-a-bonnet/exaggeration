@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
     const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
-    const caseSelect = document.getElementById('case-select'); // New dropdown for case
-    const turnMaskedSelect = document.getElementById('turn-masked-select'); // New dropdown for turn_masked
+    const caseSelect = document.getElementById('case-select');
+    const turnMaskedSelect = document.getElementById('turn-masked-select');
     const previousButton = document.getElementById('previous-button');
     const nextButton = document.getElementById('next-button');
     const goButton = document.getElementById('go-button');
@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask2 = [];
     let dataATask3 = [];
     let dataBTask3 = [];
-    let agreeDisagreeData = [];
     let statusData = [];
     let caseData = [];
     let turnMaskedData = [];
@@ -190,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
             dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
-            agreeDisagreeData = rows.slice(1).map(row => row[agreeDisagreeColumnIndex] || 'No Data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
