@@ -90,7 +90,7 @@ textarea {
 /* Styles for bar chart canvases */
 canvas {
     max-width: 100%; /* Ensure charts are responsive */
-    height: auto; /* Maintain aspect ratio */
+    height: 300px; /* Maintain aspect ratio */
     margin-bottom: 20px; /* Space below each chart */
 }
 
