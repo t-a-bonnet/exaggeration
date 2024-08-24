@@ -201,7 +201,7 @@ h2 {
 /* Remove borders from predictions section */
 .predictions {
     margin-top: 20px;
-    text-align: left;
+    text-align: center;
 }
 
 /* New styles for the Task 3 section */
@@ -274,6 +274,27 @@ button:hover, button:focus {
 
 button:active {
     background-color: #004085;
+}
+
+/* Styles for the filter section */
+#filter-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#filter-section label {
+    font-size: 18px;
+    color: #333;
+    margin-right: 10px;
+}
+
+#filter-section select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
 }
 
 /* Responsive adjustments */
