@@ -16,7 +16,6 @@ exports.handler = async (event) => {
     }
 
     try {
-        // Parse and validate input
         const { id, text, column } = JSON.parse(event.body);
 
         if (typeof id !== 'number' || typeof text !== 'string' || typeof column !== 'string') {
@@ -26,7 +25,7 @@ exports.handler = async (event) => {
             };
         }
 
-        // Step 1: Fetch the latest file metadata to get the current SHA
+        // Step 1: Fetch the file metadata to get the SHA
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
@@ -82,7 +81,7 @@ exports.handler = async (event) => {
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
-            sha: fileData.sha // Use the latest SHA for the update
+            sha: fileData.sha // Required SHA for the update
         }, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
