@@ -66,23 +66,14 @@ textarea {
 
 /* Distributions Section Styles */
 #distributions {
-    /* Container for all distribution boxes */
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between sections */
-    align-items: center;
-}
-
-#side-by-side-distributions {
     display: flex; /* Align child boxes horizontally */
     gap: 20px; /* Space between side-by-side boxes */
-    width: 100%; /* Ensure it takes full width */
-    max-width: 1200px; /* Optional: limit maximum width for larger screens */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
     justify-content: center; /* Center the boxes horizontally */
+    margin-bottom: 20px; /* Space below the distributions section */
 }
 
 .distribution-box {
-    /* Styling for individual distribution boxes */
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
@@ -90,26 +81,16 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center-align content */
-    max-width: 100%; /* Ensure it doesn’t exceed its container */
+    max-width: 400px; /* Limit maximum width of each box */
     box-sizing: border-box; /* Include padding and border in element’s total width and height */
 }
 
 /* Specific styles for each canvas */
-#case-distribution-chart {
-    width: 100%; /* Ensure chart fits within its container */
-    height: 200px; /* Set a fixed height for the Case Distribution chart */
-    margin-bottom: 20px; /* Space below the chart */
-}
-
-#turn-masked-distribution-chart {
-    width: 100%; /* Ensure chart fits within its container */
-    height: 200px; /* Set a fixed height for the Turn Masked Distribution chart */
-    margin-bottom: 20px; /* Space below the chart */
-}
-
+#case-distribution-chart,
+#turn-masked-distribution-chart,
 #agree-disagree-distribution-chart {
     width: 100%; /* Ensure chart fits within its container */
-    height: 200px; /* Set a fixed height for the Agree/Disagree Distribution chart */
+    height: 200px; /* Set a fixed height for the charts */
     margin-bottom: 20px; /* Space below the chart */
 }
 
