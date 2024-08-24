@@ -232,18 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
             informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
             informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
-
+        
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
             displayDistribution('agree-disagree-distribution-chart', calculateDistribution(rows, agreeDisagreeColumnIndex));
-
+        
             try {
                 showRow(currentRow);
             } catch (err) {
                 throw new Error('Error displaying row: ' + err.message);
             }
-
+        
         } catch (error) {
             console.error('Error loading CSV:', error);
             textDisplayA.value = 'Error loading CSV data.';
@@ -368,126 +368,126 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to submit changes
-    function submitChanges() {
-        // Ensure currentRow is within bounds
-        if (currentRow < 0 || currentRow >= dataA.length) {
-            alert('Current row index is out of bounds.');
-            return;
+    async function submitChanges() {
+        // Retrieve and sanitize input values
+        const updatedTextA = textDisplayA.value.trim() || 'No Data';
+        const updatedTextB = textDisplayB.value.trim() || 'No Data';
+        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
+        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
+        const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
+        const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
+        const updatedStatus = statusSelect.value.trim() || 'Select status';
+        const updatedCase = caseSelect.value.trim() || 'Select case';
+        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
+        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+
+        // Get selected values for ratings, defaulting to empty string if not selected
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
+        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
+        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
+
+        submitButton.disabled = true;
+
+        // Helper function to update a column
+        async function updateColumn(columnName, updatedValue) {
+            try {
+                const response = await fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: currentRow,
+                        text: updatedValue,
+                        column: columnName
+                    })
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+                return result;
+            } catch (error) {
+                alert(`Error updating column "${columnName}": ${error.message}`);
+                throw error; // Rethrow to handle in the outer try/catch
+            }
         }
 
-        // Gather updated values from the form
-        const updatedDataA = textDisplayA.value;
-        const updatedDataB = textDisplayB.value;
-        const updatedDataATask2 = textDisplayATask2.value;
-        const updatedDataBTask2 = textDisplayBTask2.value;
-        const updatedDataATask3 = textDisplayATask3.value;
-        const updatedDataBTask3 = textDisplayBTask3.value;
+        // Array of columns and their values to be updated
+        const updates = [
+            { columnName: 'speaker_a_task_1', value: updatedTextA },
+            { columnName: 'speaker_b_task_1', value: updatedTextB },
+            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
+            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
+            { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
+            { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
+            { columnName: 'status', value: updatedStatus },
+            { columnName: 'case', value: updatedCase },
+            { columnName: 'turn_masked', value: updatedTurnMasked },
+            { columnName: 'masked_word', value: updatedMaskedWord },
+            { columnName: 'coherence_task_1', value: updatedCoherence1 },
+            { columnName: 'coherence_task_2', value: updatedCoherence2 },
+            { columnName: 'coherence_task_3', value: updatedCoherence3 },
+            { columnName: 'agreement_task_1', value: updatedAgreement1 },
+            { columnName: 'agreement_task_2', value: updatedAgreement2 },
+            { columnName: 'agreement_task_3', value: updatedAgreement3 },
+            { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
+            { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
+            { columnName: 'informativeness_task_3', value: updatedInformativeness3 }
+        ];
 
-        const updatedStatus = statusSelect.value;
-        const updatedCase = caseSelect.value;
-        const updatedTurnMasked = turnMaskedSelect.value;
-
-        const updatedRobertaPreds = robertaPredsDisplay.textContent;
-        const updatedLlamaPreds = llamaPredsDisplay.textContent;
-        const updatedGemmaPreds = gemmaPredsDisplay.textContent;
-        const updatedMaskedWords = maskedWordDisplay.value;
-        const updatedOriginalDataA = originalADisplay.textContent;
-        const updatedOriginalDataB = originalBDisplay.textContent;
-
-        const updatedCoherenceRating1 = getCheckedValue(coherenceRadioButtons1);
-        const updatedCoherenceRating2 = getCheckedValue(coherenceRadioButtons2);
-        const updatedCoherenceRating3 = getCheckedValue(coherenceRadioButtons3);
-
-        const updatedAgreementRating1 = getCheckedValue(agreementRadioButtons1);
-        const updatedAgreementRating2 = getCheckedValue(agreementRadioButtons2);
-        const updatedAgreementRating3 = getCheckedValue(agreementRadioButtons3);
-
-        const updatedInformativenessRating1 = getCheckedValue(informativenessRadioButtons1);
-        const updatedInformativenessRating2 = getCheckedValue(informativenessRadioButtons2);
-        const updatedInformativenessRating3 = getCheckedValue(informativenessRadioButtons3);
-
-        // Prepare the data to be updated in the data arrays
-        dataA[currentRow] = updatedDataA;
-        dataB[currentRow] = updatedDataB;
-        dataATask2[currentRow] = updatedDataATask2;
-        dataBTask2[currentRow] = updatedDataBTask2;
-        dataATask3[currentRow] = updatedDataATask3;
-        dataBTask3[currentRow] = updatedDataBTask3;
-        statusData[currentRow] = updatedStatus;
-        caseData[currentRow] = updatedCase;
-        turnMaskedData[currentRow] = updatedTurnMasked;
-        robertaPreds[currentRow] = updatedRobertaPreds;
-        llamaPreds[currentRow] = updatedLlamaPreds;
-        gemmaPreds[currentRow] = updatedGemmaPreds;
-        maskedWords[currentRow] = updatedMaskedWords;
-        originalDataA[currentRow] = updatedOriginalDataA;
-        originalDataB[currentRow] = updatedOriginalDataB;
-        coherenceRatings1[currentRow] = updatedCoherenceRating1;
-        coherenceRatings2[currentRow] = updatedCoherenceRating2;
-        coherenceRatings3[currentRow] = updatedCoherenceRating3;
-        agreementRatings1[currentRow] = updatedAgreementRating1;
-        agreementRatings2[currentRow] = updatedAgreementRating2;
-        agreementRatings3[currentRow] = updatedAgreementRating3;
-        informativenessRatings1[currentRow] = updatedInformativenessRating1;
-        informativenessRatings2[currentRow] = updatedInformativenessRating2;
-        informativenessRatings3[currentRow] = updatedInformativenessRating3;
-
-        // Provide feedback to the user
-        alert('Changes submitted successfully.');
-    }
-
-    // Helper function to get the checked value from a group of radio buttons
-    function getCheckedValue(radioButtons) {
-        let checkedValue = '';
-        radioButtons.forEach(button => {
-            if (button.checked) {
-                checkedValue = button.value;
+        // Update columns sequentially
+        try {
+            for (const { columnName, value } of updates) {
+                await updateColumn(columnName, value);
             }
-        });
-        return checkedValue;
+
+            // Update local data arrays after successful submission
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            dataATask3[currentRow] = updatedTextATask3;
+            dataBTask3[currentRow] = updatedTextBTask3;
+            statusData[currentRow] = updatedStatus;
+            caseData[currentRow] = updatedCase;
+            turnMaskedData[currentRow] = updatedTurnMasked;
+            maskedWords[currentRow] = updatedMaskedWord;
+            coherenceRatings1[currentRow] = updatedCoherence1;
+            coherenceRatings2[currentRow] = updatedCoherence2;
+            coherenceRatings3[currentRow] = updatedCoherence3;
+            agreementRatings1[currentRow] = updatedAgreement1;
+            agreementRatings2[currentRow] = updatedAgreement2;
+            agreementRatings3[currentRow] = updatedAgreement3;
+            informativenessRatings1[currentRow] = updatedInformativeness1;
+            informativenessRatings2[currentRow] = updatedInformativeness2;
+            informativenessRatings3[currentRow] = updatedInformativeness3;
+
+            // Notify the user of successful submission
+            alert('Changes successfully submitted!');
+
+        } catch (error) {
+            console.error('Error submitting changes:', error);
+            alert('Error submitting changes: ' + error.message);
+        } finally {
+            // Re-enable submit button after submission is complete
+            submitButton.disabled = false;
+        }
     }
 
-    // Event listeners for buttons
-    previousButton.addEventListener('click', showPreviousRow);
-    nextButton.addEventListener('click', showNextRow);
-    goToRowButton.addEventListener('click', goToRow);
-    submitButton.addEventListener('click', submitChanges);
+        // Event listeners
+        previousButton.addEventListener('click', showPreviousRow);
+        nextButton.addEventListener('click', showNextRow);
+        goButton.addEventListener('click', goToRow);
+        submitButton.addEventListener('click', submitChanges);
 
-    // Initialize the first row display
-    showRow(currentRow);
-
-    // Functions to handle chart displays
-    function displayDistribution(chartId, data) {
-        const ctx = document.getElementById(chartId).getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data),
-                datasets: [{
-                    label: 'Distribution',
-                    data: Object.values(data),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    function calculateDistribution(rows, columnIndex) {
-        const distribution = {};
-        rows.slice(1).forEach(row => {
-            const value = row[columnIndex] || 'No Data';
-            distribution[value] = (distribution[value] || 0) + 1;
-        });
-        return distribution;
-    }
-});
-   
+        // Load the CSV data on page load
+        loadCSV();
+    });
