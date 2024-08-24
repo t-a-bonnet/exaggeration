@@ -1,30 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Add event listener to the status filter dropdown
-    document.getElementById('status-filter').addEventListener('change', function() {
-        // Get the selected status value
-        var selectedStatus = this.value;
-        
-        // Implement filtering logic here
-        filterByStatus(selectedStatus);
-    });
-
-    // Example function to filter rows based on the status
-    function filterByStatus(status) {
-        // Assuming you have a way to get your rows, e.g., an array of elements or a table
-        var rows = document.querySelectorAll('.data-row'); // Modify as needed for your structure
-
-        rows.forEach(function(row) {
-            // Assume each row has a data-status attribute or similar
-            var rowStatus = row.getAttribute('data-status');
-            
-            if (status === 'all' || rowStatus === status) {
-                row.style.display = ''; // Show the row
-            } else {
-                row.style.display = 'none'; // Hide the row
-            }
-        });
-    }
-
     // Function to calculate distribution
     function calculateDistribution(data, key) {
         const distribution = {};
@@ -191,23 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-
-            statusColumnIndex = header.indexOf('status');
-
-            if (statusColumnIndex === undefined) {
-                console.error('Status column not found');
-                return;
-            }
-    
-            // Populate rows and set data-status attribute
-            rows.slice(1).forEach((row, index) => {
-                const status = row[statusColumnIndex] || 'Select status';
-                const rowElement = document.querySelector(`.row[data-index="${index}"]`);
-                if (rowElement) {
-                    rowElement.setAttribute('data-status', status);
-                }
-            });
-
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
@@ -280,21 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
             displayDistribution('agree-disagree-distribution-chart', calculateDistribution(rows, agreeDisagreeColumnIndex));
-
-            // Initialize event listeners if needed
-            statusFilter.addEventListener('change', function() {
-                const selectedStatus = statusFilter.value;
-
-                document.querySelectorAll('.row').forEach(row => {
-                    const rowStatus = row.getAttribute('data-status');
-
-                    if (selectedStatus === 'all' || rowStatus === selectedStatus) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
         
             try {
                 showRow(currentRow);

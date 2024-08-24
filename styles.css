@@ -82,7 +82,7 @@ textarea {
     flex-direction: column;
     align-items: center; /* Center-align content */
     max-width: 400px; /* Limit maximum width of each box */
-    box-sizing: border-box; /* Include padding and border in element’s total width and height */
+    box-sizing: border-box; /* Include padding and border in elementâ€™s total width and height */
 }
 
 /* Specific styles for each canvas */
@@ -274,27 +274,6 @@ button:hover, button:focus {
 
 button:active {
     background-color: #004085;
-}
-
-/* Styles for the filter section */
-#filter-section {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-#filter-section label {
-    font-size: 18px;
-    color: #333;
-    margin-right: 10px;
-}
-
-#filter-section select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
 }
 
 /* Responsive adjustments */
