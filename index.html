@@ -9,22 +9,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <canvas id="case-distribution-chart" width="400" height="200"></canvas>
+    <canvas id="turn-masked-distribution-chart" width="400" height="200"></canvas>
+    <canvas id="agree-disagree-distribution-chart" width="400" height="200"></canvas>
+
     <div id="main-wrapper">
         <div id="container">
             <!-- Distributions Section -->
             <div id="distributions">
                 <div class="distribution-box">
                     <h2>Case Distribution</h2>
-                    <canvas id="case-distribution-chart" width="400" height="200"></canvas>
+                    <p id="case-distribution">Loading...</p>
                 </div>
                 <div id="side-by-side-distributions">
                     <div class="distribution-box">
                         <h2>Turn Masked Distribution</h2>
-                        <canvas id="turn-masked-distribution-chart" width="400" height="200"></canvas>
+                        <p id="turn-masked-distribution">Loading...</p>
                     </div>
                     <div class="distribution-box">
                         <h2>Agree/Disagree Distribution</h2>
-                        <canvas id="agree-disagree-distribution-chart" width="400" height="200"></canvas>
+                        <p id="agree-disagree-distribution">Loading...</p>
                     </div>
                 </div>
             </div>
