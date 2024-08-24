@@ -67,60 +67,28 @@ textarea {
 
 /* Distributions Section Styles */
 #distributions {
+    /* Container for all distribution boxes */
     display: flex;
     flex-direction: column;
     gap: 20px; /* Space between sections */
 }
 
 #side-by-side-distributions {
+    /* Container for side-by-side distributions */
     display: flex;
     gap: 20px; /* Space between side-by-side boxes */
 }
 
 .distribution-box {
+    /* Styling for individual distribution boxes */
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    overflow: hidden; /* Ensure bars don't overflow */
-    min-width: 0; /* Prevent flex items from growing too large */
+    flex: 1; /* Allows boxes to grow equally */
 }
-
-/* Bar styles */
-.distribution-bar {
-    height: 30px; /* Height of the bars */
-    background-color: #007bff; /* Default color of the bars */
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px; /* Padding inside the bar */
-    color: #fff; /* Text color inside the bar */
-    font-size: 14px; /* Text size inside the bar */
-    box-sizing: border-box; /* Include padding in width calculation */
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 0; /* Default width, will be set dynamically */
-}
-
-/* Specific colors for different bar types */
-.case-bar {
-    background-color: #28a745; /* Green for case distribution */
-}
-
-.agree-disagree-bar {
-    background-color: #ffc107; /* Yellow for agree/disagree distribution */
-}
-
-.turn-masked-bar {
-    background-color: #dc3545; /* Red for turn masked distribution */
-}
-
-/* To dynamically adjust the width of bars, inline styles or JavaScript updates can be used */
 
 h2 {
+    /* Styling for headers inside distribution boxes */
     font-size: 18px;
     margin: 0 0 10px;
 }
@@ -318,9 +286,9 @@ button:active {
     }
 
     input[type="number"] {
-        width: 100%; /* Ensure input fields take full width on smaller screens */
+        width: 100%;
     }
-
+    
     /* Responsive adjustments for predictions section */
     .predictions {
         margin-top: 10px;
