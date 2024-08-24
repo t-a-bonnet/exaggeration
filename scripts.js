@@ -3,17 +3,41 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculateDistribution(data, key) {
         const distribution = {};
         data.forEach(item => {
-            distribution[item[key]] = (distribution[item[key]] || 0) + 1;
+            const value = item[key];
+            if (value !== undefined && value !== null) {
+                distribution[value] = (distribution[value] || 0) + 1;
+            }
         });
         return distribution;
     }
 
-    // Display distributions
-    function displayDistribution(elementId, distribution) {
-        const element = document.getElementById(elementId);
-        element.textContent = Object.entries(distribution)
-            .map(([key, count]) => `${key}: ${count}`)
-            .join(', ');
+    // Function to display distribution using Chart.js
+    function displayDistribution(chartId, distribution) {
+        const ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(distribution),
+                datasets: [{
+                    label: 'Count',
+                    data: Object.values(distribution),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     }
 
     const textDisplayA = document.getElementById('text-display-a');
@@ -208,10 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
             informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
         
-            // Calculate and display distributions
-            displayDistribution('case-distribution', calculateDistribution(rows.slice(1), caseColumnIndex));
-            displayDistribution('turn-masked-distribution', calculateDistribution(rows.slice(1), turnMaskedColumnIndex));
-            displayDistribution('agree-disagree-distribution', calculateDistribution(rows.slice(1), agreeDisagreeColumnIndex));
+            // Calculate and display distributions using Chart.js
+            displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
+            displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
+            displayDistribution('agree-disagree-distribution-chart', calculateDistribution(rows, agreeDisagreeColumnIndex));
         
             try {
                 showRow(currentRow);

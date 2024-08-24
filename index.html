@@ -6,8 +6,13 @@
     <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
     <title>CSV Text Viewer</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <canvas id="case-distribution-chart" width="400" height="200"></canvas>
+    <canvas id="turn-masked-distribution-chart" width="400" height="200"></canvas>
+    <canvas id="agree-disagree-distribution-chart" width="400" height="200"></canvas>
+
     <div id="main-wrapper">
         <div id="container">
             <!-- Distributions Section -->
