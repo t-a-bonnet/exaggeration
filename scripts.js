@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Function to calculate distribution
+    function calculateDistribution(data, key) {
+        const distribution = {};
+        data.forEach(item => {
+            distribution[item[key]] = (distribution[item[key]] || 0) + 1;
+        });
+        return distribution;
+    }
+
+    // Display distributions
+    function displayDistribution(elementId, distribution) {
+        const element = document.getElementById(elementId);
+        element.textContent = Object.entries(distribution)
+            .map(([key, count]) => `${key}: ${count}`)
+            .join(', ');
+    }
+
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -188,13 +205,18 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
             informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
             informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
-
+        
+            // Calculate and display distributions
+            displayDistribution('case-distribution', calculateDistribution(rows.slice(1), caseColumnIndex));
+            displayDistribution('turn-masked-distribution', calculateDistribution(rows.slice(1), turnMaskedColumnIndex));
+            displayDistribution('agree-disagree-distribution', calculateDistribution(rows.slice(1), header.indexOf('agree_disagree')));
+        
             try {
                 showRow(currentRow);
             } catch (err) {
                 throw new Error('Error displaying row: ' + err.message);
             }
-
+        
         } catch (error) {
             console.error('Error loading CSV:', error);
             textDisplayA.value = 'Error loading CSV data.';
@@ -210,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             originalADisplay.textContent = 'Error loading CSV data.';
             originalBDisplay.textContent = 'Error loading CSV data.';
         }
-    }
+    };
 
     // Function to display a specific row
     function showRow(index) {

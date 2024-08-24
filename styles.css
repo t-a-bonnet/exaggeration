@@ -65,6 +65,34 @@ textarea {
     resize: vertical;
 }
 
+/* Distributions Section Styles */
+#distributions {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    border-radius: 4px;
+}
+
+.distribution-box {
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.distribution-box h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.distribution-box p {
+    font-size: 16px;
+    color: #666;
+}
+
 /* Styles for speaker_a_original and speaker_b_original */
 .speaker_a_original,
 .speaker_b_original {
