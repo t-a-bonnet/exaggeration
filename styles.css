@@ -73,12 +73,6 @@ textarea {
     align-items: center;
 }
 
-#side-by-side-distributions {
-    /* Container for side-by-side distributions */
-    display: flex;
-    gap: 20px; /* Space between side-by-side boxes */
-}
-
 .distribution-box {
     /* Styling for individual distribution boxes */
     border: 1px solid #ccc;
