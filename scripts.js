@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const filterSelect = document.getElementById('status-filter');
+    const dataTableRows = document.querySelectorAll('#data-table tbody tr');
+
+    filterSelect.addEventListener('change', function() {
+        const selectedStatus = filterSelect.value;
+
+        dataTableRows.forEach(row => {
+            const rowStatus = row.getAttribute('data-status');
+            if (selectedStatus === 'all' || rowStatus === selectedStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
     // Function to calculate distribution
     function calculateDistribution(data, key) {
         const distribution = {};
