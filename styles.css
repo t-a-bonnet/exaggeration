@@ -85,12 +85,15 @@ textarea {
     padding: 10px;
     border-radius: 5px;
     flex: 1; /* Allows boxes to grow equally */
+    height: 300px; /* Set fixed height to match chart height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Styles for bar chart canvases */
 canvas {
     max-width: 100%; /* Ensure charts are responsive */
-    height: 300px; /* Set a fixed height for all charts */
+    height: 300px; /* Fixed height to match container */
     margin-bottom: 20px; /* Space below each chart */
 }
 
