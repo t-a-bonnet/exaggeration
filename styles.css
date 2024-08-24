@@ -93,8 +93,8 @@ textarea {
 
 /* Specific styles for each canvas */
 #case-distribution-chart {
-    width: 100% !important; /* Ensure chart fits within its container */
-    height: 200px !important; /* Set a fixed height for the Case Distribution chart */
+    width: 100%; /* Ensure chart fits within its container */
+    height: 200px; /* Set a fixed height for the Case Distribution chart */
     margin-bottom: 20px; /* Space below the chart */
 }
 
