@@ -7,6 +7,19 @@ const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'Appen data 16.8.2024.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
+// Helper function to escape CSV fields
+function escapeCSVField(field) {
+    // Escape double quotes by doubling them
+    let escapedField = field.replace(/"/g, '""');
+    
+    // If the field contains commas, double quotes, or new lines, enclose it in double quotes
+    if (escapedField.includes(',') || escapedField.includes('"') || escapedField.includes('\n')) {
+        escapedField = `"${escapedField}"`;
+    }
+    
+    return escapedField;
+}
+
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return {
@@ -37,8 +50,6 @@ exports.handler = async (event) => {
         const fileContentResponse = await axios.get(fileData.download_url);
         const fileContent = fileContentResponse.data;
 
-        console.log('File Content:', fileContent); // Log the entire file content
-
         const rows = fileContent.trim().split('\n'); // Split into rows
         if (rows.length < 2) {
             console.error('Not enough rows in CSV file.');
@@ -48,11 +59,9 @@ exports.handler = async (event) => {
             };
         }
 
-        const header = rows[0].split(','); // Extract the header row
-        const columnIndex = header.indexOf(column); // Find the index of the specified column
-
-        console.log('Header:', header); // Log the header row
-        console.log('Column Index of', column, ':', columnIndex); // Log the column index
+        const header = rows[0]; // Extract the header row as a single string
+        const headerFields = header.split(','); // Split header into fields
+        const columnIndex = headerFields.indexOf(column); // Find the index of the specified column
 
         if (columnIndex === -1) {
             return {
@@ -63,7 +72,6 @@ exports.handler = async (event) => {
 
         const dataRows = rows.slice(1); // Skip the header row
         const parsedRows = dataRows.map(row => row.split(','));
-        console.log('Parsed Rows:', parsedRows); // Log the parsed rows
 
         if (id < 0 || id >= parsedRows.length) {
             return {
@@ -72,10 +80,11 @@ exports.handler = async (event) => {
             };
         }
 
-        parsedRows[id][columnIndex] = text; // Update the specified column
+        // Update the specified column with escaped text
+        parsedRows[id][columnIndex] = escapeCSVField(text);
 
-        // Convert rows back to CSV format
-        const updatedContent = [header, ...parsedRows].map(row => row.join(',')).join('\n');
+        // Convert rows back to CSV format with proper escaping
+        const updatedContent = [header, ...parsedRows.map(row => row.join(','))].join('\n');
 
         // Step 3: Update the file on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
