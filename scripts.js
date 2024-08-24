@@ -322,77 +322,94 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve and sanitize input values
-        const inputs = {
-            textA: textDisplayA.value.trim() || 'No Data',
-            textB: textDisplayB.value.trim() || 'No Data',
-            textATask2: textDisplayATask2.value.trim() || 'No Data',
-            textBTask2: textDisplayBTask2.value.trim() || 'No Data',
-            status: statusSelect.value.trim() || 'Select status',
-            case: caseSelect.value.trim() || 'Select case',
-            turnMasked: turnMaskedSelect.value.trim() || 'Select turn',
-            maskedWord: maskedWordDisplay.value.trim() || 'No Data',
-            coherence1: document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence',
-            coherence2: document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence',
-            agreement1: document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement',
-            agreement2: document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement',
-            informativeness1: document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness',
-            informativeness2: document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness'
-        };
+        const updatedTextA = textDisplayA.value.trim() || 'No Data';
+        const updatedTextB = textDisplayB.value.trim() || 'No Data';
+        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
+        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
+        const updatedStatus = statusSelect.value.trim() || 'Select status';
+        const updatedCase = caseSelect.value.trim() || 'Select case';
+        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
+        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+
+        // Get selected values for ratings, defaulting to empty string if not selected
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
 
         submitButton.disabled = true;
 
-        try {
-            // Single request to update all columns
-            const response = await fetch('/.netlify/functions/update-csv', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: currentRow,
-                    updates: {
-                        speaker_a_task_1: inputs.textA,
-                        speaker_b_task_1: inputs.textB,
-                        speaker_a_task_2: inputs.textATask2,
-                        speaker_b_task_2: inputs.textBTask2,
-                        status: inputs.status,
-                        case: inputs.case,
-                        turn_masked: inputs.turnMasked,
-                        masked_word: inputs.maskedWord,
-                        coherence_task_1: inputs.coherence1,
-                        coherence_task_2: inputs.coherence2,
-                        agreement_task_1: inputs.agreement1,
-                        agreement_task_2: inputs.agreement2,
-                        informativeness_task_1: inputs.informativeness1,
-                        informativeness_task_2: inputs.informativeness2
-                    }
-                })
-            });
+        // Helper function to update a column
+        async function updateColumn(columnName, updatedValue) {
+            try {
+                const response = await fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: currentRow,
+                        text: updatedValue,
+                        column: columnName
+                    })
+                });
 
-            const result = await response.json();
-            if (!result.success) {
-                throw new Error(result.message);
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+                return result;
+            } catch (error) {
+                alert(`Error updating column "${columnName}": ${error.message}`);
+                throw error; // Rethrow to handle in the outer try/catch
+            }
+        }
+
+        // Array of columns and their values to be updated
+        const updates = [
+            { columnName: 'speaker_a_task_1', value: updatedTextA },
+            { columnName: 'speaker_b_task_1', value: updatedTextB },
+            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
+            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
+            { columnName: 'status', value: updatedStatus },
+            { columnName: 'case', value: updatedCase },
+            { columnName: 'turn_masked', value: updatedTurnMasked },
+            { columnName: 'masked_word', value: updatedMaskedWord },
+            { columnName: 'coherence_task_1', value: updatedCoherence1 },
+            { columnName: 'coherence_task_2', value: updatedCoherence2 },
+            { columnName: 'agreement_task_1', value: updatedAgreement1 },
+            { columnName: 'agreement_task_2', value: updatedAgreement2 },
+            { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
+            { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
+        ];
+
+        // Update columns sequentially
+        try {
+            for (const { columnName, value } of updates) {
+                await updateColumn(columnName, value);
             }
 
             // Update local data arrays after successful submission
-            Object.assign(dataA, { [currentRow]: inputs.textA });
-            Object.assign(dataB, { [currentRow]: inputs.textB });
-            Object.assign(dataATask2, { [currentRow]: inputs.textATask2 });
-            Object.assign(dataBTask2, { [currentRow]: inputs.textBTask2 });
-            Object.assign(statusData, { [currentRow]: inputs.status });
-            Object.assign(caseData, { [currentRow]: inputs.case });
-            Object.assign(turnMaskedData, { [currentRow]: inputs.turnMasked });
-            Object.assign(maskedWords, { [currentRow]: inputs.maskedWord });
-            Object.assign(coherenceRatings1, { [currentRow]: inputs.coherence1 });
-            Object.assign(coherenceRatings2, { [currentRow]: inputs.coherence2 });
-            Object.assign(agreementRatings1, { [currentRow]: inputs.agreement1 });
-            Object.assign(agreementRatings2, { [currentRow]: inputs.agreement2 });
-            Object.assign(informativenessRatings1, { [currentRow]: inputs.informativeness1 });
-            Object.assign(informativenessRatings2, { [currentRow]: inputs.informativeness2 });
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            statusData[currentRow] = updatedStatus;
+            caseData[currentRow] = updatedCase;
+            turnMaskedData[currentRow] = updatedTurnMasked;
+            maskedWords[currentRow] = updatedMaskedWord;
+            coherenceRatings1[currentRow] = updatedCoherence1;
+            coherenceRatings2[currentRow] = updatedCoherence2;
+            agreementRatings1[currentRow] = updatedAgreement1;
+            agreementRatings2[currentRow] = updatedAgreement2;
+            informativenessRatings1[currentRow] = updatedInformativeness1;
+            informativenessRatings2[currentRow] = updatedInformativeness2;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
-            
+
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
