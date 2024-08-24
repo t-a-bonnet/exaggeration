@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
             informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
 
-            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
+            if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
                 textDisplayA.value = 'Required columns not found.';
                 textDisplayB.value = 'Required columns not found.';
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         // Check if the data arrays are not empty
-        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || dataATask3.length === 0 || dataBTask3.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
+        if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
 
         // Display text inputs, defaulting to 'No Data' if empty
         textDisplayA.value = dataA[index] || 'No Data';
