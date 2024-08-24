@@ -10,10 +10,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Display distributions
     function displayDistribution(elementId, distribution) {
-        const element = document.getElementById(elementId);
-        element.textContent = Object.entries(distribution)
-            .map(([key, count]) => `${key}: ${count}`)
-            .join(', ');
+        const ctx = document.getElementById(elementId).getContext('2d');
+        const labels = Object.keys(distribution);
+        const data = Object.values(distribution);
+    
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Distribution',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     }
 
     const textDisplayA = document.getElementById('text-display-a');
@@ -45,6 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const informativenessRadioButtons1 = document.querySelectorAll('input[name="informativeness1"]');
     const informativenessRadioButtons2 = document.querySelectorAll('input[name="informativeness2"]');
     const informativenessRadioButtons3 = document.querySelectorAll('input[name="informativeness3"]');
+    const ctxCaseDistribution = document.getElementById('case-distribution').getContext('2d');
+
+    new Chart(ctxCaseDistribution, {
+        type: 'bar',
+        data: {
+            labels: ['Label1', 'Label2', 'Label3'],
+            datasets: [{
+                label: 'Case Distribution',
+                data: [12, 19, 3],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 
     let currentRow = 0;
     let dataA = [];
@@ -209,9 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
         
             // Calculate and display distributions
-            displayDistribution('case-distribution', calculateDistribution(rows.slice(1), caseColumnIndex));
-            displayDistribution('turn-masked-distribution', calculateDistribution(rows.slice(1), turnMaskedColumnIndex));
-            displayDistribution('agree-disagree-distribution', calculateDistribution(rows.slice(1), agreeDisagreeColumnIndex));
+            displayDistribution('case-distribution', calculateDistribution(caseData, 0));
+            displayDistribution('turn-masked-distribution', calculateDistribution(turnMaskedData, 0));
+            displayDistribution('agree-disagree-distribution', calculateDistribution(agreeDisagreeData, 0));
         
             try {
                 showRow(currentRow);
