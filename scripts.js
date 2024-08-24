@@ -319,29 +319,30 @@ document.addEventListener('DOMContentLoaded', () => {
         showRow(currentRow);
     }
 
+    // Function to submit changes
     async function submitChanges() {
         // Retrieve and sanitize input values
-        const updatedValues = {
-            'speaker_a_task_1': textDisplayA.value.trim() || 'No Data',
-            'speaker_b_task_1': textDisplayB.value.trim() || 'No Data',
-            'speaker_a_task_2': textDisplayATask2.value.trim() || 'No Data',
-            'speaker_b_task_2': textDisplayBTask2.value.trim() || 'No Data',
-            'status': statusSelect.value.trim() || 'Select status',
-            'case': caseSelect.value.trim() || 'Select case',
-            'turn_masked': turnMaskedSelect.value.trim() || 'Select turn',
-            'masked_word': maskedWordDisplay.value.trim() || 'No Data',
-            'coherence_task_1': document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence',
-            'coherence_task_2': document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence',
-            'agreement_task_1': document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement',
-            'agreement_task_2': document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement',
-            'informativeness_task_1': document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness',
-            'informativeness_task_2': document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness'
+        const inputs = {
+            textA: textDisplayA.value.trim() || 'No Data',
+            textB: textDisplayB.value.trim() || 'No Data',
+            textATask2: textDisplayATask2.value.trim() || 'No Data',
+            textBTask2: textDisplayBTask2.value.trim() || 'No Data',
+            status: statusSelect.value.trim() || 'Select status',
+            case: caseSelect.value.trim() || 'Select case',
+            turnMasked: turnMaskedSelect.value.trim() || 'Select turn',
+            maskedWord: maskedWordDisplay.value.trim() || 'No Data',
+            coherence1: document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence',
+            coherence2: document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence',
+            agreement1: document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement',
+            agreement2: document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement',
+            informativeness1: document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness',
+            informativeness2: document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness'
         };
-    
+
         submitButton.disabled = true;
-    
+
         try {
-            // Send a single batch request with all updates
+            // Single request to update all columns
             const response = await fetch('/.netlify/functions/update-csv', {
                 method: 'POST',
                 headers: {
@@ -349,34 +350,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({
                     id: currentRow,
-                    updates: updatedValues
+                    updates: {
+                        speaker_a_task_1: inputs.textA,
+                        speaker_b_task_1: inputs.textB,
+                        speaker_a_task_2: inputs.textATask2,
+                        speaker_b_task_2: inputs.textBTask2,
+                        status: inputs.status,
+                        case: inputs.case,
+                        turn_masked: inputs.turnMasked,
+                        masked_word: inputs.maskedWord,
+                        coherence_task_1: inputs.coherence1,
+                        coherence_task_2: inputs.coherence2,
+                        agreement_task_1: inputs.agreement1,
+                        agreement_task_2: inputs.agreement2,
+                        informativeness_task_1: inputs.informativeness1,
+                        informativeness_task_2: inputs.informativeness2
+                    }
                 })
             });
-    
+
             const result = await response.json();
             if (!result.success) {
                 throw new Error(result.message);
             }
-    
+
             // Update local data arrays after successful submission
-            dataA[currentRow] = updatedValues['speaker_a_task_1'];
-            dataB[currentRow] = updatedValues['speaker_b_task_1'];
-            dataATask2[currentRow] = updatedValues['speaker_a_task_2'];
-            dataBTask2[currentRow] = updatedValues['speaker_b_task_2'];
-            statusData[currentRow] = updatedValues['status'];
-            caseData[currentRow] = updatedValues['case'];
-            turnMaskedData[currentRow] = updatedValues['turn_masked'];
-            maskedWords[currentRow] = updatedValues['masked_word'];
-            coherenceRatings1[currentRow] = updatedValues['coherence_task_1'];
-            coherenceRatings2[currentRow] = updatedValues['coherence_task_2'];
-            agreementRatings1[currentRow] = updatedValues['agreement_task_1'];
-            agreementRatings2[currentRow] = updatedValues['agreement_task_2'];
-            informativenessRatings1[currentRow] = updatedValues['informativeness_task_1'];
-            informativenessRatings2[currentRow] = updatedValues['informativeness_task_2'];
-    
+            Object.assign(dataA, { [currentRow]: inputs.textA });
+            Object.assign(dataB, { [currentRow]: inputs.textB });
+            Object.assign(dataATask2, { [currentRow]: inputs.textATask2 });
+            Object.assign(dataBTask2, { [currentRow]: inputs.textBTask2 });
+            Object.assign(statusData, { [currentRow]: inputs.status });
+            Object.assign(caseData, { [currentRow]: inputs.case });
+            Object.assign(turnMaskedData, { [currentRow]: inputs.turnMasked });
+            Object.assign(maskedWords, { [currentRow]: inputs.maskedWord });
+            Object.assign(coherenceRatings1, { [currentRow]: inputs.coherence1 });
+            Object.assign(coherenceRatings2, { [currentRow]: inputs.coherence2 });
+            Object.assign(agreementRatings1, { [currentRow]: inputs.agreement1 });
+            Object.assign(agreementRatings2, { [currentRow]: inputs.agreement2 });
+            Object.assign(informativenessRatings1, { [currentRow]: inputs.informativeness1 });
+            Object.assign(informativenessRatings2, { [currentRow]: inputs.informativeness2 });
+
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
-    
+            
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
