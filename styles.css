@@ -87,6 +87,13 @@ textarea {
     flex: 1; /* Allows boxes to grow equally */
 }
 
+/* Styles for bar chart canvases */
+canvas {
+    max-width: 100%; /* Ensure charts are responsive */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Space below each chart */
+}
+
 h2 {
     /* Styling for headers inside distribution boxes */
     font-size: 18px;
