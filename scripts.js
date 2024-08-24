@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
-    const textDisplayATask3 = document.getElementById('text-display-a-task-3');
-    const textDisplayBTask3 = document.getElementById('text-display-b-task-3');
     const statusSelect = document.getElementById('status-select');
     const caseSelect = document.getElementById('case-select');
     const turnMaskedSelect = document.getElementById('turn-masked-select');
@@ -63,21 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const originalBDisplay = document.getElementById('original-b');
     const coherenceRadioButtons1 = document.querySelectorAll('input[name="coherence1"]');
     const coherenceRadioButtons2 = document.querySelectorAll('input[name="coherence2"]');
-    const coherenceRadioButtons3 = document.querySelectorAll('input[name="coherence3"]');
     const agreementRadioButtons1 = document.querySelectorAll('input[name="agreement1"]');
     const agreementRadioButtons2 = document.querySelectorAll('input[name="agreement2"]');
-    const agreementRadioButtons3 = document.querySelectorAll('input[name="agreement3"]');
     const informativenessRadioButtons1 = document.querySelectorAll('input[name="informativeness1"]');
     const informativenessRadioButtons2 = document.querySelectorAll('input[name="informativeness2"]');
-    const informativenessRadioButtons3 = document.querySelectorAll('input[name="informativeness3"]');
 
     let currentRow = 0;
     let dataA = [];
     let dataB = [];
     let dataATask2 = [];
     let dataBTask2 = [];
-    let dataATask3 = [];
-    let dataBTask3 = [];
     let statusData = [];
     let caseData = [];
     let turnMaskedData = [];
@@ -89,20 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let originalDataB = [];
     let coherenceRatings1 = [];
     let coherenceRatings2 = [];
-    let coherenceRatings3 = [];
     let agreementRatings1 = [];
     let agreementRatings2 = [];
-    let agreementRatings3 = [];
     let informativenessRatings1 = [];
     let informativenessRatings2 = [];
-    let informativenessRatings3 = [];
 
     let columnIndexA;
     let columnIndexB;
     let columnIndexATask2;
     let columnIndexBTask2;
-    let columnIndexATask3;
-    let columnIndexBTask3;
     let agreeDisagreeColumnIndex;
     let statusColumnIndex;
     let caseColumnIndex;
@@ -115,13 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let originalBColumnIndex;
     let coherenceColumnIndex1;
     let coherenceColumnIndex2;
-    let coherenceColumnIndex3;
     let agreementColumnIndex1;
     let agreementColumnIndex2;
-    let agreementColumnIndex3;
     let informativenessColumnIndex1;
     let informativenessColumnIndex2;
-    let informativenessColumnIndex3;
 
     // Function to parse CSV text correctly, handling commas within quotes
     function parseCSV(text) {
@@ -153,8 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayB.value = 'No data available.';
                 textDisplayATask2.value = 'No data available.';
                 textDisplayBTask2.value = 'No data available.';
-                textDisplayATask3.value = 'No data available.';
-                textDisplayBTask3.value = 'No data available.';
                 robertaPredsDisplay.textContent = 'No data available.';
                 llamaPredsDisplay.textContent = 'No data available.';
                 gemmaPredsDisplay.textContent = 'No data available.';
@@ -169,8 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
-            columnIndexATask3 = header.indexOf('speaker_a_task_3');
-            columnIndexBTask3 = header.indexOf('speaker_b_task_3');
             agreeDisagreeColumnIndex = header.indexOf('agree_disagree');
             statusColumnIndex = header.indexOf('status');
             caseColumnIndex = header.indexOf('case');
@@ -183,13 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
             originalBColumnIndex = header.indexOf('speaker_b_original');
             coherenceColumnIndex1 = header.indexOf('coherence_task_1');
             coherenceColumnIndex2 = header.indexOf('coherence_task_2');
-            coherenceColumnIndex3 = header.indexOf('coherence_task_3');
             agreementColumnIndex1 = header.indexOf('agreement_task_1');
             agreementColumnIndex2 = header.indexOf('agreement_task_2');
-            agreementColumnIndex3 = header.indexOf('agreement_task_3');
             informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
             informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
-            informativenessColumnIndex3 = header.indexOf('informativeness_task_3');
 
             if (columnIndexA === undefined || columnIndexB === undefined || columnIndexATask2 === undefined || columnIndexBTask2 === undefined || columnIndexATask3 === undefined || columnIndexBTask3 === undefined || statusColumnIndex === undefined || caseColumnIndex === undefined || turnMaskedColumnIndex === undefined) {
                 console.error('Required columns not found');
@@ -197,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 textDisplayB.value = 'Required columns not found.';
                 textDisplayATask2.value = 'Required columns not found.';
                 textDisplayBTask2.value = 'Required columns not found.';
-                textDisplayATask3.value = 'Required columns not found.';
-                textDisplayBTask3.value = 'Required columns not found.';
                 robertaPredsDisplay.textContent = 'Required columns not found.';
                 llamaPredsDisplay.textContent = 'Required columns not found.';
                 gemmaPredsDisplay.textContent = 'Required columns not found.';
@@ -212,8 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'No Data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No Data');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
-            dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'No Data');
-            dataBTask3 = rows.slice(1).map(row => row[columnIndexBTask3] || 'No Data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
@@ -225,13 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
             originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
             coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
             coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
-            coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
             agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
             agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
-            agreementRatings3 = rows.slice(1).map(row => row[agreementColumnIndex3] || '');
             informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
             informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
-            informativenessRatings3 = rows.slice(1).map(row => row[informativenessColumnIndex3] || '');
         
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
@@ -250,8 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
             textDisplayB.value = 'Error loading CSV data.';
             textDisplayATask2.value = 'Error loading CSV data.';
             textDisplayBTask2.value = 'Error loading CSV data.';
-            textDisplayATask3.value = 'Error loading CSV data.';
-            textDisplayBTask3.value = 'Error loading CSV data.';
             robertaPredsDisplay.textContent = 'Error loading CSV data.';
             llamaPredsDisplay.textContent = 'Error loading CSV data.';
             gemmaPredsDisplay.textContent = 'Error loading CSV data.';
@@ -271,8 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayB.value = dataB[index] || 'No Data';
         textDisplayATask2.value = dataATask2[index] || 'No Data';
         textDisplayBTask2.value = dataBTask2[index] || 'No Data';
-        textDisplayATask3.value = dataATask3[index] || 'No Data';
-        textDisplayBTask3.value = dataBTask3[index] || 'No Data';
 
         // Display selects, defaulting to 'Select status', 'Select case', or 'Select turn' if empty
         statusSelect.value = statusData[index] || 'Select status';
@@ -298,11 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
             button.checked = button.value === currentCoherenceRating2;
         });
 
-        const currentCoherenceRating3 = coherenceRatings3[index] || '';
-        coherenceRadioButtons3.forEach(button => {
-            button.checked = button.value === currentCoherenceRating3;
-        });
-
         // Handle agreement ratings
         const currentAgreementRating1 = agreementRatings1[index] || '';
         agreementRadioButtons1.forEach(button => {
@@ -314,11 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
             button.checked = button.value === currentAgreementRating2;
         });
 
-        const currentAgreementRating3 = agreementRatings3[index] || '';
-        agreementRadioButtons3.forEach(button => {
-            button.checked = button.value === currentAgreementRating3;
-        });
-
         // Handle informativeness ratings
         const currentInformativenessRating1 = informativenessRatings1[index] || '';
         informativenessRadioButtons1.forEach(button => {
@@ -328,11 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentInformativenessRating2 = informativenessRatings2[index] || '';
         informativenessRadioButtons2.forEach(button => {
             button.checked = button.value === currentInformativenessRating2;
-        });
-
-        const currentInformativenessRating3 = informativenessRatings3[index] || '';
-        informativenessRadioButtons3.forEach(button => {
-            button.checked = button.value === currentInformativenessRating3;
         });
 
         // Disable/Enable navigation buttons
@@ -374,8 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextB = textDisplayB.value.trim() || 'No Data';
         const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
         const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
-        const updatedTextATask3 = textDisplayATask3.value.trim() || 'No Data';
-        const updatedTextBTask3 = textDisplayBTask3.value.trim() || 'No Data';
         const updatedStatus = statusSelect.value.trim() || 'Select status';
         const updatedCase = caseSelect.value.trim() || 'Select case';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
@@ -384,13 +334,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get selected values for ratings, defaulting to empty string if not selected
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
         const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-        const updatedCoherence3 = document.querySelector('input[name="coherence3"]:checked')?.value || 'Enter coherence';
         const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
         const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-        const updatedAgreement3 = document.querySelector('input[name="agreement3"]:checked')?.value || 'Enter agreement';
         const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
         const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
-        const updatedInformativeness3 = document.querySelector('input[name="informativeness3"]:checked')?.value || 'Enter informativeness';
 
         submitButton.disabled = true;
 
@@ -426,21 +373,16 @@ document.addEventListener('DOMContentLoaded', () => {
             { columnName: 'speaker_b_task_1', value: updatedTextB },
             { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
             { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
-            { columnName: 'speaker_a_task_3', value: updatedTextATask3 },
-            { columnName: 'speaker_b_task_3', value: updatedTextBTask3 },
             { columnName: 'status', value: updatedStatus },
             { columnName: 'case', value: updatedCase },
             { columnName: 'turn_masked', value: updatedTurnMasked },
             { columnName: 'masked_word', value: updatedMaskedWord },
             { columnName: 'coherence_task_1', value: updatedCoherence1 },
             { columnName: 'coherence_task_2', value: updatedCoherence2 },
-            { columnName: 'coherence_task_3', value: updatedCoherence3 },
             { columnName: 'agreement_task_1', value: updatedAgreement1 },
             { columnName: 'agreement_task_2', value: updatedAgreement2 },
-            { columnName: 'agreement_task_3', value: updatedAgreement3 },
             { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
             { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
-            { columnName: 'informativeness_task_3', value: updatedInformativeness3 }
         ];
 
         // Update columns sequentially
@@ -454,21 +396,16 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB[currentRow] = updatedTextB;
             dataATask2[currentRow] = updatedTextATask2;
             dataBTask2[currentRow] = updatedTextBTask2;
-            dataATask3[currentRow] = updatedTextATask3;
-            dataBTask3[currentRow] = updatedTextBTask3;
             statusData[currentRow] = updatedStatus;
             caseData[currentRow] = updatedCase;
             turnMaskedData[currentRow] = updatedTurnMasked;
             maskedWords[currentRow] = updatedMaskedWord;
             coherenceRatings1[currentRow] = updatedCoherence1;
             coherenceRatings2[currentRow] = updatedCoherence2;
-            coherenceRatings3[currentRow] = updatedCoherence3;
             agreementRatings1[currentRow] = updatedAgreement1;
             agreementRatings2[currentRow] = updatedAgreement2;
-            agreementRatings3[currentRow] = updatedAgreement3;
             informativenessRatings1[currentRow] = updatedInformativeness1;
             informativenessRatings2[currentRow] = updatedInformativeness2;
-            informativenessRatings3[currentRow] = updatedInformativeness3;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
