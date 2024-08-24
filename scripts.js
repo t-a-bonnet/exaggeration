@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to calculate distribution
     function calculateDistribution(data, key) {
         const distribution = {};
-        data.forEach(item => {
+        // Start from the second element (index 1) to skip the header row
+        data.slice(1).forEach(item => {
             const value = item[key];
             if (value !== undefined && value !== null) {
                 distribution[value] = (distribution[value] || 0) + 1;
