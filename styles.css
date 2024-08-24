@@ -68,9 +68,9 @@ textarea {
 #distributions {
     /* Container for all distribution boxes */
     display: flex;
-    gap: 20px; /* Space between distribution boxes */
-    justify-content: center;
-    margin-bottom: 40px; /* Space below distributions */
+    flex-direction: column;
+    gap: 20px; /* Space between sections */
+    align-items: center;
 }
 
 .distribution-box {
@@ -82,7 +82,6 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center-align content */
-    min-width: 300px; /* Ensure boxes have minimum width */
 }
 
 /* Specific styles for each canvas */
