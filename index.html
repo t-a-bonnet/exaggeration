@@ -6,8 +6,6 @@
     <meta name="description" content="CSV Text Viewer for viewing and editing CSV data.">
     <title>CSV Text Viewer</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Include Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="main-wrapper">
@@ -16,20 +14,20 @@
             <div id="distributions">
                 <div class="distribution-box">
                     <h2>Case Distribution</h2>
-                    <canvas class="bar-graph" id="case-distribution"></canvas>
+                    <p id="case-distribution">Loading...</p>
                 </div>
                 <div id="side-by-side-distributions">
                     <div class="distribution-box">
                         <h2>Turn Masked Distribution</h2>
-                        <canvas class="bar-graph" id="turn-masked-distribution"></canvas>
+                        <p id="turn-masked-distribution">Loading...</p>
                     </div>
                     <div class="distribution-box">
                         <h2>Agree/Disagree Distribution</h2>
-                        <canvas class="bar-graph" id="agree-disagree-distribution"></canvas>
+                        <p id="agree-disagree-distribution">Loading...</p>
                     </div>
                 </div>
             </div>
-
+            
             <h1>Task 1</h1>
             <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;WORD&gt;.</p>
             <div class="text-pair">
@@ -176,4 +174,110 @@
                 <p>Characterize User B`s response to User A along a scale from disagreement (1) to agreement (5).</p>
                 <div class="rating-options">
                     <label><input type="radio" name="agreement2" value="1"> 1</label>
-                    <label><input type="radio
+                    <label><input type="radio" name="agreement2" value="2"> 2</label>
+                    <label><input type="radio" name="agreement2" value="3"> 3</label>
+                    <label><input type="radio" name="agreement2" value="4"> 4</label>
+                    <label><input type="radio" name="agreement2" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Informativeness Ratings Scale Section -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from uninformative (1) to informative (5).</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="informativeness2" value="1"> 1</label>
+                    <label><input type="radio" name="informativeness2" value="2"> 2</label>
+                    <label><input type="radio" name="informativeness2" value="3"> 3</label>
+                    <label><input type="radio" name="informativeness2" value="4"> 4</label>
+                    <label><input type="radio" name="informativeness2" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Task 3 Section -->
+            <div class="task-3-section">
+                <h2>Task 3</h2>
+                <p>Add &lt;PHRASE&gt; in the Speaker A or Speaker B turn where you would like the participant to add a phrase for Task 3.</p>
+                <div class="text-pair">
+                    <div class="text-box">
+                        <label for="text-display-a-task-3">Speaker A:</label>
+                        <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+                    </div>
+                    <div class="text-box">
+                        <label for="text-display-b-task-3">Speaker B:</label>
+                        <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coherence Ratings Scale Section -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from incoherent (1) to coherent (5).</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="coherence3" value="1"> 1</label>
+                    <label><input type="radio" name="coherence3" value="2"> 2</label>
+                    <label><input type="radio" name="coherence3" value="3"> 3</label>
+                    <label><input type="radio" name="coherence3" value="4"> 4</label>
+                    <label><input type="radio" name="coherence3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Agreement Ratings Scale Section -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from disagreement (1) to agreement (5).</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="agreement3" value="1"> 1</label>
+                    <label><input type="radio" name="agreement3" value="2"> 2</label>
+                    <label><input type="radio" name="agreement3" value="3"> 3</label>
+                    <label><input type="radio" name="agreement3" value="4"> 4</label>
+                    <label><input type="radio" name="agreement3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Informativeness Ratings Scale Section -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from uninformative (1) to informative (5).</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="informativeness3" value="1"> 1</label>
+                    <label><input type="radio" name="informativeness3" value="2"> 2</label>
+                    <label><input type="radio" name="informativeness3" value="3"> 3</label>
+                    <label><input type="radio" name="informativeness3" value="4"> 4</label>
+                    <label><input type="radio" name="informativeness3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Status and Controls moved to the bottom -->
+            <div id="controls">
+                <div class="status-control">
+                    <label for="status-select">Status:</label>
+                    <select id="status-select" aria-label="Select status">
+                        <option value="Complete">Select status</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Incomplete">Incomplete</option>
+                    </select>
+                </div>
+                <div class="button-row">
+                    <button id="previous-button" aria-label="Show previous row">Previous</button>
+                    <button id="next-button" aria-label="Show next row">Next</button>
+                    <button id="go-button" aria-label="Go to specific row">Go to</button>
+                    <input type="number" id="row-input" aria-label="Enter row number" placeholder="row #" min="1">
+                    <button id="submit-button" aria-label="Submit changes">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('copy-task1-to-task2').addEventListener('click', function() {
+                // Get the text from Task 1 text boxes
+                var task1TextBoxA = document.getElementById('text-display-a').value;
+                var task1TextBoxB = document.getElementById('text-display-b').value;
+                
+                // Set the text to Task 2 text boxes
+                document.getElementById('text-display-a-task-2').value = task1TextBoxA;
+                document.getElementById('text-display-b-task-2').value = task1TextBoxB;
+            });
+        });
+    </script>
+    <script src="scripts.js"></script>
+</body>
+</html>

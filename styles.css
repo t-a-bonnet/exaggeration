@@ -93,26 +93,6 @@ h2 {
     margin: 0 0 10px;
 }
 
-/* Styles for bar graphs */
-.bar-graph {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    height: 200px; /* Adjust height as needed */
-    width: 100%;
-    position: relative;
-}
-
-.bar {
-    background-color: #4CAF50; /* Color of the bars */
-    height: 100%;
-    width: 0; /* Width will be set with JavaScript */
-    text-align: right;
-    color: white;
-    padding-right: 10px;
-    box-sizing: border-box;
-}
-
 /* Styles for speaker_a_original and speaker_b_original */
 .speaker_a_original,
 .speaker_b_original {
