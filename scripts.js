@@ -341,19 +341,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         submitButton.disabled = true;
 
-        // Helper function to update a column
-        async function updateColumn(columnName, updatedValue) {
+        // Construct the updates array for batch processing
+        const updates = [
+            { id: currentRow, column: 'speaker_a_task_1', text: updatedTextA },
+            { id: currentRow, column: 'speaker_b_task_1', text: updatedTextB },
+            { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
+            { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
+            { id: currentRow, column: 'status', text: updatedStatus },
+            { id: currentRow, column: 'case', text: updatedCase },
+            { id: currentRow, column: 'turn_masked', text: updatedTurnMasked },
+            { id: currentRow, column: 'masked_word', text: updatedMaskedWord },
+            { id: currentRow, column: 'coherence_task_1', text: updatedCoherence1 },
+            { id: currentRow, column: 'coherence_task_2', text: updatedCoherence2 },
+            { id: currentRow, column: 'agreement_task_1', text: updatedAgreement1 },
+            { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
+            { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
+            { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
+        ];
+
+        // Helper function to submit batch updates
+        async function submitBatchUpdates(updates) {
             try {
                 const response = await fetch('/.netlify/functions/update-csv', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        id: currentRow,
-                        text: updatedValue,
-                        column: columnName
-                    })
+                    body: JSON.stringify({ updates })
                 });
 
                 const result = await response.json();
@@ -362,34 +376,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return result;
             } catch (error) {
-                alert(`Error updating column "${columnName}": ${error.message}`);
+                alert(`Error submitting batch updates: ${error.message}`);
                 throw error; // Rethrow to handle in the outer try/catch
             }
         }
 
-        // Array of columns and their values to be updated
-        const updates = [
-            { columnName: 'speaker_a_task_1', value: updatedTextA },
-            { columnName: 'speaker_b_task_1', value: updatedTextB },
-            { columnName: 'speaker_a_task_2', value: updatedTextATask2 },
-            { columnName: 'speaker_b_task_2', value: updatedTextBTask2 },
-            { columnName: 'status', value: updatedStatus },
-            { columnName: 'case', value: updatedCase },
-            { columnName: 'turn_masked', value: updatedTurnMasked },
-            { columnName: 'masked_word', value: updatedMaskedWord },
-            { columnName: 'coherence_task_1', value: updatedCoherence1 },
-            { columnName: 'coherence_task_2', value: updatedCoherence2 },
-            { columnName: 'agreement_task_1', value: updatedAgreement1 },
-            { columnName: 'agreement_task_2', value: updatedAgreement2 },
-            { columnName: 'informativeness_task_1', value: updatedInformativeness1 },
-            { columnName: 'informativeness_task_2', value: updatedInformativeness2 },
-        ];
-
-        // Update columns sequentially
+        // Submit batch updates
         try {
-            for (const { columnName, value } of updates) {
-                await updateColumn(columnName, value);
-            }
+            await submitBatchUpdates(updates);
 
             // Update local data arrays after successful submission
             dataA[currentRow] = updatedTextA;

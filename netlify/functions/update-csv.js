@@ -50,9 +50,13 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { id, text, column } = JSON.parse(event.body);
+        const { updates } = JSON.parse(event.body); // Expecting an array of update operations
 
-        if (typeof id !== 'number' || typeof text !== 'string' || typeof column !== 'string') {
+        if (!Array.isArray(updates) || updates.some(update => 
+            typeof update.id !== 'number' || 
+            typeof update.text !== 'string' || 
+            typeof update.column !== 'string'
+        )) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ success: false, message: 'Invalid input' })
@@ -81,26 +85,28 @@ exports.handler = async (event) => {
         }
 
         const header = rows[0]; // Extract the header row
-        const columnIndex = header.indexOf(column); // Find the index of the specified column
-
-        if (columnIndex === -1) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ success: false, message: `Column "${column}" not found` })
-            };
-        }
-
         const dataRows = rows.slice(1); // Skip the header row
 
-        if (id < 0 || id >= dataRows.length) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Row index out of bounds' })
-            };
-        }
+        // Create a mapping of column names to their indices
+        const columnIndices = {};
+        header.forEach((col, index) => {
+            columnIndices[col] = index;
+        });
 
-        // Update the specified column with the new text
-        dataRows[id][columnIndex] = text;
+        // Process each update
+        updates.forEach(({ id, column, text }) => {
+            const columnIndex = columnIndices[column];
+            if (columnIndex === undefined) {
+                throw new Error(`Column "${column}" not found`);
+            }
+
+            if (id < 0 || id >= dataRows.length) {
+                throw new Error('Row index out of bounds');
+            }
+
+            // Update the specified column with the new text
+            dataRows[id][columnIndex] = text;
+        });
 
         // Convert rows back to CSV format
         const updatedContent = formatCSV([header, ...dataRows]);

@@ -7,9 +7,9 @@
     "build": "your-build-script"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "socket.io": "^4.7.5"
   },
-  "devDependencies": {},
   "engines": {
     "node": "14.x"
   }
