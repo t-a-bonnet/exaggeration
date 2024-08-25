@@ -23,7 +23,7 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensure container takes full height */
+    min-height: 100vh;
 }
 
 h1 {
@@ -43,7 +43,7 @@ p {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 40px; /* Added space between tasks */
+    margin-bottom: 40px;
 }
 
 .text-box {
@@ -66,36 +66,35 @@ textarea {
 
 /* Distributions Section Styles */
 #distributions {
-    display: flex; /* Align child boxes horizontally */
-    gap: 20px; /* Space between side-by-side boxes */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    justify-content: center; /* Center the boxes horizontally */
-    margin-bottom: 20px; /* Space below the distributions section */
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .distribution-box {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    flex: 1; /* Allows boxes to grow equally */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center-align content */
-    max-width: 400px; /* Limit maximum width of each box */
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    align-items: center;
+    max-width: 400px;
+    box-sizing: border-box;
 }
 
-/* Specific styles for each canvas */
+/* Chart styles */
 #case-distribution-chart,
 #turn-masked-distribution-chart,
 #agree-disagree-distribution-chart {
-    width: 100%; /* Ensure chart fits within its container */
-    height: 200px; /* Set a fixed height for the charts */
-    margin-bottom: 20px; /* Space below the chart */
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
 }
 
 h2 {
-    /* Styling for headers inside distribution boxes */
     font-size: 18px;
     margin: 0 0 10px;
 }
@@ -104,7 +103,7 @@ h2 {
 .speaker_a_original,
 .speaker_b_original {
     background-color: #f9f9f9;
-    border: 1px solid #ddd; /* Consistent border color */
+    border: 1px solid #ddd;
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 20px;
@@ -125,7 +124,7 @@ h2 {
     margin: 0;
 }
 
-/* Styles for rating section */
+/* Styles for rating sections */
 .rating-section {
     margin-bottom: 20px;
 }
@@ -149,7 +148,7 @@ h2 {
 
 /* Styles for the Task 2 section */
 .task-2-section {
-    margin-bottom: 20px; /* Reduced space before Task 3 */
+    margin-bottom: 20px;
 }
 
 .task-2-section h2 {
@@ -161,7 +160,7 @@ h2 {
 .task-2-section p {
     font-size: 16px;
     color: #666;
-    margin-bottom: 10px; /* Reduced space below the description */
+    margin-bottom: 10px;
 }
 
 /* Styles for the case and turn masked sections */
@@ -170,7 +169,7 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px; /* Adjusted for spacing */
+    margin-bottom: 20px;
 }
 
 .case-control select,
@@ -182,7 +181,7 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    margin-bottom: 0; /* Remove bottom margin to align with others */
+    margin-bottom: 0;
 }
 
 .masked-word-box {
@@ -192,13 +191,12 @@ h2 {
 }
 
 .masked-word-box textarea {
-    height: auto; /* Adjust height based on content */
+    height: auto;
     padding: 5px;
     box-sizing: border-box;
-    border: 1px solid #ccc; /* Remove shaded border */
+    border: 1px solid #ccc;
 }
 
-/* Remove borders from predictions section */
 .predictions {
     margin-top: 20px;
     text-align: center;
@@ -215,18 +213,18 @@ h2 {
 }
 
 #controls {
-    margin-top: auto; /* Pushes the controls to the bottom */
+    margin-top: auto;
 }
 
 .status-control {
-    margin-bottom: 20px; /* Space between status and buttons */
+    margin-bottom: 20px;
 }
 
 .button-row {
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin-bottom: 10px; /* Adds space between the two rows */
+    margin-bottom: 10px;
 }
 
 input[type="number"] {
@@ -267,7 +265,7 @@ button:active {
     }
 
     .task-2-section {
-        margin-bottom: 20px; /* Adjusted for smaller screens */
+        margin-bottom: 20px;
     }
 
     .button-row {
@@ -279,7 +277,6 @@ button:active {
         width: 100%;
     }
     
-    /* Responsive adjustments for predictions section */
     .predictions {
         margin-top: 10px;
     }

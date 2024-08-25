@@ -7,7 +7,7 @@ const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'Appen data 16.8.2024.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-// Function to parse CSV text correctly, handling commas within quotes
+// Function to parse CSV text, handling commas within quotes
 function parseCSV(text) {
     const rows = [];
     const re = /"(?:[^"]|"")*"|[^,]+/g;
@@ -24,7 +24,7 @@ function parseCSV(text) {
     return rows;
 }
 
-// Function to format CSV text with proper escaping and quoting
+// Function to format CSV text with escaping and quoting
 function formatCSV(rows) {
     return rows.map(row =>
         row.map(field => {
@@ -50,7 +50,7 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { updates } = JSON.parse(event.body); // Expecting an array of update operations
+        const { updates } = JSON.parse(event.body);
 
         if (!Array.isArray(updates) || updates.some(update => 
             typeof update.id !== 'number' || 
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
             };
         }
 
-        // Step 1: Fetch the file metadata to get the SHA
+        // Fetch the file metadata to get the SHA
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
@@ -71,16 +71,16 @@ exports.handler = async (event) => {
             }
         });
 
-        // Step 2: Fetch the raw content of the file using the download URL
+        // Fetch the raw content of the file using the download URL
         const fileContentResponse = await axios.get(fileData.download_url);
         const fileContent = fileContentResponse.data;
 
-        const rows = parseCSV(fileContent.trim()); // Parse CSV content
+        const rows = parseCSV(fileContent.trim());
         if (rows.length < 2) {
-            console.error('Not enough rows in CSV file.');
+            console.error('No rows in CSV file.');
             return {
                 statusCode: 400,
-                body: JSON.stringify({ success: false, message: 'Not enough rows in CSV file' })
+                body: JSON.stringify({ success: false, message: 'No rows in CSV file' })
             };
         }
 
@@ -93,7 +93,7 @@ exports.handler = async (event) => {
             columnIndices[col] = index;
         });
 
-        // Process each update
+        // Process update
         updates.forEach(({ id, column, text }) => {
             const columnIndex = columnIndices[column];
             if (columnIndex === undefined) {
@@ -111,7 +111,7 @@ exports.handler = async (event) => {
         // Convert rows back to CSV format
         const updatedContent = formatCSV([header, ...dataRows]);
 
-        // Step 3: Update the file on GitHub
+        // Update the CSV on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),

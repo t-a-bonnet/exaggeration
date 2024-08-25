@@ -13,7 +13,8 @@
 <body>
     <div id="main-wrapper">
         <div id="container">
-            <!-- Distributions Section -->
+
+            <!-- Distributions -->
             <div id="distributions">
                 <div class="distribution-box">
                     <h2>Case Distribution</h2>
@@ -29,6 +30,7 @@
                 </div>
             </div>
             
+            <!-- Task 1 -->
             <h1>Task 1</h1>
             <p>Mask a word in the Speaker A or Speaker B turn by replacing a word with &lt;WORD&gt;.</p>
             <div class="text-pair">
@@ -53,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- Case Section -->
+            <!-- Case -->
             <div class="case-control">
                 <label for="case-select">Case:</label>
                 <select id="case-select">
@@ -71,7 +73,7 @@
                 </select>
             </div>
 
-            <!-- Turn Masked Section -->
+            <!-- Turn Masked -->
             <div class="turn-masked-section">
                 <label for="turn-masked-select">Turn Masked:</label>
                 <select id="turn-masked-select">
@@ -81,7 +83,7 @@
                 </select>
             </div>
 
-            <!-- Masked Word Section -->
+            <!-- Masked Word -->
             <div class="masked-word-section">
                 <div class="masked-word-box">
                     <label for="masked-word">Masked Word:</label>
@@ -89,7 +91,7 @@
                 </div>
             </div>
 
-            <!-- Coherence Ratings Scale Section -->
+            <!-- Coherence -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from incoherent (1) to coherent (5).</p>
                 <div class="rating-options">
@@ -101,7 +103,7 @@
                 </div>
             </div>
 
-            <!-- Agreement Ratings Scale Section -->
+            <!-- Agreement -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from disagreement (1) to agreement (5).</p>
                 <div class="rating-options">
@@ -113,7 +115,7 @@
                 </div>
             </div>
 
-            <!-- Informativeness Ratings Scale Section -->
+            <!-- Informativeness -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from uninformative (1) to informative (5).</p>
                 <div class="rating-options">
@@ -125,7 +127,7 @@
                 </div>
             </div>
 
-            <!-- Task 2 Section -->
+            <!-- Task 2 -->
             <div class="task-2-section">
                 <h2>Task 2</h2>
                 <p>Fill the mask you made for Task 1 with a word that is all upper case and in angled brackets &lt; &gt;. Try to change the agreement of the speakers.</p>
@@ -139,9 +141,10 @@
                         <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
                     </div>
                 </div>
-                <!-- Button to copy text from Task 1 to Task 2 -->
+                <!-- Copy text from Task 1 to Task 2 -->
                 <button id="copy-task1-to-task2">Paste Text from Task 1</button>
-                <!-- Display Predictions -->
+
+                <!-- Display LLM Predictions -->
                 <div class="predictions">
                     <div class="predictions-box">
                         <h3>Roberta predictions:</h3>
@@ -158,7 +161,7 @@
                 </div>
             </div>
 
-            <!-- Coherence Ratings Scale Section -->
+            <!-- Coherence -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from incoherent (1) to coherent (5).</p>
                 <div class="rating-options">
@@ -170,7 +173,7 @@
                 </div>
             </div>
 
-            <!-- Agreement Ratings Scale Section -->
+            <!-- Agreement -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from disagreement (1) to agreement (5).</p>
                 <div class="rating-options">
@@ -182,7 +185,7 @@
                 </div>
             </div>
 
-            <!-- Informativeness Ratings Scale Section -->
+            <!-- Informativeness -->
             <div class="rating-section">
                 <p>Characterize User B`s response to User A along a scale from uninformative (1) to informative (5).</p>
                 <div class="rating-options">
@@ -194,7 +197,7 @@
                 </div>
             </div>
 
-            <!-- Status and Controls moved to the bottom -->
+            <!-- Status and Controls -->
             <div id="controls">
                 <div class="status-control">
                     <label for="status-select">Status:</label>
@@ -214,19 +217,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Script for copying text from Task 1 to Task 2 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('copy-task1-to-task2').addEventListener('click', function() {
-                // Get the text from Task 1 text boxes
                 var task1TextBoxA = document.getElementById('text-display-a').value;
                 var task1TextBoxB = document.getElementById('text-display-b').value;
-                
-                // Set the text to Task 2 text boxes
                 document.getElementById('text-display-a-task-2').value = task1TextBoxA;
                 document.getElementById('text-display-b-task-2').value = task1TextBoxB;
             });
         });
     </script>
+
     <script src="scripts.js"></script>
 </body>
 </html>
