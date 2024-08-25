@@ -173,9 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'no data');
-            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
-            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
-            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
+            statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'no data');
+            caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'no data');
+            turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'no data');
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'no data');
             llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'no data');
             gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'no data');
@@ -222,9 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayB.value = dataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
         textDisplayBTask2.value = dataBTask2[index] || 'no data';
-        statusSelect.value = statusData[index] || 'Select status';
-        caseSelect.value = caseData[index] || 'Select case';
-        turnMaskedSelect.value = turnMaskedData[index] || 'Select turn';
+        statusSelect.value = statusData[index] || 'no data';
+        caseSelect.value = caseData[index] || 'no data';
+        turnMaskedSelect.value = turnMaskedData[index] || 'no data';
         robertaPredsDisplay.textContent = robertaPreds[index] || 'no data';
         llamaPredsDisplay.textContent = llamaPreds[index] || 'no data';
         gemmaPredsDisplay.textContent = gemmaPreds[index] || 'no data';
