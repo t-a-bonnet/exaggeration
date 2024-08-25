@@ -87,8 +87,7 @@ textarea {
 
 /* Chart styles */
 #case-distribution-chart,
-#turn-masked-distribution-chart,
-#agree-disagree-distribution-chart {
+#turn-masked-distribution-chart {
     width: 100%;
     height: 200px;
     margin-bottom: 20px;

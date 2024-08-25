@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
-            displayDistribution('agree-disagree-distribution-chart', calculateDistribution(rows, agreeDisagreeColumnIndex));
         
             try {
                 showRow(currentRow);
