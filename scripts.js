@@ -184,19 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || 'No Data');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || 'No Data');
-            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No Data');
-            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No Data');
+            dataA = rows.slice(1).map(row => row[columnIndexA] || 'No data');
+            dataB = rows.slice(1).map(row => row[columnIndexB] || 'No data');
+            dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'No data');
+            dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'No data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'Select status');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'Select case');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'Select turn');
-            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No Data');
-            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No Data');
-            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No Data');
-            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No Data');
-            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No Data');
-            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No Data');
+            robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'No data');
+            llamaPreds = rows.slice(1).map(row => row[llamaPredsColumnIndex] || 'No data');
+            gemmaPreds = rows.slice(1).map(row => row[gemmaPredsColumnIndex] || 'No data');
+            maskedWords = rows.slice(1).map(row => row[maskedWordColumnIndex] || 'No data');
+            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'No data');
+            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'No data');
             coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
             coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
             agreementRatings1 = rows.slice(1).map(row => row[agreementColumnIndex1] || '');
@@ -235,24 +235,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if the data arrays are not empty
         if (dataA.length === 0 || dataB.length === 0 || dataATask2.length === 0 || dataBTask2.length === 0 || statusData.length === 0 || caseData.length === 0 || turnMaskedData.length === 0) return;
 
-        // Display text inputs, defaulting to 'No Data' if empty
-        textDisplayA.value = dataA[index] || 'No Data';
-        textDisplayB.value = dataB[index] || 'No Data';
-        textDisplayATask2.value = dataATask2[index] || 'No Data';
-        textDisplayBTask2.value = dataBTask2[index] || 'No Data';
+        // Display text inputs, defaulting to 'No data' if empty
+        textDisplayA.value = dataA[index] || 'No data';
+        textDisplayB.value = dataB[index] || 'No data';
+        textDisplayATask2.value = dataATask2[index] || 'No data';
+        textDisplayBTask2.value = dataBTask2[index] || 'No data';
 
         // Display selects, defaulting to 'Select status', 'Select case', or 'Select turn' if empty
         statusSelect.value = statusData[index] || 'Select status';
         caseSelect.value = caseData[index] || 'Select case';
         turnMaskedSelect.value = turnMaskedData[index] || 'Select turn';
 
-        // Display other text areas, defaulting to 'No Data' if empty
-        robertaPredsDisplay.textContent = robertaPreds[index] || 'No Data';
-        llamaPredsDisplay.textContent = llamaPreds[index] || 'No Data';
-        gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No Data';
-        maskedWordDisplay.value = maskedWords[index] || 'No Data';
-        originalADisplay.textContent = originalDataA[index] || 'No Data';
-        originalBDisplay.textContent = originalDataB[index] || 'No Data';
+        // Display other text areas, defaulting to 'No data' if empty
+        robertaPredsDisplay.textContent = robertaPreds[index] || 'No data';
+        llamaPredsDisplay.textContent = llamaPreds[index] || 'No data';
+        gemmaPredsDisplay.textContent = gemmaPreds[index] || 'No data';
+        maskedWordDisplay.value = maskedWords[index] || 'No data';
+        originalADisplay.textContent = originalDataA[index] || 'No data';
+        originalBDisplay.textContent = originalDataB[index] || 'No data';
 
         // Handle coherence ratings
         const currentCoherenceRating1 = coherenceRatings1[index] || '';
@@ -322,14 +322,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve and sanitize input values
-        const updatedTextA = textDisplayA.value.trim() || 'No Data';
-        const updatedTextB = textDisplayB.value.trim() || 'No Data';
-        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No Data';
-        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No Data';
-        const updatedStatus = statusSelect.value.trim() || 'Select status';
-        const updatedCase = caseSelect.value.trim() || 'Select case';
-        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'Select turn';
-        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No Data';
+        const updatedTextA = textDisplayA.value.trim() || 'No data';
+        const updatedTextB = textDisplayB.value.trim() || 'No data';
+        const updatedTextATask2 = textDisplayATask2.value.trim() || 'No data';
+        const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'No data';
+        const updatedStatus = statusSelect.value.trim() || 'No data';
+        const updatedCase = caseSelect.value.trim() || 'No data';
+        const updatedTurnMasked = turnMaskedSelect.value.trim() || 'No data';
+        const updatedMaskedWord = maskedWordDisplay.value.trim() || 'No data';
 
         // Get selected values for ratings, defaulting to empty string if not selected
         const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
