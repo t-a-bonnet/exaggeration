@@ -6,6 +6,7 @@ const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'Appen data 16.8.2024.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const BRANCH = 'dev'; // Specify the branch here
 
 // Function to parse CSV text, handling commas within quotes
 function parseCSV(text) {
@@ -63,8 +64,8 @@ exports.handler = async (event) => {
             };
         }
 
-        // Fetch the file metadata to get the SHA
-        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+        // Fetch the file metadata to get the SHA from the specified branch
+        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
@@ -116,7 +117,7 @@ exports.handler = async (event) => {
             message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha, // Required SHA for the update
-            branch: 'dev'
+            branch: BRANCH // Specify the branch here
         }, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
