@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const csvFileSelect = document.getElementById('csv-file-select');
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -171,7 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const selectedFile = csvFileSelect.value;
+            // Get the selected CSV filename
+            const csvSelect = document.getElementById('csv-select');
+            const selectedFile = csvSelect.value;
+
             const response = await fetch(selectedFile);
             const text = await response.text();
 
@@ -346,7 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showRow(currentRow);
     }
 
-    // Function to submit changes
     async function submitChanges() {
         // Retrieve input values
         const updatedTextA = textDisplayA.value.trim() || 'no data';
@@ -359,15 +360,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no datae';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no data';
         const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'no data';
         const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'no data';
         const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'no data';
         const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'no data';
         const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'no data';
-
+    
         submitButton.disabled = true;
-
+    
+        // Get the selected file name
+        const csvSelect = document.getElementById('csv-select');
+        const fileName = csvSelect.value;
+    
         // Construct the updates array for batch processing
         const updates = [
             { id: currentRow, column: 'speaker_a_task_1', text: updatedTextA },
@@ -389,18 +394,18 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'author', text: authorName },
             { id: currentRow, column: 'author_mode', text: authorMode }
         ];
-
+    
         // Helper function to submit batch updates
-        async function submitBatchUpdates(updates) {
+        async function submitBatchUpdates(updates, fileName) {
             try {
                 const response = await fetch('/.netlify/functions/update-csv', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ updates })
+                    body: JSON.stringify({ updates, fileName })
                 });
-
+    
                 const result = await response.json();
                 if (!result.success) {
                     throw new Error(result.message);
@@ -411,11 +416,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw error; // Rethrow to handle in the outer try/catch
             }
         }
-
+    
         // Submit batch updates
         try {
-            await submitBatchUpdates(updates);
-
+            await submitBatchUpdates(updates, fileName);
+    
             // Update local data arrays after successful submission
             dataA[currentRow] = updatedTextA;
             dataB[currentRow] = updatedTextB;
@@ -433,10 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
             agreementRatings2[currentRow] = updatedAgreement2;
             informativenessRatings1[currentRow] = updatedInformativeness1;
             informativenessRatings2[currentRow] = updatedInformativeness2;
-
+    
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
-
+    
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
@@ -447,10 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
         // Event listeners
-        csvFileSelect.addEventListener('change', () => {
-            currentRow = 0;
-            loadCSV();
-        });
+        document.getElementById('csv-select').addEventListener('change', loadCSV);
         previousButton.addEventListener('click', showPreviousRow);
         nextButton.addEventListener('click', showNextRow);
         goButton.addEventListener('click', goToRow);

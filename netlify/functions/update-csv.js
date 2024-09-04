@@ -50,9 +50,9 @@ exports.handler = async (event) => {
     }
 
     try {
-        const { filePath, updates } = JSON.parse(event.body);
+        const { updates, fileName } = JSON.parse(event.body);
 
-        if (!filePath || !Array.isArray(updates) || updates.some(update => 
+        if (!fileName || !Array.isArray(updates) || updates.some(update => 
             typeof update.id !== 'number' || 
             typeof update.text !== 'string' || 
             typeof update.column !== 'string'
@@ -64,7 +64,7 @@ exports.handler = async (event) => {
         }
 
         // Fetch the file metadata to get the SHA from the specified branch
-        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`, {
+        const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}?ref=${BRANCH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
@@ -112,8 +112,8 @@ exports.handler = async (event) => {
         const updatedContent = formatCSV([header, ...dataRows]);
 
         // Update the CSV on GitHub
-        await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
-            message: 'Update CSV file',
+        await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`, {
+            message: `Update ${fileName}`,
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha, // Required SHA for the update
             branch: BRANCH // Specify the branch here

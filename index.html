@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,14 +13,16 @@
 <body>
     <div id="main-wrapper">
         <div id="container">
-            <!-- File Upload Section -->
-            <div id="file-upload">
-                <label for="file-input">Upload CSV File:</label>
-                <input type="file" id="file-input" accept=".csv">
-                <button id="load-file-button">Load File</button>
-                <p id="file-status">No file selected.</p>
+            <!-- Select CSV -->
+            <div class="csv-control">
+                <label for="csv-select">CSV:</label>
+                <select id="csv-select">
+                    <option value="">Select CSV</option>
+                    <option value="exaggeration_master.csv">exaggeration_master.csv</option>
+                    <option value="exaggeration_test.csv">exaggeration_test.csv</option>
+                </select>
             </div>
-            
+
             <!-- Distributions -->
             <div id="distributions">
                 <div class="distribution-box">
