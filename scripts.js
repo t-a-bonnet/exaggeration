@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to toggle visibility of reject-select based on authorMode
-    function toggleRejectSelectVisibility() {
-        const rejectSelect = document.getElementById('reject-select');
-        if (authorMode === 'proofer') {
-            rejectSelect.classList.remove('hidden');
+    function checkAuthorMode() {
+        const isProoferMode = authorMode === 'proofer';
+
+        const rejectControl = document.getElementById('reject-control');
+        if (isProoferMode) {
+            rejectControl.classList.remove('hidden');
         } else {
-            rejectSelect.classList.add('hidden');
+            rejectControl.classList.add('hidden');
         }
     }
 
-    // Call the function to set initial visibility
-    toggleRejectSelectVisibility();
+    checkAuthorMode();
 
     // Function to calculate distribution
     function calculateDistribution(data, key) {
@@ -238,9 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
-
-            // Update visibility of reject-select after CSV is loaded
-            toggleRejectSelectVisibility();
         
             try {
                 showRow(currentRow);
