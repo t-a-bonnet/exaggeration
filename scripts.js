@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Prompt the user for their name and store it in a variable
+    // Prompt the user for their name
     let userName = '';
-
     while (true) {
         userName = prompt('Please enter author name:');
         if (userName === 'Janet' || userName === 'Ved' || userName === 'Tyler') {
@@ -9,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             alert('Invalid name.');
         }
+    }
+
+    // Prompt user for author mode
+    const authorModeSelect = document.getElementById('authorMode');
+    if (authorModeSelect) {
+        authorMode = authorModeSelect.value;
+    } else {
+        alert('Author mode selection not found.');
+        return;
     }
 
     // Function to calculate distribution
@@ -343,7 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
-            { id: currentRow, column: 'author', text: userName }
+            { id: currentRow, column: 'author', text: userName },
+            { id: currentRow, column: 'author_mode', text: authorMode }
         ];
 
         // Helper function to submit batch updates
@@ -387,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             agreementRatings2[currentRow] = updatedAgreement2;
             informativenessRatings1[currentRow] = updatedInformativeness1;
             informativenessRatings2[currentRow] = updatedInformativeness2;
+            authorModes[currentRow] = authorMode;
 
             // Notify the user of successful submission
             alert('Changes successfully submitted!');
