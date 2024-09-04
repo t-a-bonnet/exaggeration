@@ -65,7 +65,7 @@ textarea {
 }
 
 /* Author Mode Selection Styles */
-#authorMode {
+#author-mode {
     width: 150px;
     padding: 10px;
     font-size: 16px;
@@ -76,7 +76,7 @@ textarea {
     margin-bottom: 20px;
 }
 
-#authorMode option {
+#author-mode option {
     padding: 10px;
 }
 
