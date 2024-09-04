@@ -49,16 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return distribution;
     }
 
-    // Function to get the selected CSV file name from the select element
-    function getSelectedCSVFileName() {
-        const csvSelectElement = document.getElementById('csv-select');
-        const selectedOption = csvSelectElement.options[csvSelectElement.selectedIndex];
-        const fileName = selectedOption.value; // Gets the value of the selected option
-        return fileName;
-    }
-
-    let fileName = getSelectedCSVFileName();
-
     // Function to display distribution using Chart.js
     function displayDistribution(chartId, distribution) {
         const ctx = document.getElementById(chartId).getContext('2d');
@@ -178,9 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to load the CSV data
-    async function loadCSV(fileName) {
+    async function loadCSV() {
         try {
-            const response = await fetch(fileName);
+            const response = await fetch('Appen data 16.8.2024.csv');
             const text = await response.text();
 
             const rows = parseCSV(text);
@@ -223,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
             informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
 
-            // Load data from rows
             dataA = rows.slice(1).map(row => row[columnIndexA] || 'no data');
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
@@ -245,18 +234,17 @@ document.addEventListener('DOMContentLoaded', () => {
             agreementRatings2 = rows.slice(1).map(row => row[agreementColumnIndex2] || '');
             informativenessRatings1 = rows.slice(1).map(row => row[informativenessColumnIndex1] || '');
             informativenessRatings2 = rows.slice(1).map(row => row[informativenessColumnIndex2] || '');
-
+        
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
-
+        
             try {
                 showRow(currentRow);
             } catch (err) {
-                console.error('Error displaying row:', err);
-                alert('Error displaying row: ' + err.message);
+                throw new Error('Error displaying row: ' + err.message);
             }
-
+        
         } catch (error) {
             console.error('Error loading CSV:', error);
             textDisplayA.value = 'Error loading CSV data.';
@@ -369,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no data';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no datae';
         const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'no data';
         const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'no data';
         const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'no data';
@@ -389,54 +377,79 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'reject', text: updatedReject },
             { id: currentRow, column: 'case', text: updatedCase },
             { id: currentRow, column: 'turn_masked', text: updatedTurnMasked },
-            { id: currentRow, column: 'masked_words', text: updatedMaskedWord },
+            { id: currentRow, column: 'masked_word', text: updatedMaskedWord },
             { id: currentRow, column: 'coherence_task_1', text: updatedCoherence1 },
             { id: currentRow, column: 'coherence_task_2', text: updatedCoherence2 },
             { id: currentRow, column: 'agreement_task_1', text: updatedAgreement1 },
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
-            { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 }
+            { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
+            { id: currentRow, column: 'author', text: authorName },
+            { id: currentRow, column: 'author_mode', text: authorMode }
         ];
 
-        try {
-            // Assume `updateCSV` is a function to send updates to the server
-            await updateCSV(updates);
+        // Helper function to submit batch updates
+        async function submitBatchUpdates(updates) {
+            try {
+                const response = await fetch('/.netlify/functions/update-csv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ updates })
+                });
 
-            alert('Changes successfully submitted.');
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+                return result;
+            } catch (error) {
+                alert(`Error submitting batch updates: ${error.message}`);
+                throw error; // Rethrow to handle in the outer try/catch
+            }
+        }
+
+        // Submit batch updates
+        try {
+            await submitBatchUpdates(updates);
+
+            // Update local data arrays after successful submission
+            dataA[currentRow] = updatedTextA;
+            dataB[currentRow] = updatedTextB;
+            dataATask2[currentRow] = updatedTextATask2;
+            dataBTask2[currentRow] = updatedTextBTask2;
+            itemTypeData[currentRow] = updatedItemType;
+            statusData[currentRow] = updatedStatus;
+            rejectData[currentRow] = updatedReject;
+            caseData[currentRow] = updatedCase;
+            turnMaskedData[currentRow] = updatedTurnMasked;
+            maskedWords[currentRow] = updatedMaskedWord;
+            coherenceRatings1[currentRow] = updatedCoherence1;
+            coherenceRatings2[currentRow] = updatedCoherence2;
+            agreementRatings1[currentRow] = updatedAgreement1;
+            agreementRatings2[currentRow] = updatedAgreement2;
+            informativenessRatings1[currentRow] = updatedInformativeness1;
+            informativenessRatings2[currentRow] = updatedInformativeness2;
+
+            // Notify the user of successful submission
+            alert('Changes successfully submitted!');
+
         } catch (error) {
             console.error('Error submitting changes:', error);
             alert('Error submitting changes: ' + error.message);
         } finally {
+            // Re-enable submit button after submission is complete
             submitButton.disabled = false;
         }
     }
 
-    // Function to update the CSV file on the server
-    async function updateCSV(updates) {
-        // Example of how you might send data to the server
-        const response = await fetch('/update-csv', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ updates })
-        });
+        // Event listeners
+        previousButton.addEventListener('click', showPreviousRow);
+        nextButton.addEventListener('click', showNextRow);
+        goButton.addEventListener('click', goToRow);
+        submitButton.addEventListener('click', submitChanges);
 
-        if (!response.ok) {
-            throw new Error('Failed to update CSV');
-        }
-
-        return response.json();
-    }
-
-    // Event listeners for navigation buttons
-    previousButton.addEventListener('click', showPreviousRow);
-    nextButton.addEventListener('click', showNextRow);
-
-    // Event listener for "Go To Row" button
-    goToRowButton.addEventListener('click', goToRow);
-
-    // Event listener for "Submit Changes" button
-    submitButton.addEventListener('click', submitChanges);
-
-    // Load and initialize data
-    document.addEventListener('DOMContentLoaded', loadCSV);
-});
+        // Load the CSV data on page load
+        loadCSV();
+    });
