@@ -52,7 +52,14 @@ exports.handler = async (event) => {
     try {
         const { updates, fileName } = JSON.parse(event.body);
 
-        if (!fileName || !Array.isArray(updates) || updates.some(update => 
+        if (!fileName) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'fileName is required' })
+            };
+        }
+
+        if (!Array.isArray(updates) || updates.some(update => 
             typeof update.id !== 'number' || 
             typeof update.text !== 'string' || 
             typeof update.column !== 'string'
