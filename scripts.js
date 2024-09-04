@@ -1,4 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Prompt the author for their name and store it in a variable
+    let authorName = '';
+
+    while (true) {
+        authorName = prompt('Please enter author name:');
+        if (authorName === 'Janet' || authorName === 'Ved' || authorName === 'Tyler') {
+            break;
+        } else {
+            alert('Invalid name.');
+        }
+    }
+
+    // Prompt the author for mode and store it in a variable
+    let authorMode = '';
+
+    while (true) {
+        authorMode = prompt('Please enter author mode (primary or proofer):');
+        if (authorMode === 'primary' || authorMode === 'proofer') {
+            break;
+        } else {
+            alert('Invalid mode.');
+        }
+    }
+
+    function checkAuthorMode() {
+        const isProoferMode = authorMode === 'proofer';
+
+        const rejectControl = document.getElementById('reject-control');
+        if (isProoferMode) {
+            rejectControl.classList.remove('hidden');
+        } else {
+            rejectControl.classList.add('hidden');
+        }
+    }
+
+    checkAuthorMode();
+
     // Function to calculate distribution
     function calculateDistribution(data, key) {
         const distribution = {};
@@ -45,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
+    const itemTypeSelect = document.getElementById('item-type-select');
     const statusSelect = document.getElementById('status-select');
+    const rejectSelect = document.getElementById('reject-select');
     const caseSelect = document.getElementById('case-select');
     const turnMaskedSelect = document.getElementById('turn-masked-select');
     const previousButton = document.getElementById('previous-button');
@@ -71,7 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataB = [];
     let dataATask2 = [];
     let dataBTask2 = [];
+    let itemTypeData = [];
     let statusData = [];
+    let rejectData = [];
     let caseData = [];
     let turnMaskedData = [];
     let robertaPreds = [];
@@ -91,8 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexB;
     let columnIndexATask2;
     let columnIndexBTask2;
-    let agreeDisagreeColumnIndex;
+    let itemTypeColumnIndex;
     let statusColumnIndex;
+    let rejectColumnIndex;
     let caseColumnIndex;
     let turnMaskedColumnIndex;
     let robertaPredsColumnIndex;
@@ -128,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('Appen data 16.8.2024.csv');
+            const response = await fetch('exaggeration_master.csv');
             const text = await response.text();
 
             const rows = parseCSV(text);
@@ -153,7 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
             agreeDisagreeColumnIndex = header.indexOf('agree_disagree');
+            itemTypeColumnIndex = header.indexOf('item_type');
             statusColumnIndex = header.indexOf('status');
+            rejectColumnIndex = header.indexOf('reject');
             caseColumnIndex = header.indexOf('case');
             turnMaskedColumnIndex = header.indexOf('turn_masked');
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
@@ -173,7 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'no data');
+            itemTypeData = rows.slice(1).map(row => row[itemTypeColumnIndex] || 'no data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'no data');
+            rejectData = rows.slice(1).map(row => row[rejectColumnIndex] || 'no data');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'no data');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'no data');
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'no data');
@@ -221,7 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayB.value = dataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
         textDisplayBTask2.value = dataBTask2[index] || 'no data';
+        itemTypeSelect.value = itemTypeData[index] || 'no data';
         statusSelect.value = statusData[index] || 'no data';
+        rejectSelect.value = rejectData[index] || 'no data';
         caseSelect.value = caseData[index] || 'no data';
         turnMaskedSelect.value = turnMaskedData[index] || 'no data';
         robertaPredsDisplay.textContent = robertaPreds[index] || 'no data';
@@ -260,6 +308,9 @@ document.addEventListener('DOMContentLoaded', () => {
         informativenessRadioButtons2.forEach(button => {
             button.checked = button.value === currentInformativenessRating2;
         });
+
+        // Update the row number input box
+        rowInput.value = index + 1;
 
         // Disable/Enable navigation buttons
         previousButton.disabled = index === 0;
@@ -300,16 +351,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextB = textDisplayB.value.trim() || 'no data';
         const updatedTextATask2 = textDisplayATask2.value.trim() || 'no data';
         const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'no data';
+        const updatedItemType = itemTypeSelect.value.trim() || 'no data';
         const updatedStatus = statusSelect.value.trim() || 'no data';
+        const updatedReject = rejectSelect.value.trim() || 'no data';
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
-        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
-        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
-        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no datae';
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'no data';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'no data';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'no data';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'no data';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'no data';
 
         submitButton.disabled = true;
 
@@ -319,7 +372,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'speaker_b_task_1', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
+            { id: currentRow, column: 'item_type', text: updatedItemType },
             { id: currentRow, column: 'status', text: updatedStatus },
+            { id: currentRow, column: 'reject', text: updatedReject },
             { id: currentRow, column: 'case', text: updatedCase },
             { id: currentRow, column: 'turn_masked', text: updatedTurnMasked },
             { id: currentRow, column: 'masked_word', text: updatedMaskedWord },
@@ -329,6 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
+            { id: currentRow, column: 'author', text: authorName },
+            { id: currentRow, column: 'author_mode', text: authorMode }
         ];
 
         // Helper function to submit batch updates
@@ -362,7 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB[currentRow] = updatedTextB;
             dataATask2[currentRow] = updatedTextATask2;
             dataBTask2[currentRow] = updatedTextBTask2;
+            itemTypeData[currentRow] = updatedItemType;
             statusData[currentRow] = updatedStatus;
+            rejectData[currentRow] = updatedReject;
             caseData[currentRow] = updatedCase;
             turnMaskedData[currentRow] = updatedTurnMasked;
             maskedWords[currentRow] = updatedMaskedWord;

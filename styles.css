@@ -201,8 +201,10 @@ h2 {
     text-align: center;
 }
 
-/* Styles for the status dropdown */
-#status-select {
+/* Styles for dropdowns */
+#status-select,
+#item-type-select,
+#reject-select {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -211,12 +213,21 @@ h2 {
     cursor: pointer;
 }
 
+/* Styles for the controls container */
 #controls {
-    margin-top: auto;
+    margin-top: auto; /* Pushes controls to the bottom if using flexbox */
 }
 
-.status-control {
+/* Styles for control elements */
+.status-control,
+.item-type-control,
+.reject-control {
     margin-bottom: 20px;
+}
+
+/* Hides elements */
+.hidden {
+    display: none; /* Completely hides the element */
 }
 
 .button-row {
