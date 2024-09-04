@@ -261,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
             button.checked = button.value === currentInformativenessRating2;
         });
 
+        // Update the row number input box
+        rowInput.value = index + 1;
+
         // Disable/Enable navigation buttons
         previousButton.disabled = index === 0;
         nextButton.disabled = index === dataA.length - 1;
