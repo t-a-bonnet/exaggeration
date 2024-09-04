@@ -1,16 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Prompt the user for their name and store it in a variable
-    let userName = '';
-
-    while (true) {
-        userName = prompt('Please enter author name:');
-        if (userName === 'Janet' || userName === 'Ved' || userName === 'Tyler') {
-            break;
-        } else {
-            alert('Invalid name.');
-        }
-    }
-
     // Function to calculate distribution
     function calculateDistribution(data, key) {
         const distribution = {};
@@ -103,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexB;
     let columnIndexATask2;
     let columnIndexBTask2;
-    let agreeDisagreeColumnIndex;
     let statusColumnIndex;
     let caseColumnIndex;
     let turnMaskedColumnIndex;
@@ -344,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
-            { id: currentRow, column: 'author', text: userName }
         ];
 
         // Helper function to submit batch updates
