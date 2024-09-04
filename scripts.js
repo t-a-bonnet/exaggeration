@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Prompt the user for their name
+    // Prompt the user for their name and store it in a variable
     let userName = '';
+
     while (true) {
         userName = prompt('Please enter author name:');
         if (userName === 'Janet' || userName === 'Ved' || userName === 'Tyler') {
@@ -52,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const authorModeDisplay = document.getElementById('author-mode');
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const informativenessRadioButtons2 = document.querySelectorAll('input[name="informativeness2"]');
 
     let currentRow = 0;
-    let authorMode =[]
     let dataA = [];
     let dataB = [];
     let dataATask2 = [];
@@ -100,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let informativenessRatings1 = [];
     let informativenessRatings2 = [];
 
-    let authorModeColumnIndex;
     let columnIndexA;
     let columnIndexB;
     let columnIndexATask2;
@@ -161,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            authorModeColumnIndex = header.indexOf('author_mode');
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
@@ -183,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessColumnIndex1 = header.indexOf('informativeness_task_1');
             informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
 
-            authorMode = rows.slice(1).map(row => row[authorModeColumnIndex] || 'no data');
             dataA = rows.slice(1).map(row => row[columnIndexA] || 'no data');
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
@@ -232,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         // Display row data or defaults
-        authorModeDisplay.value = authorMode[index] || 'no data';
         textDisplayA.value = dataA[index] || 'no data';
         textDisplayB.value = dataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
@@ -315,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve input values
-        const updatedAuthorMode = authorModeDisplay.value.trim() || 'no data';
         const updatedTextA = textDisplayA.value.trim() || 'no data';
         const updatedTextB = textDisplayB.value.trim() || 'no data';
         const updatedTextATask2 = textDisplayATask2.value.trim() || 'no data';
@@ -335,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Construct the updates array for batch processing
         const updates = [
-            { id: currentRow, column: 'author_mode', text: updatedAuthorMode },
             { id: currentRow, column: 'speaker_a_task_1', text: updatedTextA },
             { id: currentRow, column: 'speaker_b_task_1', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
@@ -350,8 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
-            { id: currentRow, column: 'author', text: userName },
-            { id: currentRow, column: 'author_mode', text: authorMode }
+            { id: currentRow, column: 'author', text: userName }
         ];
 
         // Helper function to submit batch updates
@@ -381,7 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await submitBatchUpdates(updates);
 
             // Update local data arrays after successful submission
-            authorMode[currentRow] = updatedAuthorMode;
             dataA[currentRow] = updatedTextA;
             dataB[currentRow] = updatedTextB;
             dataATask2[currentRow] = updatedTextATask2;

@@ -64,22 +64,6 @@ textarea {
     resize: vertical;
 }
 
-/* Author Mode Selection Styles */
-#author-mode {
-    width: 150px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
-
-#author-mode option {
-    padding: 10px;
-}
-
 /* Distributions Section Styles */
 #distributions {
     display: flex;
