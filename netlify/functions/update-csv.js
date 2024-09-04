@@ -115,7 +115,8 @@ exports.handler = async (event) => {
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
             message: 'Update Appen data 16.8.2024.csv',
             content: Buffer.from(updatedContent).toString('base64'),
-            sha: fileData.sha // Required SHA for the update
+            sha: fileData.sha, // Required SHA for the update
+            branch: 'dev'
         }, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
