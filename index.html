@@ -191,14 +191,22 @@
                 </div>
             </div>
 
-            <!-- Status and Controls -->
+            <!-- Item Type, Status, and Controls -->
             <div id="controls">
+                <div class="item-type-control">
+                    <label for="item-type-select">Item Type:</label>
+                    <select id="item-type-select" aria-label="Select item type">
+                        <option value="no data">Select item type</option>
+                        <option value="filler">Filler</option>
+                        <option value="non-filler">Non-Filler</option>
+                    </select>
+                </div>
                 <div class="status-control">
                     <label for="status-select">Status:</label>
                     <select id="status-select" aria-label="Select status">
-                        <option value="Complete">Select status</option>
-                        <option value="Complete">Complete</option>
-                        <option value="Incomplete">Incomplete</option>
+                        <option value="incomplete">Select status</option>
+                        <option value="complete">Complete</option>
+                        <option value="incomplete">Incomplete</option>
                     </select>
                 </div>
                 <div class="button-row">

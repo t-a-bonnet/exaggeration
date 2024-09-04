@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
+    const itemTypeSelect = document.getElementById('item-type-select');
     const statusSelect = document.getElementById('status-select');
     const caseSelect = document.getElementById('case-select');
     const turnMaskedSelect = document.getElementById('turn-masked-select');
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataB = [];
     let dataATask2 = [];
     let dataBTask2 = [];
+    let itemTypeData = [];
     let statusData = [];
     let caseData = [];
     let turnMaskedData = [];
@@ -115,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexB;
     let columnIndexATask2;
     let columnIndexBTask2;
+    let itemTypeColumnIndex;
     let statusColumnIndex;
     let caseColumnIndex;
     let turnMaskedColumnIndex;
@@ -176,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
             agreeDisagreeColumnIndex = header.indexOf('agree_disagree');
+            itemTypeColumnIndex = header.indexOf('item_type');
             statusColumnIndex = header.indexOf('status');
             caseColumnIndex = header.indexOf('case');
             turnMaskedColumnIndex = header.indexOf('turn_masked');
@@ -196,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'no data');
+            itemTypeData = rows.slice(1).map(row => row[itemTypeColumnIndex] || 'no data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'no data');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'no data');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'no data');
@@ -244,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayB.value = dataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
         textDisplayBTask2.value = dataBTask2[index] || 'no data';
+        itemTypeSelect.value = itemTypeData[index] || 'no data';
         statusSelect.value = statusData[index] || 'no data';
         caseSelect.value = caseData[index] || 'no data';
         turnMaskedSelect.value = turnMaskedData[index] || 'no data';
@@ -326,16 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextB = textDisplayB.value.trim() || 'no data';
         const updatedTextATask2 = textDisplayATask2.value.trim() || 'no data';
         const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'no data';
+        const updatedItemType = itemTypeSelect.value.trim() || 'no data';
         const updatedStatus = statusSelect.value.trim() || 'no data';
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'Enter coherence';
-        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'Enter coherence';
-        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'Enter agreement';
-        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
-        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
-        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no datae';
+        const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'no data';
+        const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'no data';
+        const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'no data';
+        const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'no data';
+        const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'no data';
 
         submitButton.disabled = true;
 
@@ -345,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'speaker_b_task_1', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
+            { id: currentRow, column: 'item_type', text: updatedItemType },
             { id: currentRow, column: 'status', text: updatedStatus },
             { id: currentRow, column: 'case', text: updatedCase },
             { id: currentRow, column: 'turn_masked', text: updatedTurnMasked },
@@ -390,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataB[currentRow] = updatedTextB;
             dataATask2[currentRow] = updatedTextATask2;
             dataBTask2[currentRow] = updatedTextBTask2;
+            itemTypeData[currentRow] = updatedItemType;
             statusData[currentRow] = updatedStatus;
             caseData[currentRow] = updatedCase;
             turnMaskedData[currentRow] = updatedTurnMasked;
