@@ -1,13 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Prompt the user for their name and store it in a variable
-    let userName = '';
+    // Prompt the author for their name and store it in a variable
+    let authorName = '';
 
     while (true) {
-        userName = prompt('Please enter author name:');
-        if (userName === 'Janet' || userName === 'Ved' || userName === 'Tyler') {
+        authorName = prompt('Please enter author name:');
+        if (authorName === 'Janet' || authorName === 'Ved' || authorName === 'Tyler') {
             break;
         } else {
             alert('Invalid name.');
+        }
+    }
+
+    // Prompt the author for mode and store it in a variable
+    let authorMode = '';
+
+    while (true) {
+        authorMode = prompt('Please enter author mode (primary or proofer):');
+        if (authorMode === 'primary' || authorMode === 'proofer') {
+            break;
+        } else {
+            alert('Invalid mode.');
         }
     }
 
@@ -343,7 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
-            { id: currentRow, column: 'author', text: userName }
+            { id: currentRow, column: 'author', text: authorName },
+            { id: currentRow, column: 'author_mode', text: authorMode }
         ];
 
         // Helper function to submit batch updates
