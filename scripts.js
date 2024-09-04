@@ -324,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'Enter agreement';
         const updatedInformativeness1 = document.querySelector('input[name="informativeness1"]:checked')?.value || 'Enter informativeness';
         const updatedInformativeness2 = document.querySelector('input[name="informativeness2"]:checked')?.value || 'Enter informativeness';
+        const author = userName;
 
         submitButton.disabled = true;
 
@@ -343,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'agreement_task_2', text: updatedAgreement2 },
             { id: currentRow, column: 'informativeness_task_1', text: updatedInformativeness1 },
             { id: currentRow, column: 'informativeness_task_2', text: updatedInformativeness2 },
-            { id: currentRow, column: 'author', text: userName }
+            { id: currentRow, column: 'author', text: author }
         ];
 
         // Helper function to submit batch updates
