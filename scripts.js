@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
     const itemTypeSelect = document.getElementById('item-type-select');
     const statusSelect = document.getElementById('status-select');
+    const rejectSelect = document.getElementById('reject-select');
     const caseSelect = document.getElementById('case-select');
     const turnMaskedSelect = document.getElementById('turn-masked-select');
     const previousButton = document.getElementById('previous-button');
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dataBTask2 = [];
     let itemTypeData = [];
     let statusData = [];
+    let rejectData = [];
     let caseData = [];
     let turnMaskedData = [];
     let robertaPreds = [];
@@ -119,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let columnIndexBTask2;
     let itemTypeColumnIndex;
     let statusColumnIndex;
+    let rejectColumnIndex;
     let caseColumnIndex;
     let turnMaskedColumnIndex;
     let robertaPredsColumnIndex;
@@ -181,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             agreeDisagreeColumnIndex = header.indexOf('agree_disagree');
             itemTypeColumnIndex = header.indexOf('item_type');
             statusColumnIndex = header.indexOf('status');
+            rejectColumnIndex = header.indexOf('reject');
             caseColumnIndex = header.indexOf('case');
             turnMaskedColumnIndex = header.indexOf('turn_masked');
             robertaPredsColumnIndex = header.indexOf('roberta_preds');
@@ -202,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'no data');
             itemTypeData = rows.slice(1).map(row => row[itemTypeColumnIndex] || 'no data');
             statusData = rows.slice(1).map(row => row[statusColumnIndex] || 'no data');
+            rejectData = rows.slice(1).map(row => row[rejectColumnIndex] || 'no data');
             caseData = rows.slice(1).map(row => row[caseColumnIndex] || 'no data');
             turnMaskedData = rows.slice(1).map(row => row[turnMaskedColumnIndex] || 'no data');
             robertaPreds = rows.slice(1).map(row => row[robertaPredsColumnIndex] || 'no data');
@@ -251,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         textDisplayBTask2.value = dataBTask2[index] || 'no data';
         itemTypeSelect.value = itemTypeData[index] || 'no data';
         statusSelect.value = statusData[index] || 'no data';
+        rejectSelect.value = rejectData[index] || 'no data';
         caseSelect.value = caseData[index] || 'no data';
         turnMaskedSelect.value = turnMaskedData[index] || 'no data';
         robertaPredsDisplay.textContent = robertaPreds[index] || 'no data';
@@ -334,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'no data';
         const updatedItemType = itemTypeSelect.value.trim() || 'no data';
         const updatedStatus = statusSelect.value.trim() || 'no data';
+        const updatedReject = rejectSelect.value.trim() || 'no data';
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
@@ -354,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
             { id: currentRow, column: 'item_type', text: updatedItemType },
             { id: currentRow, column: 'status', text: updatedStatus },
+            { id: currentRow, column: 'reject', text: updatedReject },
             { id: currentRow, column: 'case', text: updatedCase },
             { id: currentRow, column: 'turn_masked', text: updatedTurnMasked },
             { id: currentRow, column: 'masked_word', text: updatedMaskedWord },
@@ -400,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dataBTask2[currentRow] = updatedTextBTask2;
             itemTypeData[currentRow] = updatedItemType;
             statusData[currentRow] = updatedStatus;
+            rejectData[currentRow] = updatedReject;
             caseData[currentRow] = updatedCase;
             turnMaskedData[currentRow] = updatedTurnMasked;
             maskedWords[currentRow] = updatedMaskedWord;

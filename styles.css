@@ -237,6 +237,24 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Styles for the reject dropdown */
+#reject-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#controls {
+    margin-top: auto;
+}
+
+.reject-control {
+    margin-bottom: 20px;
+}
+
 .button-row {
     display: flex;
     gap: 10px;
