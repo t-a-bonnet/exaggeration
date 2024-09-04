@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('Appen data 16.8.2024.csv');
+            const response = await fetch('exaggeration_master.csv');
             const text = await response.text();
 
             const rows = parseCSV(text);
