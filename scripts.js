@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to display a specific row
     function showRow(index) {
         // Display row data or defaults
-        authorModeDisplay.value = authorMode[index] || '';
+        authorModeDisplay.value = authorMode[index] || 'no data';
         textDisplayA.value = dataA[index] || 'no data';
         textDisplayB.value = dataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
