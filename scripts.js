@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const csvFileSelect = document.getElementById('csv-file-select');
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -170,7 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV() {
         try {
-            const response = await fetch('exaggeration_master.csv');
+            const selectedFile = csvFileSelect.value;
+            const response = await fetch(selectedFile);
             const text = await response.text();
 
             const rows = parseCSV(text);
@@ -445,6 +447,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
         // Event listeners
+        csvFileSelect.addEventListener('change', () => {
+            currentRow = 0;
+            loadCSV();
+        });
         previousButton.addEventListener('click', showPreviousRow);
         nextButton.addEventListener('click', showNextRow);
         goButton.addEventListener('click', goToRow);
