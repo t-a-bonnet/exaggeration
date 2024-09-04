@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            authorModeColumnIndex = header.indexOf('speaker_a_task_1');
+            authorModeColumnIndex = header.indexOf('author_mode');
             columnIndexA = header.indexOf('speaker_a_task_1');
             columnIndexB = header.indexOf('speaker_b_task_1');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
