@@ -6,7 +6,7 @@ const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'exaggeration_master.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const BRANCH = 'dev'; // Specify the branch here
+const BRANCH = 'main';
 
 // Function to parse CSV text, handling commas within quotes
 function parseCSV(text) {
