@@ -1,10 +1,3 @@
-const GITHUB_API_URL = 'https://api.github.com';
-const REPO_OWNER = 't-a-bonnet';
-const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'exaggeration_master.csv';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const BRANCH = 'main';
-
 document.addEventListener('DOMContentLoaded', () => {
     // Prompt the author for their name and store it in a variable
     let authorName = '';
@@ -174,31 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return rows;
     }
 
-    // Function to decode base64 content
-    function decodeBase64(content) {
-        return decodeURIComponent(atob(content).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-    }
-
-    // Function to load the CSV data from GitHub API
-    async function loadCSV() {
+    // Function to load the CSV data
+    async function loadCSV(currentRow) {
         try {
-            const githubApiUrl = `${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`;
+            const response = await fetch('exaggeration_master.csv');
+            const text = await response.text();
 
-            // Fetch the file metadata (including the git_url)
-            const fileDataResponse = await fetch(githubApiUrl);
-            const fileData = await fileDataResponse.json();
-
-            // Fetch the raw content using the git_url
-            const blobResponse = await fetch(fileData.git_url);
-            const blobData = await blobResponse.json();
-
-            // Decode the base64 content
-            const decodedContent = decodeBase64(blobData.content);
-
-            // Parse the CSV content
-            const rows = parseCSV(decodedContent.trim());
+            const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
@@ -382,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedCase = caseSelect.value.trim() || 'no data';
         const updatedTurnMasked = turnMaskedSelect.value.trim() || 'no data';
         const updatedMaskedWord = maskedWordDisplay.value.trim() || 'no data';
-        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no datae';
+        const updatedCoherence1 = document.querySelector('input[name="coherence1"]:checked')?.value || 'no data';
         const updatedCoherence2 = document.querySelector('input[name="coherence2"]:checked')?.value || 'no data';
         const updatedAgreement1 = document.querySelector('input[name="agreement1"]:checked')?.value || 'no data';
         const updatedAgreement2 = document.querySelector('input[name="agreement2"]:checked')?.value || 'no data';
@@ -476,5 +451,5 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.addEventListener('click', submitChanges);
 
         // Load the CSV data on page load
-        loadCSV();
+        loadCSV(currentRow);
     });
