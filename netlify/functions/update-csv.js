@@ -64,7 +64,7 @@ exports.handler = async (event) => {
             };
         }
 
-        // Fetch the file metadata to get the SHA from the specified branch
+        // Fetch the file metadata to get the SHA and git_url from the specified branch
         const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`, {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
@@ -72,11 +72,31 @@ exports.handler = async (event) => {
             }
         });
 
-        // Fetch the raw content of the file using the download URL
-        const fileContentResponse = await axios.get(fileData.download_url);
-        const fileContent = fileContentResponse.data;
+        // Use the git_url to fetch the content
+        const gitUrl = fileData.git_url;
+
+        // Fetch the raw content from the blob API using the git_url
+        const { data: blobData } = await axios.get(gitUrl, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        // The content is base64 encoded, so decode it
+        const fileContent = Buffer.from(blobData.content, 'base64').toString('utf-8');
+
+        // Ensure that the content is not empty
+        if (!fileContent || fileContent.trim() === '') {
+            console.error('Empty or invalid CSV content.');
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ success: false, message: 'Empty or invalid CSV content' })
+            };
+        }
 
         const rows = parseCSV(fileContent.trim());
+
         if (rows.length < 2) {
             console.error('No rows in CSV file.');
             return {
