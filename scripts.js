@@ -1,3 +1,10 @@
+const GITHUB_API_URL = 'https://api.github.com';
+const REPO_OWNER = 't-a-bonnet';
+const REPO_NAME = 'exaggeration';
+const FILE_PATH = 'exaggeration_master.csv';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const BRANCH = 'dev';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Prompt the author for their name and store it in a variable
     let authorName = '';
@@ -167,13 +174,31 @@ document.addEventListener('DOMContentLoaded', () => {
         return rows;
     }
 
-    // Function to load the CSV data
+    // Function to decode base64 content
+    function decodeBase64(content) {
+        return decodeURIComponent(atob(content).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
+    // Function to load the CSV data from GitHub API
     async function loadCSV() {
         try {
-            const response = await fetch('exaggeration_master.csv');
-            const text = await response.text();
+            const githubApiUrl = `${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`;
 
-            const rows = parseCSV(text);
+            // Fetch the file metadata (including the git_url)
+            const fileDataResponse = await fetch(githubApiUrl);
+            const fileData = await fileDataResponse.json();
+
+            // Fetch the raw content using the git_url
+            const blobResponse = await fetch(fileData.git_url);
+            const blobData = await blobResponse.json();
+
+            // Decode the base64 content
+            const decodedContent = decodeBase64(blobData.content);
+
+            // Parse the CSV content
+            const rows = parseCSV(decodedContent.trim());
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
