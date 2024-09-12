@@ -3,7 +3,7 @@ const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
 const FILE_PATH = 'exaggeration_master.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const BRANCH = 'dev';
+const BRANCH = 'main';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Prompt the author for their name and store it in a variable
