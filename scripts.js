@@ -78,13 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const GITHUB_API_URL = 'https://api.github.com';
-    const REPO_OWNER = 't-a-bonnet';
-    const REPO_NAME = 'exaggeration';
-    const FILE_PATH = 'exaggeration_master.csv';
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const BRANCH = 'dev';
-
     const textDisplayA = document.getElementById('text-display-a');
     const textDisplayB = document.getElementById('text-display-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
@@ -177,6 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV(currentRow) {
         try {
+            const GITHUB_API_URL = 'https://api.github.com';
+            const REPO_OWNER = 't-a-bonnet';
+            const REPO_NAME = 'exaggeration';
+            const FILE_PATH = 'exaggeration_master.csv';
+            const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+            const BRANCH = 'dev';
+
             // Fetch the file metadata to get the SHA and git_url from the specified branch
             const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`, {
                 headers: {
