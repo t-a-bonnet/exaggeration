@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const GITHUB_API_URL = 'https://api.github.com';
-    const REPO_OWNER = 't-a-bonnet';
-    const REPO_NAME = 'exaggeration';
-    const FILE_PATH = 'exaggeration_master.csv';
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    const BRANCH = 'dev';
+const GITHUB_API_URL = 'https://api.github.com';
+const REPO_OWNER = 't-a-bonnet';
+const REPO_NAME = 'exaggeration';
+const FILE_PATH = 'exaggeration_master.csv';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const BRANCH = 'dev';
 
+document.addEventListener('DOMContentLoaded', () => {
     // Prompt the author for their name and store it in a variable
     let authorName = '';
 
