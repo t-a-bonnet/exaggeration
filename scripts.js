@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const GITHUB_API_URL = 'https://api.github.com';
+    const REPO_OWNER = 't-a-bonnet';
+    const REPO_NAME = 'exaggeration';
+    const FILE_PATH = 'exaggeration_master.csv';
+    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+    const BRANCH = 'dev';
+
     // Prompt the author for their name and store it in a variable
     let authorName = '';
 
@@ -170,10 +177,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load the CSV data
     async function loadCSV(currentRow) {
         try {
-            const response = await fetch('exaggeration_master.csv');
-            const text = await response.text();
+            // Fetch the file metadata to get the SHA and git_url from the specified branch
+            const { data: fileData } = await axios.get(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`, {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
 
-            const rows = parseCSV(text);
+            // Use the git_url to fetch the content
+            const gitUrl = fileData.git_url;
+
+            // Fetch the raw content from the blob API using the git_url
+            const { data: blobData } = await axios.get(gitUrl, {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            // The content is base64 encoded, so decode it
+            const fileContent = Buffer.from(blobData.content, 'base64').toString('utf-8');
+
+            // Ensure that the content is not empty
+            if (!fileContent || fileContent.trim() === '') {
+                console.error('Empty or invalid CSV content.');
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ success: false, message: 'Empty or invalid CSV content' })
+                };
+            }
+
+            const rows = parseCSV(fileContent.trim());
+
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
                 textDisplayA.value = 'No data available.';
