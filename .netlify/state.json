@@ -1,0 +1,19 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Oxford",
+			"country": {
+				"code": "GB",
+				"name": "United Kingdom"
+			},
+			"subdivision": {
+				"code": "ENG",
+				"name": "England"
+			},
+			"timezone": "Europe/London",
+			"latitude": 51.7665,
+			"longitude": -1.2829
+		},
+		"timestamp": 1726159324415
+	}
+}

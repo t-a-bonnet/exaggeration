@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
             // Calculate and display distributions using Chart.js
             displayDistribution('case-distribution-chart', calculateDistribution(rows, caseColumnIndex));
+            displayDistribution('status-distribution-chart', calculateDistribution(rows, statusColumnIndex));
             displayDistribution('turn-masked-distribution-chart', calculateDistribution(rows, turnMaskedColumnIndex));
         
             try {
