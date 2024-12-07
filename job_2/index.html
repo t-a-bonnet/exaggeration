@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interface for viewing and editing rows of CSV data to create items for the Exaggeration project.">
+    <title>Item Creation Interface for the Exaggeration Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="main-wrapper">
+        <div id="container">
+
+            <!-- Distributions -->
+            <div id="distributions">
+                <div class="distribution-box">
+                    <h2>Case Distribution</h2>
+                    <canvas id="case-distribution-chart" width="400" height="200"></canvas>
+                </div>
+                <div class="distribution-box">
+                    <h2>Status Distribution</h2>
+                    <canvas id="status-distribution-chart" width="400" height="200"></canvas>
+                </div>
+                <div class="distribution-box">
+                    <h2>Turn Modified Task 2 Distribution</h2>
+                    <canvas id="turn-modified-distribution-chart-task-2" width="400" height="200"></canvas>
+                </div>
+                <div class="distribution-box">
+                    <h2>Turn Modified Task 3 Distribution</h2>
+                    <canvas id="turn-modified-distribution-chart-task-3" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Task 1 -->
+            <h1>Task 1</h1>
+
+            <div class="text-pair">
+                <div class="text-box">
+                    <label for="original-a">Original speaker A:</label>
+                    <p id="original-a">Loading...</p>
+                </div>
+                <div class="text-box">
+                    <label for="original-b">Original speaker B:</label>
+                    <p id="original-b">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Coherence -->
+            <div class="rating-section">
+                <p>Characterize the dialogue between User A and User B along a scale from low (1) to high (5) coherence.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="coherence1" value="1"> 1</label>
+                    <label><input type="radio" name="coherence1" value="2"> 2</label>
+                    <label><input type="radio" name="coherence1" value="3"> 3</label>
+                    <label><input type="radio" name="coherence1" value="4"> 4</label>
+                    <label><input type="radio" name="coherence1" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Agreement -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) level of agreement.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="agreement1" value="1"> 1</label>
+                    <label><input type="radio" name="agreement1" value="2"> 2</label>
+                    <label><input type="radio" name="agreement1" value="3"> 3</label>
+                    <label><input type="radio" name="agreement1" value="4"> 4</label>
+                    <label><input type="radio" name="agreement1" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Informativeness -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) amount of new content.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="informativeness1" value="1"> 1</label>
+                    <label><input type="radio" name="informativeness1" value="2"> 2</label>
+                    <label><input type="radio" name="informativeness1" value="3"> 3</label>
+                    <label><input type="radio" name="informativeness1" value="4"> 4</label>
+                    <label><input type="radio" name="informativeness1" value="5"> 5</label>
+                </div>
+            </div>
+            
+            <!-- Task 2 -->
+            <h1>Task 2</h1>
+            <p>Choose a word to modify in the Speaker A or Speaker B turn. The modification should change the meaning of the dialogue. Replace the word you would like to modify with your chosen word in upper case and in angled brackets (e.g. &lt;EXAMPLE&gt; where your chosen word is in place of EXAMPLE). Enter the original word you have modified in the text box below.</p>
+            <div class="text-pair">
+                <div class="text-box">
+                    <label for="text-display-a-task-2">Speaker A:</label>
+                    <textarea id="text-display-a-task-2" aria-label="Text display for speaker A task 2"></textarea>
+                </div>
+                <div class="text-box">
+                    <label for="text-display-b-task-2">Speaker B:</label>
+                    <textarea id="text-display-b-task-2" aria-label="Text display for speaker B task 2"></textarea>
+                </div>
+            </div>
+
+            <div class="text-pair">
+                <div class="text-box">
+                    <label for="original-a">Original speaker A:</label>
+                    <p id="original-a">Loading...</p>
+                </div>
+                <div class="text-box">
+                    <label for="original-b">Original speaker B:</label>
+                    <p id="original-b">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Modified Word -->
+            <div class="modified-word-section>
+                <div class="modified-word-box">
+                    <label for="modified-word">Modified Word:</label>
+                    <textarea id="modified-word" aria-label="Editable modified word">Loading...</textarea>
+                </div>
+            </div>
+
+            <!-- Case -->
+            <div class="case-control">
+                <label for="case-select">Case:</label>
+                <select id="case-select">
+                    <option value="no data">no data</option>
+                    <option value="modal">Modal</option>
+                    <option value="speech_verb">Speech Verb</option>
+                    <option value="verb">Verb</option>
+                    <option value="noun">Noun</option>
+                    <option value="temporal">Temporal</option>
+                    <option value="connector">Connector</option>
+                    <option value="scalar_adjective">Scalar Adjective</option>
+                    <option value="quantifier">Quantifier</option>
+                    <option value="negation">Negation</option>
+                    <option value="anaphora">Anaphora</option>
+                </select>
+            </div>
+
+            <!-- Turn Modified -->
+            <div class="turn-modified-section-task-2">
+                <label for="turn-modified-select-task-2">Turn Modified:</label>
+                <select id="turn-modified-select-task-2">
+                    <option value="no data">no data</option>
+                    <option value="first">First</option>
+                    <option value="second">Second</option>
+                </select>
+            </div>
+
+            <!-- Coherence -->
+            <div class="rating-section">
+                <p>Characterize the dialogue between User A and User B along a scale from low (1) to high (5) coherence.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="coherence2" value="1"> 1</label>
+                    <label><input type="radio" name="coherence2" value="2"> 2</label>
+                    <label><input type="radio" name="coherence2" value="3"> 3</label>
+                    <label><input type="radio" name="coherence2" value="4"> 4</label>
+                    <label><input type="radio" name="coherence2" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Agreement -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) level of agreement.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="agreement2" value="1"> 1</label>
+                    <label><input type="radio" name="agreement2" value="2"> 2</label>
+                    <label><input type="radio" name="agreement2" value="3"> 3</label>
+                    <label><input type="radio" name="agreement2" value="4"> 4</label>
+                    <label><input type="radio" name="agreement2" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Informativeness -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) amount of new content.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="informativeness2" value="1"> 1</label>
+                    <label><input type="radio" name="informativeness2" value="2"> 2</label>
+                    <label><input type="radio" name="informativeness2" value="3"> 3</label>
+                    <label><input type="radio" name="informativeness2" value="4"> 4</label>
+                    <label><input type="radio" name="informativeness2" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Task 3 -->
+            <div class="task-2-section">
+                <h2>Task 3</h2>
+                <p>Add, remove, or modify temporal information in the Speaker A or Speaker B turn.</p>
+                <div class="text-pair">
+                    <div class="text-box">
+                        <label for="text-display-a-task-3">Speaker A:</label>
+                        <textarea id="text-display-a-task-3" aria-label="Text display for speaker A task 3"></textarea>
+                    </div>
+                    <div class="text-box">
+                        <label for="text-display-b-task-3">Speaker B:</label>
+                        <textarea id="text-display-b-task-3" aria-label="Text display for speaker B task 3"></textarea>
+                    </div>
+                </div>
+                <!-- Copy text from Task 2 to Task 3 -->
+                <button id="copy-task2-to-task3">Paste Text from Task 2</button>
+
+            <!-- Turn Modified -->
+            <div class="turn-modified-section-task-3">
+                <label for="turn-modified-select-task-3">Turn Modified:</label>
+                <select id="turn-modified-select-task-3">
+                    <option value="no data">no data</option>
+                    <option value="first">First</option>
+                    <option value="second">Second</option>
+                </select>
+            </div>
+
+            <!-- Coherence -->
+            <div class="rating-section">
+                <p>Characterize the dialogue between User A and User B along a scale from low (1) to high (5) coherence.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="coherence3" value="1"> 1</label>
+                    <label><input type="radio" name="coherence3" value="2"> 2</label>
+                    <label><input type="radio" name="coherence3" value="3"> 3</label>
+                    <label><input type="radio" name="coherence3" value="4"> 4</label>
+                    <label><input type="radio" name="coherence3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Agreement -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) level of agreement.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="agreement3" value="1"> 1</label>
+                    <label><input type="radio" name="agreement3" value="2"> 2</label>
+                    <label><input type="radio" name="agreement3" value="3"> 3</label>
+                    <label><input type="radio" name="agreement3" value="4"> 4</label>
+                    <label><input type="radio" name="agreement3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Informativeness -->
+            <div class="rating-section">
+                <p>Characterize User B`s response to User A along a scale from low (1) to high (5) amount of new content.</p>
+                <div class="rating-options">
+                    <label><input type="radio" name="informativeness3" value="1"> 1</label>
+                    <label><input type="radio" name="informativeness3" value="2"> 2</label>
+                    <label><input type="radio" name="informativeness3" value="3"> 3</label>
+                    <label><input type="radio" name="informativeness3" value="4"> 4</label>
+                    <label><input type="radio" name="informativeness3" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Item Type, Status, Reject, and Controls -->
+            <div id="controls">
+                <div class="item-type-control">
+                    <label for="item-type-select">Item Type:</label>
+                    <select id="item-type-select" aria-label="Select item type">
+                        <option value="no data">Select item type</option>
+                        <option value="filler">Filler</option>
+                        <option value="non-filler">Non-Filler</option>
+                    </select>
+                </div>
+                <div class="status-control">
+                    <label for="status-select">Status:</label>
+                    <select id="status-select" aria-label="Select status">
+                        <option value="complete">Complete</option>
+                        <option value="incomplete">Incomplete</option>
+                    </select>
+                </div>
+                <div class="reject-control hidden" id="reject-control">
+                    <label for="reject-select">Reject:</label>
+                    <select id="reject-select" aria-label="Choose to reject">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="button-row">
+                    <button id="previous-button" aria-label="Show previous row">Previous</button>
+                    <button id="next-button" aria-label="Show next row">Next</button>
+                    <button id="go-button" aria-label="Go to specific row">Go to</button>
+                    <input type="number" id="row-input" aria-label="Enter row number" placeholder="row #" min="1">
+                    <button id="submit-button" aria-label="Submit changes">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for copying text from Task 2 to Task 3 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('copy-task2-to-task3').addEventListener('click', function() {
+                var task2TextBoxA = document.getElementById('text-display-a-task-2').value;
+                var task2TextBoxB = document.getElementById('text-display-b-task-2').value;
+                document.getElementById('text-display-a-task-3').value = task2TextBoxA;
+                document.getElementById('text-display-b-task-3').value = task2TextBoxB;
+            });
+        });
+    </script>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
