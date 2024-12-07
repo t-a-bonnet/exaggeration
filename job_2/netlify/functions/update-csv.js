@@ -4,7 +4,7 @@ const { Buffer } = require('buffer');
 const GITHUB_API_URL = 'https://api.github.com';
 const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'exaggeration_master.csv';
+const FILE_PATH = 'exaggeration_master_job_2.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const BRANCH = 'main';
 
@@ -134,7 +134,7 @@ exports.handler = async (event) => {
 
         // Update the CSV on GitHub
         await axios.put(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
-            message: 'Update exaggeration_master.csv',
+            message: 'Update exaggeration_master_job_2.csv',
             content: Buffer.from(updatedContent).toString('base64'),
             sha: fileData.sha, // Required SHA for the update
             branch: BRANCH // Specify the branch here
