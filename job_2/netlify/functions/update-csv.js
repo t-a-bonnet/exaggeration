@@ -4,7 +4,7 @@ const { Buffer } = require('buffer');
 const GITHUB_API_URL = 'https://api.github.com';
 const REPO_OWNER = 't-a-bonnet';
 const REPO_NAME = 'exaggeration';
-const FILE_PATH = 'exaggeration_master_job_2.csv';
+const FILE_PATH = 'job_2/exaggeration_master_job_2.csv';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const BRANCH = 'main';
 
