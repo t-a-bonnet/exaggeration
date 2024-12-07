@@ -78,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const textDisplayA = document.getElementById('original-a');
-    const textDisplayB = document.getElementById('original-b');
+    const originalADisplay = document.getElementById('original-a');
+    const originalBDisplay = document.getElementById('original-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
@@ -96,8 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const rowInput = document.getElementById('row-input');
     const submitButton = document.getElementById('submit-button');
     const modifiedWordDisplay = document.getElementById('modified-word');
-    const originalADisplay = document.getElementById('original-a');
-    const originalBDisplay = document.getElementById('original-b');
     const coherenceRadioButtons1 = document.querySelectorAll('input[name="coherence1"]');
     const coherenceRadioButtons2 = document.querySelectorAll('input[name="coherence2"]');
     const coherenceRadioButtons3 = document.querySelectorAll('input[name="coherence3"]');
@@ -109,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const informativenessRadioButtons3 = document.querySelectorAll('input[name="informativeness3"]');
 
     let currentRow = 0;
-    let dataA = [];
-    let dataB = [];
+    let originalDataA = [];
+    let originalDataB = [];
     let dataATask2 = [];
     let dataBTask2 = [];
     let dataATask3 = [];
@@ -122,8 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let turnModifiedDataTask2 = [];
     let turnModifiedDataTask3 = [];
     let modifiedWords = [];
-    let originalDataA = [];
-    let originalDataB = [];
     let coherenceRatings1 = [];
     let coherenceRatings2 = [];
     let coherenceRatings3 = [];
@@ -134,8 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let informativenessRatings2 = [];
     let informativenessRatings3 = [];
 
-    let columnIndexA;
-    let columnIndexB;
+    let originalAColumnIndex;
+    let originalBColumnIndex;
     let columnIndexATask2;
     let columnIndexBTask2;
     let columnIndexATask3;
@@ -147,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let turnModifiedColumnIndexTask2;
     let turnModifiedColumnIndexTask3;
     let modifiedWordColumnIndex;
-    let originalAColumnIndex;
-    let originalBColumnIndex;
     let coherenceColumnIndex1;
     let coherenceColumnIndex2;
     let coherenceColumnIndex3;
@@ -185,21 +179,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const rows = parseCSV(text);
             if (rows.length < 2) {
                 console.error('Not enough rows in CSV file.');
-                textDisplayA.value = 'No data available.';
-                textDisplayB.value = 'No data available.';
+                originalADisplay.textContent = 'No data available.';
+                originalBDisplay.textContent = 'No data available.';
                 textDisplayATask2.value = 'No data available.';
                 textDisplayBTask2.value = 'No data available.';
                 textDisplayATask3.value = 'No data available.';
                 textDisplayBTask3.value = 'No data available.';
                 modifiedWordDisplay.value = 'No data available.';
-                originalADisplay.textContent = 'No data available.';
-                originalBDisplay.textContent = 'No data available.';
                 return;
             }
 
             const header = rows[0];
-            columnIndexA = header.indexOf('speaker_a_original');
-            columnIndexB = header.indexOf('speaker_b_original');
+            originalAColumnIndex = header.indexOf('speaker_a_original');
+            originalBColumnIndex = header.indexOf('speaker_b_original');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
@@ -212,8 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
             turnModifiedColumnIndexTask2 = header.indexOf('turn_modified_task_2');
             turnModifiedColumnIndexTask3 = header.indexOf('turn_modified_task_3');
             modifiedWordColumnIndex = header.indexOf('modified_word');
-            originalAColumnIndex = header.indexOf('speaker_a_original');
-            originalBColumnIndex = header.indexOf('speaker_b_original');
             coherenceColumnIndex1 = header.indexOf('coherence_task_1');
             coherenceColumnIndex2 = header.indexOf('coherence_task_2');
             coherenceColumnIndex3 = header.indexOf('coherence_task_3');
@@ -224,8 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
             informativenessColumnIndex2 = header.indexOf('informativeness_task_2');
             informativenessColumnIndex3 = header.indexOf('informativeness_task_3');
 
-            dataA = rows.slice(1).map(row => row[columnIndexA] || 'no data');
-            dataB = rows.slice(1).map(row => row[columnIndexB] || 'no data');
+            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'no data');
+            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'no data');
             dataATask2 = rows.slice(1).map(row => row[columnIndexATask2] || 'no data');
             dataBTask2 = rows.slice(1).map(row => row[columnIndexBTask2] || 'no data');
             dataATask3 = rows.slice(1).map(row => row[columnIndexATask3] || 'no data');
@@ -237,8 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
             turnModifiedDataTask2 = rows.slice(1).map(row => row[turnModifiedColumnIndexTask2] || 'no data');
             turnModifiedDataTask3 = rows.slice(1).map(row => row[turnModifiedColumnIndexTask3] || 'no data');
             modifiedWords = rows.slice(1).map(row => row[modifiedWordColumnIndex] || 'no data');
-            originalDataA = rows.slice(1).map(row => row[originalAColumnIndex] || 'no data');
-            originalDataB = rows.slice(1).map(row => row[originalBColumnIndex] || 'no data');
             coherenceRatings1 = rows.slice(1).map(row => row[coherenceColumnIndex1] || '');
             coherenceRatings2 = rows.slice(1).map(row => row[coherenceColumnIndex2] || '');
             coherenceRatings3 = rows.slice(1).map(row => row[coherenceColumnIndex3] || '');
@@ -263,23 +251,21 @@ document.addEventListener('DOMContentLoaded', () => {
         
         } catch (error) {
             console.error('Error loading CSV:', error);
-            textDisplayA.value = 'Error loading CSV data.';
-            textDisplayB.value = 'Error loading CSV data.';
+            originalADisplay.textContent = 'Error loading CSV data.';
+            originalBDisplay.textContent = 'Error loading CSV data.';
             textDisplayATask2.value = 'Error loading CSV data.';
             textDisplayBTask2.value = 'Error loading CSV data.';
             textDisplayATask3.value = 'Error loading CSV data.';
             textDisplayBTask3.value = 'Error loading CSV data.';
             modifiedWordDisplay.value = 'Error loading CSV data.';
-            originalADisplay.textContent = 'Error loading CSV data.';
-            originalBDisplay.textContent = 'Error loading CSV data.';
         }
     };
 
     // Function to display a specific row
     function showRow(index) {
         // Display row data or defaults
-        textDisplayA.value = dataA[index] || 'no data';
-        textDisplayB.value = dataB[index] || 'no data';
+        originalADisplay.textContent = originalDataA[index] || 'no data';
+        originalBDisplay.textContent = originalDataB[index] || 'no data';
         textDisplayATask2.value = dataATask2[index] || 'no data';
         textDisplayBTask2.value = dataBTask2[index] || 'no data';
         textDisplayATask3.value = dataATask3[index] || 'no data';
@@ -291,8 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
         turnModifiedSelectTask2.value = turnModifiedDataTask2[index] || 'no data';
         turnModifiedSelectTask3.value = turnModifiedDataTask3[index] || 'no data';
         modifiedWordDisplay.value = modifiedWords[index] || 'no data';
-        originalADisplay.textContent = originalDataA[index] || 'no data';
-        originalBDisplay.textContent = originalDataB[index] || 'no data';
 
         const currentCoherenceRating1 = coherenceRatings1[index] || '';
         coherenceRadioButtons1.forEach(button => {
@@ -344,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Disable/Enable navigation buttons
         previousButton.disabled = index === 0;
-        nextButton.disabled = index === dataA.length - 1;
+        nextButton.disabled = index === originalDataA.length - 1;
     }
 
     // Function to show the previous row
@@ -357,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show the next row
     function showNextRow() {
-        if (currentRow < dataA.length - 1) {
+        if (currentRow < originalDataA.length - 1) {
             currentRow += 1;
             showRow(currentRow);
         }
@@ -366,8 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to jump to a specific row
     function goToRow() {
         const rowNumber = parseInt(rowInput.value, 10);
-        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > dataA.length) {
-            alert(`Please enter a valid row number between 1 and ${dataA.length}.`);
+        if (isNaN(rowNumber) || rowNumber < 1 || rowNumber > originalDataA.length) {
+            alert(`Please enter a valid row number between 1 and ${originalDataA.length}.`);
             return;
         }
         currentRow = rowNumber - 1;
@@ -377,8 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit changes
     async function submitChanges() {
         // Retrieve input values
-        const updatedTextA = textDisplayA.value.trim() || 'no data';
-        const updatedTextB = textDisplayB.value.trim() || 'no data';
         const updatedTextATask2 = textDisplayATask2.value.trim() || 'no data';
         const updatedTextBTask2 = textDisplayBTask2.value.trim() || 'no data';
         const updatedTextATask3 = textDisplayATask3.value.trim() || 'no data';
@@ -404,8 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Construct the updates array for batch processing
         const updates = [
-            { id: currentRow, column: 'speaker_a_original', text: updatedTextA },
-            { id: currentRow, column: 'speaker_b_original', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
             { id: currentRow, column: 'speaker_a_task_3', text: updatedTextATask3 },
@@ -457,8 +437,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await submitBatchUpdates(updates);
 
             // Update local data arrays after successful submission
-            dataA[currentRow] = updatedTextA;
-            dataB[currentRow] = updatedTextB;
             dataATask2[currentRow] = updatedTextATask2;
             dataBTask2[currentRow] = updatedTextBTask2;
             dataATask3[currentRow] = updatedTextATask3;
