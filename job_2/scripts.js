@@ -78,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const textDisplayA = document.getElementById('text-display-a');
-    const textDisplayB = document.getElementById('text-display-b');
+    const textDisplayA = document.getElementById('original-a');
+    const textDisplayB = document.getElementById('original-b');
     const textDisplayATask2 = document.getElementById('text-display-a-task-2');
     const textDisplayBTask2 = document.getElementById('text-display-b-task-2');
     const textDisplayATask3 = document.getElementById('text-display-a-task-3');
