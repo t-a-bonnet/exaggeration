@@ -87,7 +87,9 @@ textarea {
 
 /* Chart styles */
 #case-distribution-chart,
-#turn-modified-distribution-chart {
+#status-distribution-chart,
+#turn-modified-distribution-chart-task-2,
+#turn-modified-distribution-chart-task-3 {
     width: 100%;
     height: 200px;
     margin-bottom: 20px;
@@ -163,7 +165,10 @@ h2 {
 }
 
 /* Styles for the case and turn modified sections */
-.case-control, .turn-modified-section, .modified-word-section {
+.case-control,
+.turn-modified-section-task-2,
+.turn-modified-section-task-3,
+.modified-word-section {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -172,7 +177,8 @@ h2 {
 }
 
 .case-control select,
-.turn-modified-section select,
+.turn-modified-section-task-2 select,
+.turn-modified-section-task-3 select,
 .modified-word-box textarea {
     width: 150px;
     padding: 10px;
@@ -202,9 +208,12 @@ h2 {
 }
 
 /* Styles for dropdowns */
+#case-select,
 #status-select,
 #item-type-select,
-#reject-select {
+#reject-select,
+#turn-modified-select-task-2,
+#turn-modified-select-task-3 {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;

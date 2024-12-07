@@ -408,6 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: currentRow, column: 'speaker_b_original', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
+            { id: currentRow, column: 'speaker_a_task_3', text: updatedTextATask3 },
+            { id: currentRow, column: 'speaker_b_task_3', text: updatedTextBTask3 },
             { id: currentRow, column: 'item_type', text: updatedItemType },
             { id: currentRow, column: 'status', text: updatedStatus },
             { id: currentRow, column: 'reject', text: updatedReject },
