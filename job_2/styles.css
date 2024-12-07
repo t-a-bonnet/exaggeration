@@ -66,9 +66,9 @@ textarea {
 
 /* Distributions Section Styles */
 #distributions {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 20px;
 }
@@ -77,11 +77,9 @@ textarea {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 400px;
     box-sizing: border-box;
 }
 
