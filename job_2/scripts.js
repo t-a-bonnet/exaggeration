@@ -198,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const header = rows[0];
-            columnIndexA = header.indexOf('speaker_a_task_1');
-            columnIndexB = header.indexOf('speaker_b_task_1');
+            columnIndexA = header.indexOf('speaker_a_original');
+            columnIndexB = header.indexOf('speaker_b_original');
             columnIndexATask2 = header.indexOf('speaker_a_task_2');
             columnIndexBTask2 = header.indexOf('speaker_b_task_2');
             columnIndexATask3 = header.indexOf('speaker_a_task_3');
@@ -404,8 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Construct the updates array for batch processing
         const updates = [
-            { id: currentRow, column: 'speaker_a_task_1', text: updatedTextA },
-            { id: currentRow, column: 'speaker_b_task_1', text: updatedTextB },
+            { id: currentRow, column: 'speaker_a_original', text: updatedTextA },
+            { id: currentRow, column: 'speaker_b_original', text: updatedTextB },
             { id: currentRow, column: 'speaker_a_task_2', text: updatedTextATask2 },
             { id: currentRow, column: 'speaker_b_task_2', text: updatedTextBTask2 },
             { id: currentRow, column: 'item_type', text: updatedItemType },

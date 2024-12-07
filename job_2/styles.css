@@ -66,9 +66,9 @@ textarea {
 
 /* Distributions Section Styles */
 #distributions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 20px;
+    flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 20px;
 }
@@ -77,15 +77,17 @@ textarea {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 400px;
     box-sizing: border-box;
 }
 
 /* Chart styles */
 #case-distribution-chart,
-#turn-masked-distribution-chart {
+#turn-modified-distribution-chart {
     width: 100%;
     height: 200px;
     margin-bottom: 20px;
@@ -160,8 +162,8 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* Styles for the case and turn masked sections */
-.case-control, .turn-masked-section, .masked-word-section {
+/* Styles for the case and turn modified sections */
+.case-control, .turn-modified-section, .modified-word-section {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,8 +172,8 @@ h2 {
 }
 
 .case-control select,
-.turn-masked-section select,
-.masked-word-box textarea {
+.turn-modified-section select,
+.modified-word-box textarea {
     width: 150px;
     padding: 10px;
     font-size: 16px;
@@ -181,13 +183,13 @@ h2 {
     margin-bottom: 0;
 }
 
-.masked-word-box {
+.modified-word-box {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.masked-word-box textarea {
+.modified-word-box textarea {
     height: auto;
     padding: 5px;
     box-sizing: border-box;
