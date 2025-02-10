@@ -29,7 +29,7 @@
               v-model="completion" 
               label="Enter a word or phrase to complete UserB’s reply" 
               outlined 
-              style="width: 60%; font-size: 1.2rem; margin-top: 20px;"
+              style="width: 50%; font-size: 1.2rem; margin-top: 20px;"
           ></v-text-field>
 
           <v-btn 
@@ -133,6 +133,8 @@ const similarityRating = ref(3); // Default value
 const loading = ref(true);
 const stage = ref(1);
 const router = useRouter();
+let instructionsWindow = null;
+
 
 const addEllipsis = computed(() => {
     return (currentItem.value?.user_b_fragments || "") + " ...";
@@ -142,7 +144,6 @@ const combineFragments = computed(() => {
     const fragment = currentItem.value?.user_b_fragments || "";
     let completion = currentItem.value?.user_b_completion || "";
 
-    // Remove leading ellipsis if present
     completion = completion.replace(/^\.{3}\s*/, "");
 
     return `${fragment} <strong>${completion}</strong>`;
@@ -169,18 +170,29 @@ const revealReplacement = () => {
 
 const nextItem = () => {
   if (currentIndex.value < data.value.length - 1) {
-      currentIndex.value++;
-      currentItem.value = data.value[currentIndex.value];
-      completion.value = "";
-      similarityRating.value = 3;
-      stage.value = 1;
+    currentIndex.value++;
+    currentItem.value = data.value[currentIndex.value];
+    completion.value = "";
+    similarityRating.value = 3;
+    stage.value = 1;
   } else {
-      router.push("/end");
+    endExperiment();
   }
 };
 
 const openInstructions = () => {
-  window.open('/instructions-separate', '_blank', 'width=800,height=600');
+  if (!instructionsWindow || instructionsWindow.closed) {
+    instructionsWindow = window.open('/instructions-separate', '_blank', 'width=400,height=900');
+  } else {
+    instructionsWindow.focus();
+  }
+};
+
+const endExperiment = () => {
+  if (instructionsWindow && !instructionsWindow.closed) {
+    instructionsWindow.close();
+  }
+  router.push("/end");
 };
 
 onMounted(loadCSV);

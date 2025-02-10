@@ -56,54 +56,48 @@
 
                 <h2>Examples</h2>
                 <br>
+
                 <h3>Example 1</h3>
                 <br>
-                <p><strong>UserA:</strong> Yep, sheep can get under the panels and could predictably eat the wires.</p>
-                <p><strong>UserB:</strong> It's definitely something to consider when planning solar installations, especially in rural areas. Sheep are curious creatures and will happily munch on anything new and shiny. Protecting the wiring is crucial to ensure the longevity and efficiency of the system.</p>
+                <div class="image-container">
+                    <img src="/images/template_3_example_1.png" alt="Example 1" class="example-image" />
+                </div>
                 <br>
-                <p><strong>Coherence:</strong> 6</p>
-                <p><strong>Level of Agreement:</strong> 6</p>
-                <p><strong>Amount of New Content:</strong> 6</p>
+                <hr class="image-divider" />
                 <br>
 
                 <h3>Example 2</h3>
                 <br>
-                <p><strong>UserA:</strong> And a melting Thwaites Glacier causes rising sea levels which push the grounding line further inland causing more melting Thwaites and on and on...</p>
-                <p><strong>UserB:</strong> It's like a long line of dominoes, when the first one topples, they all will topple.</p>
+                <div class="image-container">
+                    <img src="/images/template_3_example_2.png" alt="Example 2" class="example-image" />
+                </div>
                 <br>
-                <p><strong>Coherence:</strong> 5</p>
-                <p><strong>Level of Agreement:</strong> 6</p>
-                <p><strong>Amount of New Content:</strong> 3</p>
+                <hr class="image-divider" />
                 <br>
 
                 <h3>Example 3</h3>
                 <br>
-                <p><strong>UserA:</strong> Eating shellfish isn't so good for eater, however. Fine in moderation, but they concentrate pollutants. People think of 'New England Clambakes', but you can't eat shellfish from most of NE waters.</p>
-                <p><strong>UserB:</strong> I appreciate your nuance and attention to context when discussing dietary preferences. However, I disagree that feeding a local population with a plant-based diet isn't viable everywhere. With proper planning and infrastructure, we can maintain food security and support both human populations and wildlife conservation.</p>
+                <div class="image-container">
+                    <img src="/images/template_3_example_3.png" alt="Example 3" class="example-image" />
+                </div>
                 <br>
-                <p><strong>Coherence:</strong> 0</p>
-                <p><strong>Level of Agreement:</strong> 0</p>
-                <p><strong>Amount of New Content:</strong> 3</p>
+                <hr class="image-divider" />
                 <br>
 
                 <h3>Example 4</h3>
                 <br>
-                <p><strong>UserA:</strong> I think the lack of engagement might be related to the enormity of the issue.</p>
-                <p><strong>UserB:</strong> So if the issue would have been smaller we would have cared more? That's ridiculous.</p>
+                <div class="image-container">
+                    <img src="/images/template_3_example_4.png" alt="Example 4" class="small-example-image"/>
+                </div>
                 <br>
-                <p><strong>Coherence:</strong> 6</p>
-                <p><strong>Level of Agreement:</strong> 2</p>
-                <p><strong>Amount of New Content:</strong> 2</p>
+                <hr class="image-divider" />
                 <br>
 
                 <h3>Example 5</h3>
                 <br>
-                <p><strong>UserA:</strong> Air you can breathe, water you can drink, fish you can eat ... how is that too much to ask?</p>
-                <p><strong>UserB:</strong> The Earth's resources are finite, not infinite. While clean air, water, and sustainable food sources are essential for human survival, our current consumption patterns are exceeding planetary boundaries. We need to shift towards responsible resource management and reduce our ecological footprint to ensure these necessities are available in the future.</p>
-                <br>
-                <p><strong>Coherence:</strong> 5</p>
-                <p><strong>Level of Agreement:</strong> 6</p>
-                <p><strong>Amount of New Content:</strong> 2</p>
+                <div class="image-container">
+                    <img src="/images/template_3_example_5.png" alt="Example 5" class="example-image" />
+                </div>
                 <br>
             </template>
         </InstructionsComponent>
@@ -120,3 +114,34 @@ const next = () => {
     router.push("/experiment");
 };
 </script>
+
+<style scoped>
+.center-text {
+    text-align: center; /* Centers the heading */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* Center the images horizontally */
+    align-items: center;
+    margin-bottom: 20px; /* Added margin to avoid images being too close to each other */
+}
+
+.example-image {
+    max-width: 50%; /* Standard size for most images */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensures image content is not distorted */
+}
+
+.small-example-image {
+    max-width: 40%; /* Significantly smaller size for Example 4 */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Keeps image content intact */
+}
+
+.image-divider {
+    border: none;
+    border-top: 1px solid #ccc; /* Adds a horizontal divider below each example */
+    margin: 20px 0;
+}
+</style>

@@ -134,6 +134,7 @@ const similarityRating = ref(3);
 const loading = ref(true);
 const stage = ref(1);
 const router = useRouter();
+let instructionsWindow = null;
 
 const loadCSV = async () => {
   const response = await fetch("/items_job_1.csv");
@@ -160,18 +161,29 @@ const revealReplacement = () => {
 
 const nextItem = () => {
   if (currentIndex.value < data.value.length - 1) {
-      currentIndex.value++;
-      currentItem.value = data.value[currentIndex.value];
-      guess.value = "";
-      similarityRating.value = null;
-      stage.value = 1;
+    currentIndex.value++;
+    currentItem.value = data.value[currentIndex.value];
+    guess.value = "";
+    similarityRating.value = 3;
+    stage.value = 1;
   } else {
-      router.push("/end");
+    endExperiment();
   }
 };
 
 const openInstructions = () => {
-  window.open('/instructions-separate', '_blank', 'width=800,height=600');
+  if (!instructionsWindow || instructionsWindow.closed) {
+    instructionsWindow = window.open('/instructions-separate', '_blank', 'width=400,height=900');
+  } else {
+    instructionsWindow.focus();
+  }
+};
+
+const endExperiment = () => {
+  if (instructionsWindow && !instructionsWindow.closed) {
+    instructionsWindow.close();
+  }
+  router.push("/end");
 };
 
 onMounted(loadCSV);

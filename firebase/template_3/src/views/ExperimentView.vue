@@ -127,10 +127,7 @@ const newContentRating = ref(null);
 const loading = ref(true);
 const stage = ref(1);
 const router = useRouter();
-
-const openInstructions = () => {
-  window.open('/instructions-separate', '_blank', 'width=800,height=600');
-};
+let instructionsWindow = null;
 
 const loadCSV = async () => {
   const response = await fetch("/items_job_3.csv");
@@ -149,14 +146,29 @@ const loadCSV = async () => {
 
 const nextItem = () => {
   if (currentIndex.value < data.value.length - 1) {
-      currentIndex.value++;
-      currentItem.value = data.value[currentIndex.value];
-      coherenceRating.value = null;
-      agreementRating.value = null;
-      newContentRating.value = null;
+    currentIndex.value++;
+    currentItem.value = data.value[currentIndex.value];
+    coherenceRating.value = 3;
+    agreementRating.value = 3;
+    newContentRating.value = 3;
   } else {
-      router.push("/end");
+    endExperiment();
   }
+};
+
+const openInstructions = () => {
+  if (!instructionsWindow || instructionsWindow.closed) {
+    instructionsWindow = window.open('/instructions-separate', '_blank', 'width=400,height=900');
+  } else {
+    instructionsWindow.focus();
+  }
+};
+
+const endExperiment = () => {
+  if (instructionsWindow && !instructionsWindow.closed) {
+    instructionsWindow.close();
+  }
+  router.push("/end");
 };
 
 onMounted(loadCSV);
