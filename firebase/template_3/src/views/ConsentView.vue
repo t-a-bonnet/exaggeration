@@ -16,7 +16,7 @@
     <br>
     <p>If you agree to proceed, please click 'I consent'</p>
     <p>Otherwise, click 'I do not consent'</p>
-
+    <v-btn @click="goBack" color="primary" class="mr-2 mt-4">Back <v-icon>arrow_back</v-icon></v-btn>
     <v-btn @click="agree" color="success" class="mr-2 mt-4">I Consent <v-icon>check_circle</v-icon></v-btn>
     <v-btn @click="disagree" color="error" class="mt-4">I Do Not Consent <v-icon>cancel</v-icon></v-btn>
   </v-container>
@@ -26,6 +26,14 @@
 import { useRouter } from 'vue-router'
 const router = useRouter();
 import Swal from "sweetalert2";
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back();
+  } else {
+    router.push("/");
+  }
+};
 
 const agree = () => {
   router.push("/instructions")
@@ -38,4 +46,5 @@ const disagree = () => {
     text: 'You may now close the browser'
   })
 }
+
 </script>

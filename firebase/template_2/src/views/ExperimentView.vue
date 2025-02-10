@@ -9,7 +9,7 @@
         <v-container class="d-flex flex-column align-center">
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User A:</strong>
+              <strong>UserA:</strong>
             </v-col>
             <v-col cols="10">
               <p v-html="currentItem?.user_a_original"></p>
@@ -18,7 +18,7 @@
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User B:</strong>
+              <strong>UserB:</strong>
             </v-col>
             <v-col cols="10">
               <p v-html="addEllipsis"></p>
@@ -27,7 +27,7 @@
 
           <v-text-field 
               v-model="completion" 
-              label="Enter a word or phrase to complete User B’s reply" 
+              label="Enter a word or phrase to complete UserB’s reply" 
               outlined 
               style="width: 60%; font-size: 1.2rem; margin-top: 20px;"
           ></v-text-field>
@@ -60,7 +60,7 @@
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User A:</strong>
+              <strong>UserA:</strong>
             </v-col>
             <v-col cols="10">
               <p v-html="currentItem?.user_a_original"></p>
@@ -69,7 +69,7 @@
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User B:</strong>
+              <strong>UserB:</strong>
             </v-col>
             <v-col cols="10">
               <p v-html="combineFragments"></p>
@@ -78,35 +78,25 @@
 
           <v-row class="justify-center" style="width: 60%; margin-top: 20px;">
             <v-col cols="12" class="text-center">
-              <h4>Rate Similarity</h4>
+              <h4 style="margin-bottom: 20px;">Rate Similarity</h4>
               <div class="slider-container">
-                <v-slider
-                  v-model="similarityRating"
-                  min="1"
-                  max="5"
+                <!-- Slider Input -->
+                <input
+                  type="range"
+                  class="slider"
+                  min="0"
+                  max="6"
                   step="0.1"
-                  show-ticks="always"
-                  class="slider-with-labels"
-                ></v-slider>
-              </div>
-            </v-col>
-          </v-row>
-
-          <v-row class="justify-center" style="width: 60%; margin-top: 0px;">
-            <v-col cols="12" class="text-center">
+                  v-model="similarityRating"
+                  @input="updateDisplayedValue"
+                />
+                <!-- Labels Below the Slider -->
                 <div class="tick-labels">
-                  <span v-for="(label, index) in ['1', '2', '3', '4', '5']" :key="index" class="tick-label">
+                  <span v-for="(label, index) in ['0', '1', '2', '3', '4', '5', '6']" :key="index" class="tick-label">
                     {{ label }}
                   </span>
                 </div>
-            </v-col>
-          </v-row>
-          
-          <v-row class="justify-center" style="width: 60%; margin-top: 0px;">
-            <v-col cols="12" class="text-center">
-                <div class="slider-value">
-                  <span>{{ similarityRating.toFixed(1) }}</span>
-                </div>
+              </div>
             </v-col>
           </v-row>
 
@@ -150,7 +140,7 @@ const addEllipsis = computed(() => {
 
 const combineFragments = computed(() => {
     const fragment = currentItem.value?.user_b_fragments || "";
-    let completion = currentItem.value?.user_b_llama_completion || "";
+    let completion = currentItem.value?.user_b_completion || "";
 
     // Remove leading ellipsis if present
     completion = completion.replace(/^\.{3}\s*/, "");
@@ -197,44 +187,65 @@ onMounted(loadCSV);
 </script>
 
 <style scoped>
+/* Slider container */
 .slider-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 545px;
+  width: 450px;
   margin: 0 auto;
-  margin-bottom: 0px;
 }
 
-.slider-with-labels {
+/* Slider styling */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
-  margin-bottom: 0px;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #04aa6d;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: #04aa6d;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .tick-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0px;
-  margin-bottom: 20px;
-  position: relative;
-  width: 100%;
-}
-
-.slider-value {
-  font-size: 1.2rem;
-  margin-top: -10px;
-  margin-bottom: 20px;
-  font-weight: bold;
+display: flex;
+justify-content: center;
+gap: 63px;
+margin-top: 0px;
+margin-bottom: 20px;
+position: relative;
+width: 100%;
 }
 
 .tick-label {
-  font-size: 1rem;
-  color: #000;
-  text-align: center;
-  position: relative;
-  margin-top: -40px;
-  bottom: -6px;
-  width: 20%;
+font-size: 1rem;
+color: #000;
+text-align: center;
+position: relative;
+margin-top: 0px;
+bottom: -6px;
 }
 
 .mt-2 {

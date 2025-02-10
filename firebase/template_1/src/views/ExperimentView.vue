@@ -9,19 +9,19 @@
         <v-container class="d-flex flex-column align-center">
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User A:</strong>
+              <strong>UserA:</strong>
             </v-col>
             <v-col cols="10">
-              <p v-html="highlightWORD(currentItem?.user_a_1)"></p>
+              <p v-html="currentItem?.user_a_1"></p>
             </v-col>
           </v-row>
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User B:</strong>
+              <strong>UserB:</strong>
             </v-col>
             <v-col cols="10">
-              <p v-html="highlightWORD(currentItem?.user_b_1)"></p>
+              <p v-html="currentItem?.user_b_1"></p>
             </v-col>
           </v-row>
 
@@ -61,47 +61,45 @@
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User A:</strong>
+              <strong>UserA:</strong>
             </v-col>
             <v-col cols="10">
-              <p v-html="formatBoldInBrackets(currentItem?.user_a_2)"></p>
+              <p v-html="formatUnderlineInBrackets(currentItem?.user_a_2)"></p>
             </v-col>
           </v-row>
 
           <v-row class="justify-center" style="width: 60%;">
             <v-col cols="2" class="text-right">
-              <strong>User B:</strong>
+              <strong>UserB:</strong>
             </v-col>
             <v-col cols="10">
-              <p v-html="formatBoldInBrackets(currentItem?.user_b_2)"></p>
+              <p v-html="formatUnderlineInBrackets(currentItem?.user_b_2)"></p>
             </v-col>
           </v-row>
 
           <v-row class="justify-center" style="width: 60%; margin-top: 20px;">
             <v-col cols="12" class="text-center">
-              <h4>Rate Similarity</h4>
+              <h4 style="margin-bottom: 20px;">Rate Similarity</h4>
               <div class="slider-container">
-                <v-slider
+                <!-- Slider Input -->
+                <input
+                  type="range"
+                  class="slider"
+                  min="0"
+                  max="6"
+                  step="0.1"
                   v-model="similarityRating"
-                  min="1"
-                  max="5"
-                  step="1"
-                  show-ticks="always"
-                  class="slider-with-labels"
-                ></v-slider>
-              </div>
-            </v-col>
-          </v-row>
-
-          <v-row class="justify-center" style="width: 60%; margin-top: 0px;">
-            <v-col cols="12" class="text-center">
+                  @input="updateDisplayedValue"
+                />
+                <!-- Labels Below the Slider -->
                 <div class="tick-labels">
-                  <span v-for="(label, index) in ['1', '2', '3', '4', '5']" :key="index" class="tick-label">
+                  <span v-for="(label, index) in ['0', '1', '2', '3', '4', '5', '6']" :key="index" class="tick-label">
                     {{ label }}
                   </span>
                 </div>
-              </v-col>
-            </v-row>
+              </div>
+            </v-col>
+          </v-row>
 
           <v-btn 
             @click="nextItem" 
@@ -132,7 +130,7 @@ const data = ref([]);
 const currentIndex = ref(0);
 const currentItem = ref(null);
 const guess = ref("");
-const similarityRating = ref(null);
+const similarityRating = ref(3);
 const loading = ref(true);
 const stage = ref(1);
 const router = useRouter();
@@ -152,12 +150,8 @@ const loadCSV = async () => {
   });
 };
 
-const highlightWORD = (text) => {
-  return text ? text.replace(/\bWORD\b/g, "<strong>WORD</strong>") : "";
-};
-
-const formatBoldInBrackets = (text) => {
-  return text ? text.replace(/<([^>]+)>/g, "<strong>$1</strong>") : "";
+const formatUnderlineInBrackets = (text) => {
+  return text ? text.replace(/<([^>]+)>/g, "<u>$1</u>") : "";
 };
 
 const revealReplacement = () => {
@@ -184,24 +178,52 @@ onMounted(loadCSV);
 </script>
 
 <style scoped>
+/* Slider container */
 .slider-container {
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 80%;
-margin: 0 auto;
-margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 450px;
+  margin: 0 auto;
 }
 
-.slider-with-labels {
-width: 275px;
-margin-bottom: 0px;
+/* Slider styling */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #04aa6d;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: #04aa6d;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
 .tick-labels {
 display: flex;
 justify-content: center;
-gap: 58px;
+gap: 63px;
 margin-top: 0px;
 margin-bottom: 20px;
 position: relative;
@@ -213,8 +235,15 @@ font-size: 1rem;
 color: #000;
 text-align: center;
 position: relative;
-margin-top: -40px;
+margin-top: 0px;
 bottom: -6px;
+}
+
+/* Display slider value */
+.slider-value {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #333;
 }
 
 .mt-2 {

@@ -11,7 +11,7 @@
                 <h1>Instructions</h1>
                 <br>
                 <p>
-                    You will see short sequences of a social media post (User A) and a reply (User B). A single word from the original posts is missing (at the location indicated by <strong>WORD</strong>, in bold capital letters). Your first job is to guess what this word is. Type into the box the first word that comes into your mind as a likely choice. For many of the posts, several different words are equally likely. Don’t worry about figuring out the best choice. Type the first word that comes into your mind. 
+                    You will see short sequences of a social media post (UserA) and a reply (UserB). A single word from the original posts is missing (at the location indicated by a blank space _____. Your first job is to guess what this word is. Type into the box the first word that comes into your mind as a likely choice. For many of the posts, several different words are equally likely. Don’t worry about figuring out the best choice. Type the first word that comes into your mind. 
                 </p>
                 <br>
                 <p>
@@ -20,10 +20,10 @@
                 <br>
                 <h2>Similarity</h2>
                 <br>
-                <strong>Scale:</strong> Low | 1 ... 5 | High
+                <strong>Scale:</strong> Low | 0 ... 6 | High
                 <br>
                 <p>
-                    Use the top value of 5 if you guessed exactly the same word as  the one provided.  Use 0 if the two words have very little relationship. Use the values in between for cases in which the two words have related, but not identical, meanings.  
+                    Use the top value of 6 if you guessed exactly the same word as  the one provided. Use 0 if the two words have very little relationship. Use the values in between for cases in which the two words have related, but not identical, meanings.  
                 </p>
                 <br>
                 <h2>Examples</h2>
@@ -34,96 +34,31 @@
                 <br>
                 <h3>Example 1</h3>
                 <br>
-                <p>
-                    <strong>User A:</strong> Can we do something about spam mail? It could <strong>WORD</strong> shorten the time that USPS workers are out delivering. 
-                </p>
+                <div class="image-container">
+                    <img src="/images/template_1_example_1_task_1.png" alt="Example 1 Image 1" class="size-1"/>
+                    <div class="divider"></div>
+                    <img src="/images/template_1_example_1_task_2.png" alt="Example 1 Image 2" class="size-1"/>
+                </div>
                 <br>
-                <p>
-                    <strong>User B:</strong> Impossible. The USPS makes a ton of money via mailing advertisements. I haven't checked, but I would not be so surprised to find that they make most of their money this way.
-                </p>
-                <br>
-                <p>
-                    <strong>Guess:</strong> definitely
-                </p>
-                <br>
-                <p>
-                    <strong>User A:</strong> Can we do something about spam mail? It could <u>probably</u> shorten the time that USPS workers are out delivering.
-                </p>
-                <br>
-                <p>
-                    <strong>User B:</strong> Impossible. The USPS makes a ton of money via mailing advertisements. I haven't checked, but I would not be so surprised to find that they make most of their money this way.
-                </p>
-                <br>
-                <p>
-                    <strong>Similarity:</strong>
-                    Low | 0 .... 5 | High 
-                </p>
-                <br>
-                <p>
-                    <strong>Judgement:</strong> 4
-                </p>
+                <hr class="image-divider"/>
                 <br>
                 <h3>Example 2</h3>
                 <br>
-                <p>
-                    <strong>User A:</strong> An F-16 burns between 5300 to 640000 pounds of fuel IN AN HOUR! When people say "vote with your pocketbook", governments and corporations smile. They know individuals cannot make the impact needed to turn climate change around. Regulation of industry is what we need, and we need it now. 
-                </p>
+                <div class="image-container">
+                    <img src="/images/template_1_example_2_task_1.png" alt="Example 2 Image 1" class="size-1"/>
+                    <div class="divider"></div>
+                    <img src="/images/template_1_example_2_task_2.png" alt="Example 2 Image 2" class="size-1"/>
+                </div>
                 <br>
-                <p>
-                    <strong>User B:</strong> I don’t get how we have fuel efficiency standards for car manufacturers but not <strong>WORD</strong> manufacturers.
-                </p>
-                <br>
-                <p>
-                    <strong>Guess:</strong> other
-                </p>
-                <br>
-                <p>
-                    <strong>User A:</strong> An F-16 burns between 5300 to 640000 pounds of fuel IN AN HOUR! When people say "vote with your pocketbook", governments and corporations smile. They know individuals cannot make the impact needed to turn climate change around. Regulation of industry is what we need, and we need it now.
-                </p>
-                <br>
-                <p>
-                    <strong>User B:</strong> I don’t get how we have fuel efficiency standards for car manufacturers but not <u>airplane</u> manufacturers.
-                </p>
-                <br>
-                <p>
-                    <strong>Similarity:</strong> 
-                    Low | 0 .... 5 | High 
-                </p>
-                <br>
-                <p>
-                    <strong>Judgement:</strong> 0
-                </p>
+                <hr class="image-divider"/>
                 <br>
                 <h3>Example 3</h3>
                 <br>
-                <p>
-                    <strong>User A:</strong> Around 1500 b.c. a massive volcanic eruption at Santorini destroyed the whole Minoan civilization.
-                </p>
-                <br>
-                <p>
-                    <strong>User B:</strong> <strong>WORD</strong>, that was how the Akrotiri settlement was destroyed. 
-                </p>
-                <br>
-                <p>
-                    <strong>Guess:</strong> So
-                </p>
-                <br>
-                <p>
-                    <strong>User A:</strong> Around 1500 b.c. a massive volcanic eruption at Santorini destroyed the whole Minoan civilization.
-                </p>
-                <br>
-                <p>
-                    <strong>User B:</strong> <u>Apparently</u>, that was how the Akrotiri settlement was destroyed. 
-                </p>
-                <br>
-                <p>
-                    <strong>Similarity:</strong> 
-                    Low | 0 .... 5 | High 
-                </p>
-                <br>
-                <p>
-                    <strong>Judgement:</strong> 3
-                </p>
+                <div class="image-container">
+                    <img src="/images/template_1_example_3_task_1.png" alt="Example 3 Image 1" class="size-2"/>
+                    <div class="divider"></div>
+                    <img src="/images/template_1_example_3_task_2.png" alt="Example 3 Image 2" class="size-3"/>
+                </div>
                 <br>
             </template>
         </InstructionsComponent>
@@ -134,3 +69,49 @@
 import InstructionsComponent from "@/components/InstructionsComponent.vue";
 
 </script>
+
+<style scoped>
+.center-text {
+    text-align: center; /* Centers the heading */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* Center the images horizontally */
+    align-items: center;
+    gap: 30px; /* Adds space between images */
+}
+
+.image-container img {
+    max-width: 45%; /* Adjusts the image size */
+    height: auto;
+}
+
+.divider {
+    width: 1px;
+    background-color: #000; /* Adds a vertical divider */
+    height: 100%; /* Makes the divider stretch to the full height of the container */
+}
+
+.image-divider {
+    border: none;
+    border-top: 1px solid #ccc; /* Optional: Add a horizontal divider below each example */
+    margin: 20px 0;
+}
+
+.size-1 {
+  max-height: 60%;
+  width: auto;
+}
+
+/* For smaller images (in Example 3), apply specific styles */
+.size-2 {
+    max-height: 30%; /* Make images smaller */
+    width: 35%;
+}
+
+.size-3 {
+    max-height: 35%; /* Make images smaller */
+    width: 35%;
+}
+</style>

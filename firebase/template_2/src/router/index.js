@@ -13,7 +13,7 @@ const router = createRouter({
       path: '/consent',
       name: 'consent',
       component: () => import('../views/ConsentView.vue'),
-      meta: { oneWay: true }
+      meta: { oneWay: false }
     },
     {
       path: '/instructions',
